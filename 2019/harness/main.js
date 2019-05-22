@@ -61,6 +61,9 @@ var parseParams = function(testSuiteConfig) {
   config.sig = parseParam('sig', null);
   config.start_time = parseParam('start_time', null);
 
+  // See: https://wiki.mozilla.org/Performance_sheriffing/Raptor
+  config.is_raptor = util.stringToBoolean(parseParam('raptor', false));
+
   config.is_cobalt = util.isCobalt();
   config.support_hdr = util.supportHdr();
   config.support_webspeech = util.supportWebSpeech();
