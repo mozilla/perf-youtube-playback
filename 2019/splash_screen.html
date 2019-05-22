@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<!--
+Copyright 2019 Google Inc. All rights reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<html>
+  <head>
+    <style>
+      body {
+        overflow: hidden;
+        height: 100vh;
+        width: 100vw;
+        background-color: #282828;
+        margin: 0;
+      }
+      .content {
+        color: #FFFFFF;
+        text-align: center;
+        position: relative;
+        top: 50%;
+        margin-top: -6vh;
+        font-size: 6vh;
+      }
+      @keyframes spinner {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .circle {
+        box-sizing: border-box;
+        width: 1em;
+        height: 1em;
+        margin: 1em auto;
+        border: 0.05em solid #282828;
+        border-top-color: red;
+        border-radius: 50%;
+        animation: spinner 0.8s linear infinite;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="content">
+      YTS 2019
+      <div class="circle"></div>
+    </div>
+  </body>
+</html>
