@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<!--
+Copyright 2018 Google Inc. All rights reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Key Event Test</title>
+    <link rel="stylesheet" href="manual-page-style.css" type="text/css">
+  </head>
+
+  <body>
+    <div class="outer">
+      <div class="h1">Key Event Test</div>
+      <div class="padding"></div>
+      <div class="h2">* Requirement: After a key is held down for 500ms, the Window.keydown event MUST repeat every 50ms until a user stops holding the key down.</div>
+      <div class="padding"></div>
+      <div class="h2">* Instruction: Keep any keys pressed for a couple of seconds and check the key repeat time.</div>
+      <div class="padding"></div>
+      <div class="h2">* Tip: Longpress 'Back' key will move this page back to YTS Manual Test page.</div>
+      <div class="padding"></div>
+      <div class="text-box valid-box centered" id="key-code-box">
+        <div class="h2">
+          <span>Key Codes</span> :
+          <span id="key-code"></span>
+        </div>
+      </div>
+      <div class="h3" id="key-log"></div>
+    </div>
+    <script src="../harness/key.js"></script>
+    <script src="../harness/keyEvent.js"></script>
+    <script src="../lib/manual/key_event.js"></script>
+  </body>
+</html>

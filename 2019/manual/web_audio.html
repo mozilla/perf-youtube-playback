@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<!--
+Copyright 2018 Google Inc. All rights reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<html>
+  <head lang="en">
+    <meta charset="UTF-8">
+    <title>YouTube Web Audio API integration test page</title>
+    <link rel="stylesheet" href="manual-page-style.css" type="text/css">
+  </head>
+  <body>
+    <div class="outer">
+      <div class="h1">Web Audio Test</div>
+      <div class="padding"></div>
+      <div class="h2">
+        * Tip: 'Back' key press will move this page back to YTS Manual page.
+      </div>
+      <div class="padding"></div>
+      <div class="h3">
+        <p>
+          This page tests that WebAudio plays sounds correctly, and that the
+          platform is able to play sounds using WebAudio while a video is
+          playing.
+        </p>
+        <p>
+          Pressing any of the required 4 directional navigation keys (Up, Down,
+          Left, Right) should result in a sound being played.
+        </p>
+        <p>
+          Pressing Enter, Play, or Play/Pause should result in the video
+          toggling between pausing and playing.
+        </p>
+        <p>
+          The WebAudio navigation sounds should play properly on top of the
+          video's sound.
+        </p>
+        <p>
+          The same test sound is used for every key event. For Cobalt devices,
+          this test will use a WAV file. Otherwise, MP3 is used.
+        </p>
+      </div>
+      <div class="padding"></div>
+      <div class="h3">Last updated: October 24 2018</div>
+      <div>
+        <video id="vid" tabIndex="-1" controls autoplay src="../test-materials/media/car_20130125_18.mp4"></video>
+      </div>
+    </div>
+    <script src="../harness/key.js"></script>
+    <script src="../harness/keyEvent.js"></script>
+    <script src="../lib/manual/web_audio.js"></script>
+  </body>
+</html>
