@@ -1,4 +1,13 @@
-# js_mse_eme
+# perf-youtube-playback
+
+This repository is a mirror of the 2019 branch from the
+https://github.com/youtube/js_mse_eme/ repository,
+with some customization for Raptor applied.
+
+With the '''raptor''' branch checked out, it is used for 
+executing the '''raptor-youtube-playback''' performance tests.
+
+The description of the original repository is:
 
 js_mse_eme is an externally-published tool that is aimed to test the validity
 of a browser's HTML5 Media Source Extension and Encrypted Media Extension
