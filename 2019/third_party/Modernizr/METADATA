@@ -1,0 +1,20 @@
+name: "Modernizr"
+description:
+    "Modernizr is a JavaScript library which is designed to detect HTML5 and "
+    "CSS3 features in various browsers, which lets JavaScript avoid using "
+    "unimplemented features or use a workaround such as a shim to emulate them. "
+    "Modernizr aims to provide this feature detection in a complete and "
+    "standardized manner."
+
+third_party {
+  url {
+    type: HOMEPAGE
+    value: "https://modernizr.com/"
+  }
+  url {
+    type: GIT
+    value: "https://github.com/Modernizr/Modernizr"
+  }
+  version: "3.5.0"
+  last_upgrade_date { year: 2018 month: 6 day: 7 }
+}
