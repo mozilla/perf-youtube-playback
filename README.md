@@ -4,8 +4,8 @@ This repository is a mirror of the 2019 branch from the
 https://github.com/youtube/js_mse_eme/ repository,
 with some customization for Raptor applied.
 
-It is used for executing the raptor-youtube-playback
-performance tests.
+With the '''raptor''' branch checked out, it is used for 
+executing the '''raptor-youtube-playback''' performance tests.
 
 The description of the original repository is:
 
