@@ -1,0 +1,65 @@
+version: 2.0
+jobs:
+  build:
+    docker:
+      - image: circleci/python:3.7
+    steps:
+      - checkout
+      - run:
+          name: download and untar files
+          command: |
+            ./.utils/prepare_files.sh
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - ./*
+
+  deploy:
+    docker:
+      - image: circleci/python:3.7
+    steps:
+      - run:
+          name: Install AWS CLI
+          command: |
+            sudo pip install --upgrade pip
+            sudo pip install --upgrade awscli
+      - attach_workspace:
+          at: .
+      - run:
+          name: deployment
+          command: |
+            # deploy stage
+            # stage is used by ops to verify infrastructure setups
+            AWS_ACCESS_KEY_ID="${STAGE_AWS_ACCESS_KEY_ID}"                 \
+            AWS_SECRET_ACCESS_KEY="${STAGE_AWS_SECRET_ACCESS_KEY}"         \
+            DISTRIBUTION_ID="${STAGE_DISTRIBUTION_ID}"                     \
+            YTTEST_BUCKET="${STAGE_YTTEST_BUCKET}" \
+            ./.utils/deploy.sh
+
+            AWS_ACCESS_KEY_ID="${STAGE_AWS_ACCESS_KEY_ID}"                 \
+            AWS_SECRET_ACCESS_KEY="${STAGE_AWS_SECRET_ACCESS_KEY}"         \
+            DISTRIBUTION_ID="${STAGE_DISTRIBUTION_ID}"                     \
+            YTTEST_BUCKET="${STAGE_YTTEST_BUCKET}" \
+            ./.utils/invalidate-cloudfront-cache.sh
+
+            # deploy production
+            AWS_ACCESS_KEY_ID="${AWS_ACCESS_KEY_ID}"                 \
+            AWS_SECRET_ACCESS_KEY="${AWS_SECRET_ACCESS_KEY}"         \
+            DISTRIBUTION_ID="${DISTRIBUTION_ID}"                     \
+            YTTEST_BUCKET="${YTTEST_BUCKET}" \
+            ./.utils/deploy.sh
+
+            AWS_ACCESS_KEY_ID="${AWS_ACCESS_KEY_ID}"                 \
+            AWS_SECRET_ACCESS_KEY="${AWS_SECRET_ACCESS_KEY}"         \
+            DISTRIBUTION_ID="${DISTRIBUTION_ID}"                     \
+            YTTEST_BUCKET="${YTTEST_BUCKET}" \
+            ./.utils/invalidate-cloudfront-cache.sh
+
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build
