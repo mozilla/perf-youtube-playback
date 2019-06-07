@@ -6,77 +6,114 @@
 
 set -ex
 
-if [ ! -d "test-materials" ] || [ ! -d "2019" ]; then
-    echo "Can't find test-materials/ or 2019/ directory. Are you running"\
-         "from the correct root directory?"
-    exit 1
-fi
+main() {
+  # For short-lived assets; in seconds
+  FIVE_DAYS="432000"
 
-if [ -z "$YTTEST_BUCKET" ]; then
-    echo "The S3 bucket is not set. Failing."
-    exit 1
-fi
+  # For long-lived assets; in seconds
+  ONE_YEAR="31536000"
 
-# The basic strategy is to sync all the files that need special attention
-# first, and then sync everything else which will get defaults
-
-
-# For short-lived assets; in seconds
-FIVE_DAYS="432000"
-
-# For long-lived assets; in seconds
-ONE_YEAR="31536000"
-
-CSPSTATIC="\"content-security-policy\": \"default-src 'none'; "\
+  CSPSTATIC="\"content-security-policy\": \"default-src 'none'; "\
 "base-uri 'none'; "\
 "form-action 'none'; "\
 "object-src 'none'\""
-# CSP mimicing what https://ytlr-cert.appspot.com/2019/main.html uses
-CSP="\"content-security-policy\": \"default-src * 'unsafe-inline' 'unsafe-eval' data: blob:;\""
-HSTS="\"strict-transport-security\": \"max-age=${ONE_YEAR}; includeSubDomains; preload\""
-TYPE="\"x-content-type-options\": \"nosniff\""
-XSS="\"x-xss-protection\": \"1; mode=block\""
-REFERRER="\"referrer-policy\": \"no-referrer-when-downgrade\""
+  # CSP mimicing what https://ytlr-cert.appspot.com/2019/main.html uses
+  CSP="\"content-security-policy\": \"default-src * 'unsafe-inline' 'unsafe-eval' data: blob:;\""
+  HSTS="\"strict-transport-security\": \"max-age=${ONE_YEAR}; includeSubDomains; preload\""
+  TYPE="\"x-content-type-options\": \"nosniff\""
+  XSS="\"x-xss-protection\": \"1; mode=block\""
+  REFERRER="\"referrer-policy\": \"no-referrer-when-downgrade\""
 
+  if [ -z "$YTTEST_BUCKET" ]; then
+      echo "The S3 bucket is not set. Failing."
+      exit 1
+  fi
 
-# HTML; short cache
-aws s3 sync \
-  --cache-control "max-age=${FIVE_DAYS}" \
-  --content-type "text/html; charset=utf-8" \
-  --exclude "*" \
-  --include "*.html" \
-  --metadata "{${CSP}, ${HSTS}, ${TYPE}, ${XSS}, ${REFERRER}}" \
-  --metadata-directive "REPLACE" \
-  --acl "public-read" \
-  2019/ s3://${YTTEST_BUCKET}/2019/
+  CODE_DIR=2019
 
-# JS; short cache
-aws s3 sync \
-  --cache-control "max-age=${FIVE_DAYS}" \
-  --content-type "text/javascript" \
-  --exclude "*" \
-  --include "*.js" \
-  --metadata "{${CSP}, ${HSTS}, ${TYPE}, ${XSS}, ${REFERRER}}" \
-  --metadata-directive "REPLACE" \
-  --acl "public-read" \
-  2019/ s3://${YTTEST_BUCKET}/2019/
+  case "$1" in
+    code)
+      if [ ! -d "$CODE_DIR" ]; then
+          echo "Can't find $CODE_DIR/ directory. Are you running"\
+               "from the correct root directory?"
+          exit 1
+      fi
+      deploy_code
+    ;;
+    media)
+      deploy_media_files
+    ;;
+    *)
+      echo "Unrecognized deploying target \`$1'. Try 'code' or 'media'." 1>&2
+      exit 1
+    ;;
+  esac
+}
 
-# Everything else; long cache
-aws s3 sync \
-  --delete \
-  --exclude "test-materials/*" \
-  --cache-control "max-age=${ONE_YEAR}, immutable" \
-  --metadata "{${CSPSTATIC}, ${HSTS}, ${TYPE}, ${XSS}, ${REFERRER}}" \
-  --metadata-directive "REPLACE" \
-  --acl "public-read" \
-  2019/ s3://${YTTEST_BUCKET}/2019/
+deploy_code() {
 
-# Media files; long cache
-aws s3 sync \
-  --delete \
-  --cache-control "max-age=${ONE_YEAR}, immutable" \
-  --metadata "{${CSPSTATIC}, ${HSTS}, ${TYPE}, ${XSS}, ${REFERRER}}" \
-  --metadata-directive "REPLACE" \
-  --acl "public-read" \
-  test-materials/ s3://${YTTEST_BUCKET}/2019/test-materials/
+  # The basic strategy is to sync all the files that need special attention
+  # first, and then sync everything else which will get defaults
 
+  # HTML; short cache
+  aws s3 sync \
+    --cache-control "max-age=${FIVE_DAYS}" \
+    --content-type "text/html; charset=utf-8" \
+    --exclude "*" \
+    --include "*.html" \
+    --metadata "{${CSP}, ${HSTS}, ${TYPE}, ${XSS}, ${REFERRER}}" \
+    --metadata-directive "REPLACE" \
+    --acl "public-read" \
+    "$CODE_DIR/" "s3://$YTTEST_BUCKET/$CODE_DIR/"
+
+  # JS; short cache
+  aws s3 sync \
+    --cache-control "max-age=${FIVE_DAYS}" \
+    --content-type "text/javascript" \
+    --exclude "*" \
+    --include "*.js" \
+    --metadata "{${CSP}, ${HSTS}, ${TYPE}, ${XSS}, ${REFERRER}}" \
+    --metadata-directive "REPLACE" \
+    --acl "public-read" \
+    "$CODE_DIR/" "s3://$YTTEST_BUCKET/$CODE_DIR/"
+
+  # Everything else; long cache
+  aws s3 sync \
+    --delete \
+    --exclude "test-materials/*" \
+    --cache-control "max-age=${ONE_YEAR}, immutable" \
+    --metadata "{${CSPSTATIC}, ${HSTS}, ${TYPE}, ${XSS}, ${REFERRER}}" \
+    --metadata-directive "REPLACE" \
+    --acl "public-read" \
+    "$CODE_DIR/" "s3://$YTTEST_BUCKET/$CODE_DIR/"
+}
+
+_download_and_prepare_media_files() {
+
+  TO_BE_DOWNLOADED=(
+    'https://storage.googleapis.com/ytlr-cert.appspot.com/test-materials/YTS-media-files.tar.gz'
+  )
+
+  for i in "${TO_BE_DOWNLOADED[@]}"; do
+    wget -c "$i"
+    tar zxvf "${i##*/}"
+    rm -fv "${i##*/}"
+  done
+
+}
+
+deploy_media_files() {
+
+  _download_and_prepare_media_files
+
+  # Media files; long cache
+  aws s3 sync \
+    --delete \
+    --cache-control "max-age=${ONE_YEAR}, immutable" \
+    --metadata "{${CSPSTATIC}, ${HSTS}, ${TYPE}, ${XSS}, ${REFERRER}}" \
+    --metadata-directive "REPLACE" \
+    --acl "public-read" \
+    test-materials/ "s3://$YTTEST_BUCKET/$CODE_DIR/test-materials/"
+}
+
+main "$@"
