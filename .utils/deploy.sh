@@ -16,6 +16,7 @@ main() {
   CSPSTATIC="\"content-security-policy\": \"default-src 'none'; "\
 "base-uri 'none'; "\
 "form-action 'none'; "\
+"frame-ancestors: 'none'; "\
 "object-src 'none'\""
   # CSP mimicing what https://ytlr-cert.appspot.com/2019/main.html uses
   CSP="\"content-security-policy\": \"default-src * 'unsafe-inline' 'unsafe-eval' data: blob:;\""
