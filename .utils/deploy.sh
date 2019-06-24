@@ -13,13 +13,8 @@ main() {
   # For long-lived assets; in seconds
   ONE_YEAR="31536000"
 
-  CSPSTATIC="\"content-security-policy\": \"default-src 'none'; "\
-"base-uri 'none'; "\
-"form-action 'none'; "\
-"frame-ancestors: 'none'; "\
-"object-src 'none'\""
-  # CSP mimicing what https://ytlr-cert.appspot.com/2019/main.html uses
-  CSP="\"content-security-policy\": \"default-src * 'unsafe-inline' 'unsafe-eval' data: blob:;\""
+  CSPSTATIC="\"content-security-policy\": \"default-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors: 'none'; object-src 'none'\""
+  CSP="\"content-security-policy\": \"default-src 'none'; img-src 'self' data:; script-src 'self' 'unsafe-inline'; font-src 'self'; frame-ancestors 'none'; base-uri 'none'; style-src 'self' 'unsafe-inline'; connect-src 'self'\""
   HSTS="\"strict-transport-security\": \"max-age=${ONE_YEAR}; includeSubDomains; preload\""
   TYPE="\"x-content-type-options\": \"nosniff\""
   XSS="\"x-xss-protection\": \"1; mode=block\""
