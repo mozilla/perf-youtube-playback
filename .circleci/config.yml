@@ -22,9 +22,8 @@ jobs:
       - attach_workspace:
           at: .
       - run:
-          name: deployment
+          name: deploy stage
           command: |
-            # deploy stage
             # stage is used by ops to verify infrastructure setups
             export AWS_ACCESS_KEY_ID="${STAGE_AWS_ACCESS_KEY_ID}"         \
             export AWS_SECRET_ACCESS_KEY="${STAGE_AWS_SECRET_ACCESS_KEY}" \
@@ -32,8 +31,9 @@ jobs:
             export YTTEST_BUCKET="${STAGE_YTTEST_BUCKET}"
             ./.utils/deploy.sh code
             ./.utils/invalidate-cloudfront-cache.sh
-
-            # deploy production
+      - run:
+          name: deploy production
+          command: |
             export AWS_ACCESS_KEY_ID="${AWS_ACCESS_KEY_ID}"         \
             export AWS_SECRET_ACCESS_KEY="${AWS_SECRET_ACCESS_KEY}" \
             export DISTRIBUTION_ID="${DISTRIBUTION_ID}"             \
