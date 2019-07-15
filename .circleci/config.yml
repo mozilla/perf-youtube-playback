@@ -1,0 +1,59 @@
+version: 2.0
+jobs:
+  build:
+    docker:
+      - image: circleci/python:3.7
+    steps:
+      - checkout
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - ./*
+
+  deploy:
+    docker:
+      - image: circleci/python:3.7
+    steps:
+      - run:
+          name: Install AWS CLI
+          command: |
+            sudo pip install --upgrade pip
+            sudo pip install --upgrade awscli
+      - attach_workspace:
+          at: .
+      - run:
+          name: deployment
+          command: |
+            # deploy stage
+            # stage is used by ops to verify infrastructure setups
+            export AWS_ACCESS_KEY_ID="${STAGE_AWS_ACCESS_KEY_ID}"         \
+            export AWS_SECRET_ACCESS_KEY="${STAGE_AWS_SECRET_ACCESS_KEY}" \
+            export DISTRIBUTION_ID="${STAGE_DISTRIBUTION_ID}"             \
+            export YTTEST_BUCKET="${STAGE_YTTEST_BUCKET}"                 \
+            ./.utils/deploy.sh code
+            ./.utils/invalidate-cloudfront-cache.sh
+
+            # deploy production
+            export AWS_ACCESS_KEY_ID="${AWS_ACCESS_KEY_ID}"         \
+            export AWS_SECRET_ACCESS_KEY="${AWS_SECRET_ACCESS_KEY}" \
+            export DISTRIBUTION_ID="${DISTRIBUTION_ID}"             \
+            export YTTEST_BUCKET="${YTTEST_BUCKET}"                 \
+            ./.utils/deploy.sh code
+            ./.utils/invalidate-cloudfront-cache.sh
+
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only:
+                - raptor
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - raptor
