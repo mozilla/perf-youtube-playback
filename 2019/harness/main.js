@@ -39,6 +39,7 @@ var parseParams = function(testSuiteConfig) {
   config.command = parseParam('command', '');
   config.timeout = Number(parseParam('timeout', TestBase.timeout));
   config.logging = !util.stringToBoolean(parseParam('disable_log', false));
+  config.fullscreen = util.stringToBoolean(parseParam('fullscreen', false));
   config.loop = util.stringToBoolean(parseParam('loop', false));
   config.stoponfailure = util.stringToBoolean(
       parseParam('stoponfailure', false));
