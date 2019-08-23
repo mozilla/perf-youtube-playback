@@ -19,12 +19,6 @@
 
 var XHR_TIMEOUT_LIMIT = 5000;
 
-if (!Element.prototype.requestFullscreen) {
-  Element.prototype.requestFullscreen = Element.prototype.mozRequestFullscreen ||
-                                        Element.prototype.webkitRequestFullscreen ||
-                                        Element.prototype.msRequestFullscreen;
-}
-
 (function() {
 
 // Backup logged in case logger is not setup in main.js.
@@ -403,10 +397,6 @@ TestExecutor.prototype.startNextTest = function() {
                                this.eventsAdded[i][1]);
     }
   };
-
-  if (harnessConfig.fullscreen) {
-    this.currentTest.video.requestFullscreen();
-  }
 
   this.currentTest.start(this, this.currentTest.video);
 };

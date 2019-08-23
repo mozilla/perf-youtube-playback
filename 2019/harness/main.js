@@ -161,6 +161,13 @@ var createRunner = function(testSuite, testSuiteVer, testsMask) {
       testarea.appendChild(util.createElement('video', vid, 'box-right'));
       document.getElementById(vid).controls = true;
       document.getElementById(vid).muted = harnessConfig.muted;
+      if (harnessConfig.fullscreen) {
+        try {
+          document.getElementById(vid).requestFullscreen()
+        } catch(err) {
+          this.fail('Failed to start video in fullscreen mode: ' + err)
+        }
+      }
     }
     return document.getElementById(vid);
   };
