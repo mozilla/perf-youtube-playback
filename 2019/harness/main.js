@@ -163,9 +163,9 @@ var createRunner = function(testSuite, testSuiteVer, testsMask) {
       document.getElementById(vid).muted = harnessConfig.muted;
       if (harnessConfig.fullscreen) {
         try {
-          document.getElementById(vid).requestFullscreen()
-        } catch(err) {
-          this.fail('Failed to start video in fullscreen mode: ' + err)
+          document.getElementById(vid).requestFullscreen();
+        } catch(e) {
+          this.fail('Failed to start video in fullscreen mode: ' + e);
         }
       }
     }
