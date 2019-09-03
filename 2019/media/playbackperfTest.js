@@ -28,8 +28,8 @@ var tests = [];
 var testTime = 15;
 TestBase.timeout = 70000; // 70 sec to compensate for 0.25 playbackRate tests.
 
-// For long tests, increase the default timeout to 1200 sec and
-// parse parameters in case a different timeout was requested.
+// For long tests, get the timeout and testing time from the harness config
+// parameters.
 if (harnessConfig.longtest) {
   TestBase.timeout = harnessConfig.timeout;
   testTime = harnessConfig.testTime
