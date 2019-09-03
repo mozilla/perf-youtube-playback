@@ -811,7 +811,7 @@ window.setupMse = function(video, runner, videoStreams, audioStreams) {
           appendUntil(
             runner.timeouts,
             video,
-            videoSbs[audioSbs.length - 1],
+            videoSbs[videoSbs.length - 1],
             videoChain,
             harnessConfig.testTime,
             function() {}
