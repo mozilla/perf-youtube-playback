@@ -53,6 +53,16 @@ var parseParams = function(testSuiteConfig) {
 
   // See: https://wiki.mozilla.org/Performance_sheriffing/Raptor
   config.is_raptor = util.stringToBoolean(parseParam('raptor', false));
+  config.longtest = util.stringToBoolean(parseParam('longtest', false));
+
+  // test_time parameter is ignored when longtest is false
+  config.testTime = 15;
+
+  if (config.longtest) {
+    // Set a higher default timeout for long tests
+    config.timeout = Number(parseParam('timeout', 1200000));
+    config.testTime = Number(parseParam('test_time', 300));
+  }
 
   config.is_cobalt = util.isCobalt();
   config.support_hdr = util.supportHdr();

@@ -25,7 +25,16 @@ var PlaybackperfTest = function() {
 
 var webkitPrefix = MediaSource.prototype.version.indexOf('webkit') >= 0;
 var tests = [];
+var testTime = 15;
 TestBase.timeout = 70000; // 70 sec to compensate for 0.25 playbackRate tests.
+
+// For long tests, increase the default timeout to 1200 sec and
+// parse parameters in case a different timeout was requested.
+if (harnessConfig.longtest) {
+  TestBase.timeout = harnessConfig.timeout;
+  testTime = harnessConfig.testTime
+}
+
 var info = 'No MSE Support!';
 if (window.MediaSource) {
   info = 'webkit prefix: ' + webkitPrefix.toString();
@@ -131,7 +140,7 @@ var createFrameDropValidationTest = function(videoStream1, videoStream2) {
         test.prototype.status = '(' + totalDroppedFrames + '/' +
             totalDecodedFrames + ')';
         runner.updateStatus();
-        if (!video.paused && video.currentTime >= 15) {
+        if (!video.paused && video.currentTime >= testTime) {
           video.removeEventListener('timeupdate', onTimeUpdate);
           video.pause();
           test.prototype.decoded_frames = totalDecodedFrames;
@@ -195,7 +204,7 @@ var createPlaybackPerfTest = function(
       test.prototype.status = '(' + totalDroppedFrames + '/' +
           totalDecodedFrames + ')';
       runner.updateStatus();
-      if (!video.paused && video.currentTime >= 15) {
+      if (!video.paused && video.currentTime >= testTime) {
         video.removeEventListener('timeupdate', onTimeUpdate);
         video.pause();
         test.prototype.decoded_frames = totalDecodedFrames;

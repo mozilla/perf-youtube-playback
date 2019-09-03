@@ -781,7 +781,21 @@ window.setupMse = function(video, runner, videoStreams, audioStreams) {
       var audioStream = audioStreams[audioStreamIdx];
       if (audioStream != null) {
         audioSbs.push(ms.addSourceBuffer(audioStream.mimetype));
-        appendLoop(audioStream, audioSbs[audioSbs.length - 1]);
+        if (harnessConfig.longtest) {
+          var audioChain = new ResetInit(new FixedAppendSize(
+              new FileSource(audioStream.src, runner.XHRManager, runner.timeouts),
+              65536));
+          appendUntil(
+            runner.timeouts,
+            video,
+            audioSbs[audioSbs.length - 1],
+            audioChain,
+            harnessConfig.testTime + 10,
+            function() {}
+          );
+        } else {
+          appendLoop(audioStream, audioSbs[audioSbs.length - 1]);
+        }
       }
     }
 
@@ -789,7 +803,22 @@ window.setupMse = function(video, runner, videoStreams, audioStreams) {
       var videoStream = videoStreams[videoStreamIdx];
       if (videoStream != null) {
         videoSbs.push(ms.addSourceBuffer(videoStream.mimetype));
-        appendLoop(videoStream, videoSbs[videoSbs.length - 1]);
+        if (harnessConfig.longtest) {
+          var videoChain = new ResetInit(new FixedAppendSize(
+              new FileSource(videoStream.src, runner.XHRManager, runner.timeouts),
+              65536));
+          console.log(harnessConfig.testTime)
+          appendUntil(
+            runner.timeouts,
+            video,
+            videoSbs[audioSbs.length - 1],
+            videoChain,
+            harnessConfig.testTime,
+            function() {}
+          );
+        } else {
+          appendLoop(videoStream, videoSbs[videoSbs.length - 1]);
+        }
       }
     }
   }
