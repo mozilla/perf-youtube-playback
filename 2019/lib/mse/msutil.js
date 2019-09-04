@@ -781,7 +781,7 @@ window.setupMse = function(video, runner, videoStreams, audioStreams) {
       var audioStream = audioStreams[audioStreamIdx];
       if (audioStream != null) {
         audioSbs.push(ms.addSourceBuffer(audioStream.mimetype));
-        if (harnessConfig.longtest) {
+        if (harnessConfig.testTime > 15) {
           var audioChain = new ResetInit(new FixedAppendSize(
               new FileSource(audioStream.src, runner.XHRManager, runner.timeouts),
               65536));
@@ -803,7 +803,7 @@ window.setupMse = function(video, runner, videoStreams, audioStreams) {
       var videoStream = videoStreams[videoStreamIdx];
       if (videoStream != null) {
         videoSbs.push(ms.addSourceBuffer(videoStream.mimetype));
-        if (harnessConfig.longtest) {
+        if (harnessConfig.testTime > 15) {
           var videoChain = new ResetInit(new FixedAppendSize(
               new FileSource(videoStream.src, runner.XHRManager, runner.timeouts),
               65536));
@@ -813,7 +813,7 @@ window.setupMse = function(video, runner, videoStreams, audioStreams) {
             video,
             videoSbs[videoSbs.length - 1],
             videoChain,
-            harnessConfig.testTime,
+            harnessConfig.testTime + 10,
             function() {}
           );
         } else {

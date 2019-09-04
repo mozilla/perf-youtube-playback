@@ -25,14 +25,15 @@ var PlaybackperfTest = function() {
 
 var webkitPrefix = MediaSource.prototype.version.indexOf('webkit') >= 0;
 var tests = [];
-var testTime = 15;
-TestBase.timeout = 70000; // 70 sec to compensate for 0.25 playbackRate tests.
+var testTime = harnessConfig.testTime;
 
-// For long tests, get the timeout and testing time from the harness config
-// parameters.
-if (harnessConfig.longtest) {
+if (harnessConfig.timeout == TestBase.timeout) {
+  // Use a timeout (in ms) that is 4x highger than testTime
+  // to compensate for 0.25 playbackRate tests.
+  TestBase.timeout = harnessConfig.testTime * 4000;
+} else {
+  // A non-default timeout was supplied, use that instead
   TestBase.timeout = harnessConfig.timeout;
-  testTime = harnessConfig.testTime
 }
 
 var info = 'No MSE Support!';
