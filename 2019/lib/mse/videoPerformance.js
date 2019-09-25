@@ -17,6 +17,8 @@
 
 'use strict';
 
+var FAIL_ALL = false;
+
 var VideoPerformanceMetrics = function(video) {
   this.video = video;
 };
@@ -49,6 +51,10 @@ VideoPerformanceMetrics.prototype.getDroppedVideoFrames = function() {
 
 VideoPerformanceMetrics.prototype.getTotalDecodedVideoFrames = function() {
   if (this.supports_('webkitDecodedFrameCount')) {
+    if (this.video['webkitDecodedFrameCount'] == 0) {
+      window.LOG('FAIL THE TEST!');
+      FAIL_ALL = true;
+    }
     return this.video['webkitDecodedFrameCount'];
   } else if(this.supports_('getVideoPlaybackQuality')) {
     return this.video.getVideoPlaybackQuality().totalVideoFrames;

@@ -272,7 +272,8 @@ TestExecutor.prototype.onfinished = function() {
 
   var keepRunning = (!harnessConfig.stoponfailure ||
       this.lastResult === 'pass') && harnessConfig.loop &&
-      (this.testView.anySelected() || this.numOfTestToRun === 1);
+      (this.testView.anySelected() || this.numOfTestToRun === 1) &&
+      FAIL_ALL === false;;
   if (keepRunning) {
     this.testToRun = this.numOfTestToRun;
     this.currentTestIdx = this.startIndex;
@@ -354,6 +355,13 @@ TestExecutor.prototype.startTest = function(startIndex, numOfTestToRun) {
 };
 
 TestExecutor.prototype.startNextTest = function() {
+
+  window.LOG('FAIL_ALL = '+ FAIL_ALL);
+  if (FAIL_ALL === true) {
+    this.onfinished();
+    return;
+  }
+
   if (this.numOfTestToRun != 1) {
     while (this.testToRun > 0 &&
            !this.testView.getTest(this.currentTestIdx).selected()) {
