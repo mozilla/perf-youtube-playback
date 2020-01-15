@@ -47,6 +47,10 @@ var PlaybackperfTest = function(subgroup) {
       });
       this.baseTearDown(testSuiteVer, cb);
     };
+
+    t.prototype.dropped_frames = 0;
+    t.prototype.decoded_frames = 0;
+
     tests.push(t);
     return t;
   };
@@ -180,6 +184,10 @@ var PlaybackperfTest = function(subgroup) {
             video.pause();
             perfTestUtil.assertAtLeastOneFrameDecoded();
             var totalDroppedFrames = perfTestUtil.getTotalDroppedFrames();
+
+            test.prototype.decoded_frames = perfTestUtil.getTotalDecodedFrames();
+            test.prototype.dropped_frames = totalDroppedFrames;
+
             if (totalDroppedFrames > 2) {
               runner.succeed();
             } else if (videoStream2.src == videoStream.src) {
@@ -241,6 +249,10 @@ var PlaybackperfTest = function(subgroup) {
         if (stopPlayback(video, testEmeHandler)) {
           video.removeEventListener('timeupdate', onTimeUpdate);
           video.pause();
+
+          test.prototype.decoded_frames = perfTestUtil.getTotalDecodedFrames();
+          test.prototype.dropped_frames = perfTestUtil.getTotalDroppedFrames();
+
           if (video.playbackRate != playbackRate) {
             runner.fail('playbackRate is not set');
           }
