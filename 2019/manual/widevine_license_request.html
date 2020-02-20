@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Widevine License Request Test</title>
+    <link rel="stylesheet" href="manual-page-style.css" type="text/css">
+</head>
+<body>
+    <div class="outer">
+      <div class="h1">Widevine License Values Test</div>
+      <div class="padding"></div>
+      <div class="h2">* Tip: 'Back' key press will move this page back to the previous page.</div>
+      <div class="padding"></div>
+      <div class="h3" style="padding:0px 80px;" id="wv_data"></div>
+      <br/>
+      <div>Log:</div>
+      <div style="border:1px solid black;" id="log"></div>
+    </div>
+    <video id="video" width="640" poster="//shaka-player-demo.appspot.com/assets/poster.jpg" controls style="display:none;"></video>
+
+    <script src="../harness/key.js"></script>
+    <script src="../harness/keyEvent.js"></script>
+    <script src="../third_party/Shaka/shaka-player.compiled.js"></script>
+    <script src="../third_party/beatgammit/base64.min.js"></script>
+    <script src="../lib/manual/wv_license_request.js"></script>
+    <script>
+      document.addEventListener('keyup', function(event) {
+        pushBackKeyToReturnManualPage(event);
+      });
+      initApp();
+    </script>
+</body>
+</html>

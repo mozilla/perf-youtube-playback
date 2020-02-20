@@ -17,6 +17,8 @@
 
 'use strict';
 
+goog.require('proto.yts_eme.LicenseRequest');
+
 var EMEHandler = function() {};
 
 EMEHandler.prototype.init = function(video, licenseManager) {
@@ -27,17 +29,36 @@ EMEHandler.prototype.init = function(video, licenseManager) {
   this.keyCount = 0;
   this.keySessions = [];
   this.licenseDelay = 10; // In milliseconds.
+  this.messageEncrypted = false;
+  this.serverCertificateRequested = false;
+  this.setServerCertificateResult = '';
+  this.certificateSrc;
 
   video.addEventListener('encrypted', this.onEncrypted.bind(this));
 
   return this;
 };
 
+EMEHandler.prototype.setCertificateSrc = function(cert) {
+  this.certificateSrc = cert;
+}
+
 EMEHandler.prototype.addEventSpies = function(eventSpies) {
   for (var spy in eventSpies) {
     this['_' + spy] = this[spy];
     this[spy] = eventSpies[spy];
   }
+};
+
+/** @return Promise */
+EMEHandler.prototype.checkKeySystem = function() {
+  if (typeof navigator.requestMediaKeySystemAccess != 'function') {
+    return new Promise((resolve, reject) => {
+      reject('requestMediaKeySystemAccess is not defined (requires HTTPS)');
+    });
+  }
+  var config = this.licenseManager.makeKeySystemConfig();
+  return navigator.requestMediaKeySystemAccess(this.keySystem, config);
 };
 
 /**
@@ -48,7 +69,6 @@ EMEHandler.prototype.onEncrypted = function(event) {
   if (!this.keySystem) {
     throw 'Not initialized! Bad manifest parse?';
   }
-
   dlog(2, 'onEncrypted()');
   var self = this;
   var initData = this.licenseManager.getExternalPSSH();
@@ -58,15 +78,21 @@ EMEHandler.prototype.onEncrypted = function(event) {
   var initDataType = event.initDataType
   var video = event.target;
 
-  var config = this.licenseManager.makeKeySystemConfig();
-  var promise = navigator.requestMediaKeySystemAccess(this.keySystem, config);
-  promise.then(function(keySystemAccess) {
+  this.checkKeySystem().then(function(keySystemAccess) {
     keySystemAccess.createMediaKeys().then(
       function(createdMediaKeys) {
         var mediaKeys = video.mediaKeys;
         if (!mediaKeys) {
           video.setMediaKeys(createdMediaKeys);
           mediaKeys = createdMediaKeys;
+        }
+        if (self.certificateSrc) {
+          if (createdMediaKeys.setServerCertificate) {
+            self.setServerCertificate(createdMediaKeys, self.certificateSrc);
+          } else {
+            self.setServerCertificateResult =
+              'setServerCertificate() is not supported';
+          }
         }
         var keySession = mediaKeys.createSession();
         keySession.addEventListener(
@@ -83,6 +109,40 @@ EMEHandler.prototype.onEncrypted = function(event) {
 };
 
 /**
+ * Sends HTTP request to get the certification and apply it to
+ * setServerCertificate.
+ */
+EMEHandler.prototype.setServerCertificate = function(mediaKeys, cert) {
+  dlog(2, 'setServerCertificate()');
+  var self = this;
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', cert);
+  xhr.addEventListener('readystatechange', function(evt) {
+    if (evt.target.readyState != 4) {
+      return;
+    }
+    var responseStatus = evt.target.status;
+    if (responseStatus < 200 || responseStatus > 299) {
+      return;
+    }
+    mediaKeys.setServerCertificate(evt.target.response).then(
+      (result) => {
+        if (result != true) {
+          self.setServerCertificateResult = `setServerCertificate failed`;
+          dlog(2, self.setServerCertificateResult);
+        }
+      },
+      (rejected) => {
+        self.setServerCertificateResult =
+            `setServerCertificate rejected ${rejected}`;
+        dlog(2, self.setServerCertificateResult);
+      });
+  });
+  xhr.responseType = 'arraybuffer';
+  xhr.send();
+}
+
+/**
  * Default callback for onMessage event from EME system.
  * @param {Event} e Event passed in by the EME system.
  */
@@ -96,17 +156,47 @@ EMEHandler.prototype.onMessage = function(event) {
 
   var updateSession =  function(response) {
     setTimeout(function() {
-      keySession.update(response).catch(dlog(2, 'keySession.update failed'))
+      keySession.update(response).catch(() =>
+          dlog(2, 'keySession.update failed'))
     }, licenseDelay);
   }
   if (messageType == 'individualization-request') {
     this.licenseManager.requestIndividualization(message, updateSession);
   } else if (messageType == 'license-request') {
+    this.checkServerCertificateRequest(message);
+    this.validateEncryptedMessage(message);
     this.licenseManager.acquireLicense(message, updateSession);
   } else {
     dlog(2, 'Unknown message:' + messageType);
   }
 };
+
+/**
+ * Checks if the message is server certificate request.
+ */
+EMEHandler.prototype.checkServerCertificateRequest = function(message) {
+  dlog(2, 'checkServerCertificateRequest()');
+  var msg = proto.yts_eme.Message.deserializeBinary(message);
+  if (msg.getId() == 4) {
+    this.serverCertificateRequested = true;
+  }
+}
+
+/**
+ * Checks if the license request is encrypted.
+ */
+EMEHandler.prototype.validateEncryptedMessage = function(message) {
+  dlog(2, 'validateEncryptedMessage()');
+  var msg = proto.yts_eme.Message.deserializeBinary(message);
+  if (msg.getId() != 1) {
+    return;
+  }
+  var licenseRequest =
+      proto.yts_eme.LicenseRequest.deserializeBinary(msg.getMsg());
+  if (!licenseRequest.hasRequestInfo() && licenseRequest.hasRequestId()) {
+    this.messageEncrypted = true;
+  }
+}
 
 /**
  * Default callback for keystatuseschange event from EME system.
@@ -142,3 +232,10 @@ EMEHandler.prototype.closeAllKeySessions = function (cb) {
   };
   closeAllSessions();
 };
+
+try {
+  exports.EMEHandler = EMEHandler;
+} catch (e) {
+  // do nothing, this function is not supposed to work for browser, but it's for
+  // Node js to generate json file instead.
+}

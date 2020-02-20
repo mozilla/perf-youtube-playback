@@ -40,6 +40,18 @@ function extractLicense(licenseArrayBuffer) {
   return licenseArray.subarray(licenseStartIndex);
 }
 
+var result = document.getElementById('result');
+var secondaryVideo = document.querySelector('video.secondary');
+if (!!secondaryVideo.setMaxVideoCapabilities) {
+  secondaryVideo.setMaxVideoCapabilities('width=432; height=240; framerate=15;');
+} else {
+  result.textContent = "video.setMaxVideoCapabilities NOT SUPPORTED!";
+}
+secondaryVideo.loop = true;
+secondaryVideo.autoplay = true;
+secondaryVideo.muted = true;
+secondaryVideo.src = 'https://storage.googleapis.com/ytlr-cert.appspot.com/test-materials/media/manual/dual_video/secondary-video.mp4';
+
 var videoContentType = 'video/mp4; codecs="avc1.640028"';
 var audioContentType = 'audio/mp4; codecs="mp4a.40.2"';
 

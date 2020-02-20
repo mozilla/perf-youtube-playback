@@ -41,7 +41,7 @@ function Category(categoryName) {
 
 function Test(desc, style) {
   var self = this;
-  this.index = desc.index;
+  this.index = desc.index + 1;
   this.nameId = 'test-item-name-' + this.index;
   this.statusId = 'test-item-status-' + this.index;
   this.desc = desc;
@@ -52,9 +52,10 @@ function Test(desc, style) {
     name.id = this.nameId;
     status.id = this.statusId;
     var link = createElement('span', null, null,
-                             this.index + 1 + '. ' + this.desc.desc);
+                             this.index + '. ' + this.desc.desc);
     link.classList.add('focusable');
     link.setAttribute('tabindex', '0');
+    link.setAttribute('testId', desc.id);
     link.exec = desc.onclick;
     link.onclick = desc.onclick;
     link.title = desc.title;

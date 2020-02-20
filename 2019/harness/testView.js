@@ -72,17 +72,30 @@ function TestView(testSuiteVer) {
   };
 
   this.addTestSuites = function(testSuites) {
+    var auth_params = {};
+    if (!!harnessConfig.cert_scope) {
+      auth_params = {
+        cert_scope: harnessConfig.cert_scope,
+        sig: harnessConfig.sig,
+        start_time: harnessConfig.start_time
+      };
+    }
+
     for (var index in testSuites) {
       var testSuite = testSuites[index];
       var testSuiteName = testSuiteDescriptions[testSuite].name;
       if (testSuite !== harnessConfig.testType) {
-        this.addTestSuite(testSuiteName, '?test_type=' + testSuite);
+        var url_param = '?test_type=' + testSuite;
+        for (var key in auth_params) {
+          url_param += '&' + key + '=' + auth_params[key];
+        }
+        this.addTestSuite(testSuiteName, url_param);
       }
       else {
         this.addTestSuite(testSuiteName, null);
       }
     }
-  }
+  };
 
   this.addLink = function(text, href) {
     links.push({text: text, href: href});
@@ -90,7 +103,7 @@ function TestView(testSuiteVer) {
 
   this.generate = function() {
     var heading = '[' + this.testSuiteVer + '] ' +
-        testSuiteDescriptions[harnessConfig.testType].heading + ' (v 20190520112447)';
+        testSuiteDescriptions[harnessConfig.testType].heading + ' (v 20200212151848)';
     try {
       document.title = testSuiteDescriptions[harnessConfig.testType].title;
     } catch (e) {
@@ -179,6 +192,15 @@ function TestView(testSuiteVer) {
         testSuitesDiv.lastChild.style.border = "solid #000000";
       }
     }
+
+    document.addEventListener('keyup', e => {
+      if (translateKeycode(e) === 'Back') {
+        document.getElementById("login-pop-up").style.display = "none";
+        if (util.tokenInterval) {
+          window.clearInterval(util.tokenInterval);
+        }
+      }
+    });
 
     this.testList.generate(document.getElementById('testlist'));
   };

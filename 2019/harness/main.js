@@ -23,8 +23,14 @@
 var loadTests = function(testType) {
   // We have to make it compatible to the legacy url format.
   var testName = testType.substr(0, testType.indexOf('-'));
-  testName = util.MakeCapitalName(testName) + 'Test';
-  return window[testName]();
+  if (testName == "playbackperf") {
+    var subgroup =
+      testType.substring(testType.indexOf('-') + 1, testType.lastIndexOf('-'));
+    return window['PlaybackperfTest'](subgroup)
+  } else {
+    testName = util.MakeCapitalName(testName) + 'Test';
+    return window[testName]();
+  }
 };
 
 var parseParam = function(param, defaultValue) {
@@ -39,20 +45,24 @@ var parseParams = function(testSuiteConfig) {
   config.command = parseParam('command', '');
   config.timeout = Number(parseParam('timeout', TestBase.timeout));
   config.logging = !util.stringToBoolean(parseParam('disable_log', false));
+  config.fullscreen = util.stringToBoolean(parseParam('fullscreen', false));
   config.loop = util.stringToBoolean(parseParam('loop', false));
   config.stoponfailure = util.stringToBoolean(
       parseParam('stoponfailure', false));
   config.enablewebm = util.stringToBoolean(
       parseParam('enablewebm', testSuiteConfig.enablewebm));
+  config.muted = util.stringToBoolean(parseParam('muted', false));
   config.novp9 = util.stringToBoolean(parseParam('novp9', false));
   config.tests = parseParam('tests');
   config.exclude = parseParam('exclude');
   config.testsMask = parseParam('tests_mask', '');
   config.testid = parseParam('testid', '');
+  config.cert_scope = parseParam('cert_scope', null);
+  config.sig = parseParam('sig', null);
+  config.start_time = parseParam('start_time', null);
 
   config.is_cobalt = util.isCobalt();
   config.support_hdr = util.supportHdr();
-  config.support_webgl = util.supportWebGL();
   config.support_webspeech = util.supportWebSpeech();
 
   // Overloaded run command to support browsers that have limitations on extra
@@ -155,6 +165,14 @@ var createRunner = function(testSuite, testSuiteVer, testsMask) {
       testarea.innerHTML = '';
       testarea.appendChild(util.createElement('video', vid, 'box-right'));
       document.getElementById(vid).controls = true;
+      document.getElementById(vid).muted = harnessConfig.muted;
+      if (harnessConfig.fullscreen) {
+        try {
+          document.getElementById(vid).requestFullscreen();
+        } catch(e) {
+          this.fail('Failed to start video in fullscreen mode: ' + e);
+        }
+      }
     }
     return document.getElementById(vid);
   };
@@ -185,7 +203,8 @@ window.startMseTest = function(testSuiteVer) {
     throw 'Cannot find test type ' + harnessConfig.testType;
   }
   // This is a hack that will not work in all cases.
-  if (!!window.Media && harnessConfig.novp9) {
+  if (!!window.Media && harnessConfig.novp9 &&
+      harnessConfig.testType != 'playbackperf-test') {
     Media.VP9 = Media.H264;
   }
 

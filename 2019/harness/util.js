@@ -20,6 +20,7 @@
 (function() {
 
 const MEDIA_PATH = 'test-materials/media/';
+const CERT_PATH = 'test-materials/cert/';
 
 if (!Function.prototype.bind) {
   Function.prototype.bind = function(oThis) {
@@ -44,6 +45,94 @@ if (!Function.prototype.bind) {
 }
 
 var util = {};
+
+// Begin non GitHub files
+// Initiate backend to grab user token to access API.
+util.getToken = function(onSuccess, interval) {
+  // Check if user clicks login again. Need to remove the last polling interval.
+  if (util.tokenInterval && interval!=util.tokenInterval) {
+    window.clearInterval(util.tokenInterval);
+  }
+  util.tokenInterval = interval;
+  var xhr = new XMLHttpRequest();
+  xhr.open("GET", "/token?branch=" + testVersion);
+  xhr.setRequestHeader("Content-type",
+    "application/x-www-form-urlencoded");
+  xhr.onreadystatechange = function() {
+    if (this.readyState === XMLHttpRequest.DONE){
+      if (this.status === 200) {
+        onSuccess();
+        window.clearInterval(interval);
+      } else if (this.status !== 428) {
+        // 428 means not ready, we can continue to call if it's not ready.
+        window.LOG(this, ["Login:", this.responseText]);
+        window.clearInterval(interval);
+        document.getElementById("login-pop-up").style.display = "none";
+      }
+    }
+  };
+  xhr.send();
+};
+
+// Gets the login code from backend.
+util.login = function(onSuccess) {
+  var overlay = document.getElementById('login-pop-up');
+  if (overlay.style.display === 'inline-block')
+  {
+    // Disable this button if the overlay is already showing.
+    return;
+  }
+
+  overlay.style.display = 'inline-block';
+  var xhr = new XMLHttpRequest();
+  xhr.open("GET", "/login");
+  xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  xhr.onreadystatechange = function() {
+    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+      var response = JSON.parse(this.responseText);
+      document.getElementById("client-id").textContent =
+          `2) Enter this code\n${response.user_code}`;
+      var interval = window.setInterval(() => {
+        util.getToken(onSuccess, interval);
+      }, response.interval * 1050);
+    }
+  };
+  xhr.send();
+};
+
+// Uploads current test results to API
+util.uploadTestResult = function(callBack) {
+  for (var test of window.globalRunner.testList) {
+    if (test && test.prototype.outcome!=0){
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "/uploadTest?branch=" + testVersion);
+      xhr.setRequestHeader("Content-type",
+        "application/json");
+      var params = JSON.stringify({
+        test_results: [
+          {
+            test_case_id: test.prototype.id,
+            test_result: {
+              result: test.prototype.outcome
+            }
+          }
+        ]
+      });
+      xhr.onreadystatechange = function() {
+        if (this.readyState === XMLHttpRequest.DONE) {
+          if (this.status != 200) {
+            window.LOG(this, ["upload error:", this.responseText]);
+          }
+        }
+      };
+      xhr.send(params);
+    }
+  }
+  callBack();
+};
+
+//End non GitHub files
+
 
 util.createElement = function(tag, id, class_, innerHTML) {
   var element = document.createElement(tag);
@@ -177,7 +266,6 @@ util.getAttr = function(obj, attr) {
   }
   return obj;
 };
-
 util.resize = function(str, newLength, fillValue) {
   if (typeof str != 'string')
     throw 'Only string is supported';
@@ -228,6 +316,38 @@ util.dlog = function(level) {
   }
 };
 
+/**
+ * Returns an AV1 codecs parameter string, e.g. "av01.0.05M.08"
+ * See https://aomediacodec.github.io/av1-isobmff/#codecsparam
+ *
+ * @param {?string} level from 2.0 to 7.3
+ * @param {?number} bitDepth 8 or 10
+ * @return {string}
+ */
+util.av1Codec = function(level = '2.0', bitDepth = 8) {
+  if (!/^[2-7]\.[0-3]$/.test(level)) {
+    throw `Invalid level: "${level}"`;
+  }
+  if (![8, 10].includes(bitDepth)) {
+    throw `Invalid bit depth: "${bitDepth}"`;
+  }
+  var zeroPad = n => {
+    // Returns a number (<100) formatted as a two-digit string.
+    return n < 10 ? `0${n}` : n.toString();
+  }
+  var fmtLevel = level => {
+    // Returns the value of seq_level_idx as defined in the spec.
+    var x_y = level.split('.');
+    var x = parseInt(x_y[0], 10);
+    var y = parseInt(x_y[1], 10);
+    var res = ((x - 2) * 4) + y;
+    return zeroPad(res);
+  };
+  var profile = 0; // Profile 0. No support for Profile 1 or Profile 2.
+  var tier = 'M'; // Main tier. No support yet for High tier.
+  return `av01.${profile}.${fmtLevel(level)}${tier}.${zeroPad(bitDepth)}`;
+};
+
 // return [width, height] of current window
 util.getMaxWindow = function() {
   return [
@@ -238,14 +358,18 @@ util.getMaxWindow = function() {
 
 util.getMaxVp9SupportedWindow = function() {
   if (MediaSource.isTypeSupported(
+      'video/webm; codecs="vp9"; width=7680; height=4320;') &&
+          !MediaSource.isTypeSupported(
+              'video/webm; codecs="vp9"; width=9999; height=9999;')) {
+    return [7680, 4320];
+  } else if (MediaSource.isTypeSupported(
       'video/webm; codecs="vp9"; width=3840; height=2160;') &&
           !MediaSource.isTypeSupported(
-              'video/webm; codecs="vp9"; width=9999; height=9999;'))
+              'video/webm; codecs="vp9"; width=9999; height=9999;')) {
     return [3840, 2160];
-  else
+  } else
     return util.getMaxWindow();
 };
-
 util.getMaxH264SupportedWindow = function() {
   if (MediaSource.isTypeSupported(
       'video/mp4; codecs="avc1.4d401e"; width=1920; height=1080;') &&
@@ -256,10 +380,53 @@ util.getMaxH264SupportedWindow = function() {
     return util.getMaxWindow();
 };
 
-util.is4k = function() {
-  return util.getMaxVp9SupportedWindow[0] == 3840 &&
-      util.getMaxVp9SupportedWindow[1] == 2160;
+util.getMaxAv1SupportedWindow = function() {
+  var checkSupport = spec => {
+    var type = [
+        'video/mp4',
+        `codecs="${util.av1Codec(spec.level)}"`,
+        `width=${spec.width}`,
+        `height=${spec.height}`,
+    ].join('; ');
+    return MediaSource.isTypeSupported(type);
+  };
+  if (checkSupport({level: '2.0', width: 9999, height: 9999})) {
+    // Invalid resolution, default to window size
+    return util.getMaxWindow();
+  }
+
+  var specs = [
+    {level: '6.0', width: 7680, height: 4320},
+    {level: '5.0', width: 3840, height: 2160},
+    {level: '4.0', width: 1920, height: 1080},
+  ];
+  for (var spec of specs) {
+    if (checkSupport(spec)) {
+      return [spec.width, spec.height];
+    }
+  }
+
+  // No valid resolutions, default to window size
+  return util.getMaxWindow();
 };
+
+util.is4k = function() {
+  return util.getMaxVp9SupportedWindow()[0] == 3840 &&
+      util.getMaxVp9SupportedWindow()[1] == 2160;
+};
+
+util.is8k = function() {
+  return util.getMaxVp9SupportedWindow()[0] == 7680 &&
+      util.getMaxVp9SupportedWindow()[1] == 4320;
+};
+
+util.isGtFHD = function() {
+  return ((util.getMaxWindow()[0] * util.getMaxWindow()[1]) > 2073600);
+}
+
+util.isGt4K = function() {
+  return ((util.getMaxWindow()[0] * util.getMaxWindow()[1]) > 8294400);
+}
 
 util.isCobalt = function() {
   return navigator.userAgent.includes('Cobalt');
@@ -285,40 +452,32 @@ util.createAudioFormatStr = function(audio, codec, suffix) {
       'audio/' + audio, codec, null, null, null, null, suffix);
 };
 
-util.supportHdr = function() {
-  var smpte2084Type = util.createVideoFormatStr(
-      'webm', 'vp9.2', 1280, 720, 30, null, 'eotf=smpte2084');
-  var smpte2084Supported = MediaSource.isTypeSupported(smpte2084Type);
-
-  var bt709Type = util.createVideoFormatStr(
-      'webm', 'vp9.2', 1280, 720, 30, null, 'eotf=bt709');
-  var bt709Supported = MediaSource.isTypeSupported(bt709Type);
-
-  var hlgType = util.createVideoFormatStr(
-      'webm', 'vp9.2', 1280, 720, 30, null, 'eotf=arib-std-b67');
-  var hlgSupported = MediaSource.isTypeSupported(hlgType);
-
-  var invalidEOTFType = util.createVideoFormatStr(
-      'webm', 'vp9.2', 1280, 720, 30, null, 'eotf=strobevision');
-  var invalidEOTFSupported = MediaSource.isTypeSupported(invalidEOTFType);
-
-  if (smpte2084Supported && bt709Supported &&
-      hlgSupported && !invalidEOTFSupported) {
+util.requireAV1 = function() {
+  if (util.isGt4K()) {
     return true;
-  } else {
-    return false;
   }
+  return util.isGtFHD() && util.supportHdr();
 };
 
-util.supportWebGL = function() {
-  try {
-    if (window.WebGLRenderingContext) {
-      var canvas = document.createElement('canvas');
-      var ctx = canvas.getContext('webgl');
-      return !!ctx;
+util.supportHdr = function() {
+  var supportEotf = eotf => {
+    return MediaSource.isTypeSupported(
+        util.createVideoFormatStr(
+            'webm', 'vp9.2', 1280, 720, 30, null, `eotf=${eotf}`));
+  };
+
+  if (supportEotf('strobevision')) {
+    // Invalid EOTF supported: MediaSource.isTypeSupported must be broken.
+    return false;
+  }
+
+  var eotfs = ['smpte2084', 'bt709', 'arib-std-b67'];
+  for (var i = 0; i < eotfs.length; i++) {
+    if (!supportEotf(eotfs[i])) {
+      return false;
     }
-  } catch (e) {}
-  return false;
+  }
+  return true;
 };
 
 util.supportWebSpeech = function() {
@@ -359,6 +518,17 @@ util.getMediaPath = function(filename) {
   return MEDIA_PATH + filename;
 };
 
+util.getCertificatePath = function(filename) {
+  return CERT_PATH + filename;
+};
+
 window.util = util;
 
 })();
+
+try {
+  exports.util = window.util;
+} catch (e) {
+  // do nothing, this function is not supposed to work for browser, but it's for
+  // Node js to generate json file instead.
+}

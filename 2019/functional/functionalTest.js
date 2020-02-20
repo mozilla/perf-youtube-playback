@@ -37,7 +37,7 @@ const TEST_MEDIA_SRC = {
 
 const MS_TO_WAIT_FOR_FONTS = 3000;
 const COBALT_REQ_URL =
-    'https://cobalt.googlesource.com/cobalt/+/19.lts.stable/' +
+    'https://cobalt.googlesource.com/cobalt/+/20.lts.stable/' +
     'src/cobalt/build/build.id?format=TEXT';
 
 var functionalVersion = 'Current Editor\'s Draft';
@@ -54,16 +54,10 @@ info += ' | Default Timeout: ' + TestBase.timeout + 'ms';
 
 var fields = ['passes', 'failures', 'timeouts'];
 
-var createFunctionalTest = function(name, category, mandatory) {
-  var t = createTest(name);
+var createFunctionalTest =
+    function(testId, name, category = 'Functional', mandatory = true) {
+  var t = createTest(name, category, mandatory, testId, 'Functional Tests');
   t.prototype.index = tests.length;
-  t.prototype.passes = 0;
-  t.prototype.failures = 0;
-  t.prototype.timeouts = 0;
-  t.prototype.category = category || 'Functional';
-  if (typeof mandatory === 'boolean') {
-    t.prototype.mandatory = mandatory;
-  }
   tests.push(t);
   return t;
 };
@@ -81,9 +75,9 @@ var createElement = function(elementName) {
 /**
  * Validate the existence of AudioContext and its properties.
  */
-var createAudioContextPropertyTest = function(value, evaluate) {
+var createAudioContextPropertyTest = function(testId, value, evaluate) {
   var name = value ? 'AudioContext.' + value : 'AudioContext';
-  var test = createFunctionalTest(name,'AudioContext');
+  var test = createFunctionalTest(testId, name,'AudioContext');
   test.prototype.title = 'Test if' + name + ' exists';
   test.prototype.start = function(runner) {
     try {
@@ -91,39 +85,46 @@ var createAudioContextPropertyTest = function(value, evaluate) {
       if (!evaluate(audioCtx)) {
         throw 'No ' + name + '.';
       }
+      runner.succeed();
     } catch (e) {
-      return runner.fail(e);
+      runner.fail(e);
+    } finally {
+      audioCtx.close();
     }
-    runner.succeed();
   }
 };
 
-createAudioContextPropertyTest(null, function(audioCtx) {
+createAudioContextPropertyTest('14.1.1.1', null, function(audioCtx) {
   return !!(audioCtx);
 });
-createAudioContextPropertyTest('destination', function(audioCtx) {
+createAudioContextPropertyTest('14.1.2.1', 'destination', function(audioCtx) {
   return !!(audioCtx.destination);
 });
-createAudioContextPropertyTest('sampleRate', function(audioCtx) {
+createAudioContextPropertyTest('14.1.3.1', 'sampleRate', function(audioCtx) {
   return typeof audioCtx.sampleRate === 'number';
 });
-createAudioContextPropertyTest('currentTime', function(audioCtx) {
+createAudioContextPropertyTest('14.1.4.1', 'currentTime', function(audioCtx) {
   return isNaN(audioCtx.currentTime) == false;
 });
-createAudioContextPropertyTest('decodeAudioData', function(audioCtx) {
-  return !!(audioCtx.decodeAudioData);
-});
-createAudioContextPropertyTest('createBufferSource', function(audioCtx) {
-  return (!!audioCtx.createBufferSource &&
-      audioCtx.createBufferSource() instanceof AudioBufferSourceNode);
-});
+createAudioContextPropertyTest(
+    '14.1.5.1', 'decodeAudioData', function(audioCtx) {
+      return !!(audioCtx.decodeAudioData);
+    });
+createAudioContextPropertyTest(
+  '14.1.6.1', 'createBufferSource', function(audioCtx) {
+    return (
+        !!audioCtx.createBufferSource &&
+        audioCtx.createBufferSource() instanceof AudioBufferSourceNode);
+  });
 
 /**
  * Validate the existence of AudioBufferSourceNode and its properties.
  */
-var createAudioBufferSourceNodeTest = function(value, evaluate, mandatory) {
+var createAudioBufferSourceNodeTest = function(
+    testId, value, evaluate, mandatory) {
   var name = value ? 'AudioBufferSourceNode.' + value : 'AudioBufferSourceNode';
-  var test = createFunctionalTest(name, 'AudioBufferSourceNode', mandatory);
+  var test =
+      createFunctionalTest(testId, name, 'AudioBufferSourceNode', mandatory);
   test.prototype.title = 'Test if ' + name + ' exists.';
   test.prototype.start = function(runner) {
     try {
@@ -132,42 +133,45 @@ var createAudioBufferSourceNodeTest = function(value, evaluate, mandatory) {
       if (!evaluate(source)) {
         throw 'No ' + name + '.';
       }
+      runner.succeed();
     } catch (e) {
       return runner.fail(e);
+    } finally {
+      audioCtx.close();
     }
-    runner.succeed();
   }
 };
 
-createAudioBufferSourceNodeTest(null, function(source) {
+createAudioBufferSourceNodeTest('14.2.1.1', null, function(source) {
   return !!source;
 });
-createAudioBufferSourceNodeTest('buffer', function(source) {
+createAudioBufferSourceNodeTest('14.2.2.1', 'buffer', function(source) {
   return !!(typeof source.buffer);
 });
-createAudioBufferSourceNodeTest('onended', function(source) {
+createAudioBufferSourceNodeTest('14.2.3.1', 'onended', function(source) {
   return !!(typeof source.onended);
 });
 createAudioBufferSourceNodeTest(
+    '14.2.4.1',
     'playbackRate',
     function(source) {
       return (typeof source.playbackRate.defaultValue === 'number') &&
           (typeof source.playbackRate.value === 'number');
     },
     false);
-createAudioBufferSourceNodeTest('start', function(source) {
+createAudioBufferSourceNodeTest('14.2.5.1', 'start', function(source) {
   return !!(typeof source.start);
 });
-createAudioBufferSourceNodeTest('stop', function(source) {
+createAudioBufferSourceNodeTest('14.2.6.1', 'stop', function(source) {
   return !!(typeof source.stop);
 });
 
 /**
  * Validate the existence of AudioNode and its properties.
  */
-var createAudioNodeTest = function(value, evaluate) {
+var createAudioNodeTest = function(testId, value, evaluate) {
   var name = value ? 'AudioNode.' + value : 'AudioNode';
-  var test = createFunctionalTest(name, 'AudioNode');
+  var test = createFunctionalTest(testId, name, 'AudioNode');
   test.prototype.title = 'Test if ' + name + ' exists.';
   test.prototype.start = function(runner) {
     try {
@@ -176,35 +180,37 @@ var createAudioNodeTest = function(value, evaluate) {
       if (!evaluate(node, audioCtx)) {
         throw 'No ' + name + '.';
       }
+      runner.succeed();
     } catch (e) {
-      return runner.fail(e);
+      runner.fail(e);
+    } finally {
+      audioCtx.close();
     }
-    runner.succeed();
   }
 };
 
-createAudioNodeTest(null, function(node) {
+createAudioNodeTest('14.3.1.1', null, function(node) {
   return !!(node);
 });
-createAudioNodeTest('context', function(node, audioCtx) {
+createAudioNodeTest('14.3.2.1', 'context', function(node, audioCtx) {
   return node.context === audioCtx;
 });
-createAudioNodeTest('numberOfInputs', function(node) {
+createAudioNodeTest('14.3.3.1', 'numberOfInputs', function(node) {
   return typeof node.numberOfInputs === 'number';
 });
-createAudioNodeTest('numberOfOutputs', function(node) {
+createAudioNodeTest('14.3.4.1', 'numberOfOutputs', function(node) {
   return typeof node.numberOfOutputs === 'number';
 });
-createAudioNodeTest('channelCountMode', function(node) {
+createAudioNodeTest('14.3.5.1', 'channelCountMode', function(node) {
   return typeof node.channelCountMode === 'string';
 });
-createAudioNodeTest('channelInterpretation', function(node) {
+createAudioNodeTest('14.3.6.1', 'channelInterpretation', function(node) {
   return typeof node.channelInterpretation === 'string';
 });
-createAudioNodeTest('connect', function(node, audioCtx) {
+createAudioNodeTest('14.3.7.1', 'connect', function(node, audioCtx) {
   return (!!(audioCtx.createBufferSource().connect));
 });
-createAudioNodeTest('disconnect', function(node, audioCtx) {
+createAudioNodeTest('14.3.8.1', 'disconnect', function(node, audioCtx) {
   return (!!(audioCtx.createBufferSource().disconnect));
 });
 
@@ -218,7 +224,7 @@ var expandUrl = function(url, charset) {
  * Ensure super long navigation URL is properly supported.
  */
 var testNavigationURLLength = createFunctionalTest(
-    'NavigationURLLength', 'URL Length', false);
+    '14.4.1.1', 'NavigationURLLength', 'URL Length', false);
 testNavigationURLLength.prototype.title = 'Test Navigation URL Length support.';
 testNavigationURLLength.prototype.start = function(runner) {
   try {
@@ -251,7 +257,7 @@ testNavigationURLLength.prototype.start = function(runner) {
  * Ensure super long image src URL is properly supported.
  */
 var testImageSrcURLLength = createFunctionalTest(
-    'ImageSrcURLLength', 'URL Length');
+    '14.4.2.1', 'ImageSrcURLLength', 'URL Length');
 testImageSrcURLLength.prototype.title = 'Test Image Src URL Length support.';
 testImageSrcURLLength.prototype.start = function(runner) {
   try {
@@ -272,9 +278,9 @@ testImageSrcURLLength.prototype.start = function(runner) {
 /**
  * Ensure super long video src URL is properly supported.
  */
-var createVideoSrcURLTest = function(format, src) {
+var createVideoSrcURLTest = function(testId, format, src) {
   var test = createFunctionalTest(
-      'VideoSrcURLLength - ' + format, 'URL Length');
+      testId, 'VideoSrcURLLength - ' + format, 'URL Length');
   test.prototype.title = 'Test ' + format + ' Video Src URL Length support.';
   test.prototype.start = function(runner, video) {
     try {
@@ -298,13 +304,14 @@ var createVideoSrcURLTest = function(format, src) {
   }
 };
 
-createVideoSrcURLTest('mp4', TEST_MEDIA_SRC.SslTestVideoMp4);
+createVideoSrcURLTest('14.4.3.1', 'mp4', TEST_MEDIA_SRC.SslTestVideoMp4);
 
 
 /**
  * Ensure super long XHR request URL is properly supported.
  */
-var testXHRURLLength = createFunctionalTest('XHRURLLength', 'URL Length');
+var testXHRURLLength =
+    createFunctionalTest('14.4.4.1', 'XHRURLLength', 'URL Length');
 testXHRURLLength.prototype.title = 'Test XHR Src URL Length support.';
 testXHRURLLength.prototype.start = function(runner) {
   try {
@@ -329,7 +336,7 @@ testXHRURLLength.prototype.start = function(runner) {
 /**
  * Validate the existence of CORS through Modernizr.
  */
-var testCORS = createFunctionalTest('CORS', 'Security');
+var testCORS = createFunctionalTest('14.5.1.1', 'CORS', 'Security');
 testCORS.prototype.title = 'Test if CORS works.';
 testCORS.prototype.start = function(runner) {
   try {
@@ -345,9 +352,9 @@ testCORS.prototype.start = function(runner) {
 /**
  * Validate the existence of localStorage properties.
  */
-var createLocalStorageTest = function(value, evaluate, cleanup) {
+var createLocalStorageTest = function(testId, value, evaluate, cleanup) {
   var name = value ? 'localStorage.' + value : 'localStorage';
-  var test = createFunctionalTest(name, 'localStorage');
+  var test = createFunctionalTest(testId, name, 'localStorage');
   test.prototype.title = 'Test if ' + name + ' works.';
   test.prototype.start = function(runner) {
     try {
@@ -365,19 +372,20 @@ var createLocalStorageTest = function(value, evaluate, cleanup) {
   }
 };
 
-createLocalStorageTest(null, function() {
+createLocalStorageTest('14.6.1.1', null, function() {
   return Modernizr.localstorage;
 });
-createLocalStorageTest('setItem', function() {
+createLocalStorageTest('14.6.2.1', 'setItem', function() {
   return Modernizr.prefixed('setItem', window.localStorage , false) != false;
 });
-createLocalStorageTest('getItem', function() {
+createLocalStorageTest('14.6.3.1', 'getItem', function() {
   return Modernizr.prefixed('getItem', window.localStorage , false) != false;
 });
-createLocalStorageTest('removeItem', function() {
+createLocalStorageTest('14.6.4.1', 'removeItem', function() {
   return Modernizr.prefixed('removeItem', window.localStorage , false) != false;
 });
 createLocalStorageTest(
+    '14.6.5.1',
     '1M Char Quota',
     function() {
       var testData = new Array(1000 * 1000).join('2');
@@ -392,7 +400,7 @@ createLocalStorageTest(
 /**
  * Test if HTTPS onload fires.
  */
-var testHTTPS = createFunctionalTest('HTTPS', 'HTTP');
+var testHTTPS = createFunctionalTest('14.7.1.1', 'HTTPS', 'HTTP');
 testHTTPS.prototype.title = 'Test if HTTPS onload fires.';
 testHTTPS.prototype.start = function(runner) {
   try {
@@ -414,7 +422,8 @@ testHTTPS.prototype.start = function(runner) {
 /**
  * Test if XMLHTTPRequest works.
  */
-var testXMLHTTPRequest = createFunctionalTest('XMLHTTPRequest', 'HTTP');
+var testXMLHTTPRequest =
+    createFunctionalTest('14.7.2.1', 'XMLHTTPRequest', 'HTTP');
 testXMLHTTPRequest.prototype.title = 'Test if XMLHTTPRequest works.';
 testXMLHTTPRequest.prototype.start = function(runner) {
   try {
@@ -429,8 +438,8 @@ testXMLHTTPRequest.prototype.start = function(runner) {
 /**
  * Test if XMLHTTPRequest Level 2 works.
  */
-var testXMLHTTPRequestLevel2 = createFunctionalTest(
-    'XMLHTTPRequest Level 2', 'HTTP');
+var testXMLHTTPRequestLevel2 =
+    createFunctionalTest('14.7.3.1', 'XMLHTTPRequest Level 2', 'HTTP');
 testXMLHTTPRequestLevel2.prototype.title =
     'Test if XMLHTTPRequest Level 2 works.';
 testXMLHTTPRequestLevel2.prototype.start = function(runner) {
@@ -448,9 +457,9 @@ testXMLHTTPRequestLevel2.prototype.start = function(runner) {
 /**
  * Validate Fetch API properties work as expect.
  */
-var createFetchAPITest = function(value, evaluate) {
+var createFetchAPITest = function(testId, value, evaluate) {
   var name = 'Fetch API - ' + value;
-  var test = createFunctionalTest(name, 'Fetch API');
+  var test = createFunctionalTest(testId, name, 'Fetch API');
   test.prototype.title = 'Test if ' + value + ' in Fetch API works.';
   test.prototype.start = function(runner) {
     try {
@@ -464,10 +473,10 @@ var createFetchAPITest = function(value, evaluate) {
   }
 };
 
-createFetchAPITest('fetch()', function() {
+createFetchAPITest('14.8.1.1', 'fetch()', function() {
   return !!(window.fetch);
 });
-createFetchAPITest('Headers', function() {
+createFetchAPITest('14.8.2.1', 'Headers', function() {
   var httpHeaders = {
     'Content-Type' : 'image/jpeg',
     'Accept-Charset' : 'utf-8'
@@ -479,8 +488,8 @@ createFetchAPITest('Headers', function() {
 /**
  * Validate Fetch API Request work as expect.
  */
-var testFetchAPIRequest= createFunctionalTest(
-    'Fetch API - Request', 'Fetch API');
+var testFetchAPIRequest =
+    createFunctionalTest('14.8.3.1', 'Fetch API - Request', 'Fetch API');
 testFetchAPIRequest.prototype.title = 'Test if Fetch API Request works.';
 testFetchAPIRequest.prototype.start = function(runner) {
   try {
@@ -500,8 +509,8 @@ testFetchAPIRequest.prototype.start = function(runner) {
 /**
  * Validate Fetch API Response work as expect.
  */
-var testFetchAPIResponse= createFunctionalTest(
-    'Fetch API - Response', 'Fetch API');
+var testFetchAPIResponse =
+    createFunctionalTest('14.8.4.1', 'Fetch API - Response', 'Fetch API');
 testFetchAPIResponse.prototype.title = 'Test if Fetch API Response works.';
 testFetchAPIResponse.prototype.start = function(runner) {
   try {
@@ -519,8 +528,8 @@ testFetchAPIResponse.prototype.start = function(runner) {
 /**
  * Test fetch API's streaming feature.
  */
-var testFetchStreamAPIRequest = createFunctionalTest(
-    'Fetch API - stream', 'Fetch API');
+var testFetchStreamAPIRequest =
+    createFunctionalTest('14.8.5.1', 'Fetch API - stream', 'Fetch API');
 testFetchStreamAPIRequest.prototype.title =
     'Test if Fetch API handles steaming. ';
 testFetchStreamAPIRequest.prototype.start = function(runner){
@@ -576,8 +585,8 @@ testFetchStreamAPIRequest.prototype.start = function(runner){
 /**
  * Validate Streams API - ReadableByteStream.
  */
-var testStreamsAPI= createFunctionalTest(
-    'Streams API - ReadableByteStream', 'Assorted');
+var testStreamsAPI = createFunctionalTest(
+    '14.9.1.1', 'Streams API - ReadableByteStream', 'Assorted');
 testStreamsAPI.prototype.title = 'Test Streams API - ReadableByteStream.';
 testStreamsAPI.prototype.start = function(runner) {
   try {
@@ -595,7 +604,8 @@ testStreamsAPI.prototype.start = function(runner) {
 /**
  * Validate browser supports strict mode in ECMA262-5.
  */
-var testECMA262= createFunctionalTest('ECMA262-5 Strict Mode', 'Assorted');
+var testECMA262 =
+    createFunctionalTest('14.9.2.1', 'ECMA262-5 Strict Mode', 'Assorted');
 testECMA262.prototype.title = 'Test browser supports strict mode in ECMA262-5.';
 testECMA262.prototype.start = function(runner) {
   try {
@@ -610,8 +620,8 @@ testECMA262.prototype.start = function(runner) {
 /**
  * Validate the existence of window.requestAnimationFrame through Modernizr.
  */
-var testAnimationFrame= createFunctionalTest(
-    'RequestAnimationFrame', 'Assorted');
+var testAnimationFrame =
+    createFunctionalTest('14.9.3.1', 'RequestAnimationFrame', 'Assorted');
 testAnimationFrame.prototype.title = 'Test request Animation Frame.';
 testAnimationFrame.prototype.start = function(runner) {
   try {
@@ -627,8 +637,8 @@ testAnimationFrame.prototype.start = function(runner) {
 /**
  * Test if js date object is correctly supported.
  */
-var testJSDateObject= createFunctionalTest(
-    'JavaScript Date Object', 'Assorted');
+var testJSDateObject =
+    createFunctionalTest('14.9.4.1', 'JavaScript Date Object', 'Assorted');
 testJSDateObject.prototype.title = 'Test if js date object is supported.';
 testJSDateObject.prototype.start = function(runner) {
   try {
@@ -648,8 +658,8 @@ testJSDateObject.prototype.start = function(runner) {
 /**
  * Validate support for specified image format.
  */
-var createImgTest = function(suffix) {
-  var test = createFunctionalTest(suffix.toUpperCase(), 'Assorted');
+var createImgTest = function(testId, suffix) {
+  var test = createFunctionalTest(testId, suffix.toUpperCase(), 'Assorted');
   test.prototype.title = 'Test image format ' + suffix;
   test.prototype.start = function(runner) {
     try {
@@ -668,13 +678,14 @@ var createImgTest = function(suffix) {
   }
 };
 
-createImgTest('Jpg');
-createImgTest('Png');
+createImgTest('14.9.5.1', 'Jpg');
+createImgTest('14.9.6.1', 'Png');
 
 /**
  * Validate the window height and width are in right size.
  */
-var testWindowSize = createFunctionalTest('Window Size', 'Assorted');
+var testWindowSize =
+    createFunctionalTest('14.9.7.1', 'Window Size', 'Assorted');
 testWindowSize.prototype.title = 'Test window size in current browser.';
 testWindowSize.prototype.start = function(runner) {
   try {
@@ -710,8 +721,8 @@ testWindowSize.prototype.start = function(runner) {
 /**
  * Validate existence of WebP properties.
  */
-var createWebPTest = function(name, uri) {
-  var test = createFunctionalTest(name, 'WebP');
+var createWebPTest = function(testId, name, uri) {
+  var test = createFunctionalTest(testId, name, 'WebP');
   test.prototype.title = 'Test ' + name + ' support.';
   test.prototype.start = function(runner) {
     var img = new Image();
@@ -738,93 +749,25 @@ var webpTests = [{
   'name': 'WebP Animation'
 }, {
   'uri': 'data:image/webp;base64,UklGRh4AAABXRUJQVlA4TBEAAAAvAAAAAAfQ//73v/+BiOh/AAA=',
-  'name': 'WebP Lossles'
+  'name': 'WebP Lossless'
 }];
 
 for (var i = 0; i < webpTests.length; i++) {
-  createWebPTest(webpTests[i].name, webpTests[i].uri);
+  createWebPTest(`14.10.${i + 1}.1`, webpTests[i].name, webpTests[i].uri);
 }
-
-/**
- * Validate specified video format could be played.
- */
-var createMediaFormatTest = function(name, stream, codec, mandatory) {
-  var test = createFunctionalTest(name, 'Video / Audio', mandatory);
-  test.prototype.title = 'Test if browser can play ' + name;
-  test.prototype.start = function(runner, video) {
-    try {
-      if (!!(MediaSource.isTypeSupported &&
-          MediaSource.isTypeSupported(
-              stream + '; codecs="' + codec + '"'))) {
-        return runner.succeed();
-      }
-      throw name + ' not supported.';
-    } catch (e) {
-      return runner.fail(e);
-    }
-  };
-};
-
-createMediaFormatTest('MP4 + H.264', 'video/mp4', 'avc1.4d401e');
-createMediaFormatTest('WebM + VP9', 'video/webm', 'vp9');
-createMediaFormatTest('WebM + VP9 Profile 2', 'video/webm', 'vp9.2');
-createMediaFormatTest('WebM + Opus', 'audio/webm', 'opus', false);
-
-
-/**
- * Ensure WebGL is correctly supported.
- */
-var testWebGLSupport = createFunctionalTest(
-    'WebGL Support Detected', 'WebGL', harnessConfig.support_webgl);
-testWebGLSupport.prototype.title = 'Test if WebGL is correctly supported';
-testWebGLSupport.prototype.start = function(runner) {
-  try {
-    if (window.WebGLRenderingContext) {
-      var canvas = createElement('canvas');
-      var ctx = canvas.getContext('webgl');
-      if (!!(ctx)) {
-        return runner.succeed();
-      }
-    }
-    throw 'WebGL not correctly supported.'
-  } catch (e) {
-    return runner.fail(e);
-  }
-};
-
-/**
- * Ensure WebGL is properly disabled if not supported.
- */
-var testWebGLDisabled = createFunctionalTest(
-    'WebGL Properly Disabled', 'WebGL', !harnessConfig.support_webgl);
-testWebGLDisabled.prototype.title = 'Test if WebGL is properly disabled';
-testWebGLDisabled.prototype.start = function(runner) {
-  try {
-    if (window.WebGLRenderingContext) {
-      var canvas = createElement('canvas');
-      var ctx = canvas.getContext('webgl');
-      if (ctx) {
-        throw 'WebGL not correctly disbabled.'
-      }
-    }
-    return runner.succeed();
-  } catch (e) {
-    return runner.fail(e);
-  }
-};
 
 /**
  * Test WebSpeech API through Modernizr.
  */
 var testWebSpeechAPI = createFunctionalTest(
-    'WebSpeech API', 'Assorted', harnessConfig.support_webspeech);
+    '14.12.1.1', 'WebSpeech API', 'Assorted', harnessConfig.support_webspeech);
 testWebSpeechAPI.prototype.title = 'Test WebSpeech API.';
 testWebSpeechAPI.prototype.start = function(runner) {
   try {
-    if (Modernizr.speechrecognition) {
+    if (Modernizr.speechrecognition || Modernizr.mediarecorder) {
       return runner.succeed();
     }
-    throw 'WebSpeech not supported.';
+    throw 'Neither speechrecognition nor mediarecorder supported.';
   } catch (e) {
     return runner.fail(e);
   }
@@ -834,7 +777,7 @@ testWebSpeechAPI.prototype.start = function(runner) {
  * Ensure video/x-flv is unsupported.
  */
 var testNoVideoXFlv = createFunctionalTest(
-    'video/x-flv is unsupported', 'Assorted');
+    '14.12.2.1', 'video/x-flv is unsupported', 'Assorted');
 testNoVideoXFlv.prototype.title = 'Make sure video/x-flv is unsupported.';
 testNoVideoXFlv.prototype.start = function(runner) {
   try {
@@ -850,8 +793,8 @@ testNoVideoXFlv.prototype.start = function(runner) {
 /**
  * Validate MediaSource properties through Modernizr.
  */
-var createMediaSourceTest = function(arg) {
-  var test = createFunctionalTest('MediaSource.' + arg, 'MediaSource');
+var createMediaSourceTest = function(testId, arg) {
+  var test = createFunctionalTest(testId, 'MediaSource.' + arg, 'MediaSource');
   test.prototype.title = 'Test if MediaSource.' + arg + ' is supported.';
   test.prototype.start = function(runner, video) {
     try {
@@ -867,19 +810,326 @@ var createMediaSourceTest = function(arg) {
   };
 }
 
-createMediaSourceTest('addSourceBuffer');
-createMediaSourceTest('sourceBuffers');
-createMediaSourceTest('activeSourceBuffers');
-createMediaSourceTest('duration');
-createMediaSourceTest('removeSourceBuffer');
-createMediaSourceTest('readyState');
-createMediaSourceTest('endOfStream');
+createMediaSourceTest('14.13.1.1', 'addSourceBuffer');
+createMediaSourceTest('14.13.2.1', 'sourceBuffers');
+createMediaSourceTest('14.13.3.1', 'activeSourceBuffers');
+createMediaSourceTest('14.13.4.1', 'duration');
+createMediaSourceTest('14.13.5.1', 'removeSourceBuffer');
+createMediaSourceTest('14.13.6.1', 'readyState');
+createMediaSourceTest('14.13.7.1', 'endOfStream');
+
+/**
+ * Test if specified type is supported through MediaSource.isTypeSupported.
+ */
+var createSupportTest = function(testId, name, evaluate, mandatory) {
+  var logResult = function(format, result) {
+    this.runner.log('[' + this.desc + '] - isTypeSupported("' + format +
+        '") returned: ' + result);
+  };
+
+  var test = createFunctionalTest(testId, name, 'Support', mandatory);
+  test.prototype.title = 'Test ' + name;
+  test.prototype.start = function(runner) {
+    try {
+      if (evaluate(logResult.bind(this))) {
+        return runner.succeed();
+      }
+      throw name + ' failed.';
+    } catch (e) {
+      return runner.fail(e);
+    }
+  }
+};
+
+
+createSupportTest(
+    '14.14.1.1', 'isTypeSupported cryptoblockformat', function(logResult) {
+  var invalidCryptoBlockFormatType = util.createVideoFormatStr(
+      'webm', 'vp9', 1280, 720, 23.976, null, 'cryptoblockformat=invalid');
+  var invalidCryptoBlockFormatSupported =
+      MediaSource.isTypeSupported(invalidCryptoBlockFormatType);
+  logResult(
+      invalidCryptoBlockFormatType, invalidCryptoBlockFormatSupported);
+
+  var validCryptoBlockFormatType = util.createVideoFormatStr(
+      'webm', 'vp9', 1280, 720, 23.976, null, 'cryptoblockformat=subsample');
+  var validCryptoBlockFormatSupported =
+      MediaSource.isTypeSupported(validCryptoBlockFormatType);
+  logResult(validCryptoBlockFormatType, validCryptoBlockFormatSupported);
+
+  if (!invalidCryptoBlockFormatSupported && validCryptoBlockFormatSupported) {
+    return true;
+  }
+});
+
+
+var isTypeSupportedTest = function(logResult) {
+  var baselineVideoType = util.createVideoFormatStr(
+      'mp4', 'avc1.4d401e', 640, 360, 30, null, 'bitrate=300000');
+  var baselineVideoSupported =
+      MediaSource.isTypeSupported(baselineVideoType);
+  logResult(baselineVideoType, baselineVideoSupported);
+
+  var baselineAudioType =
+      util.createAudioFormatStr('mp4', 'mp4a.40.2', 'channels=2');
+  var baselineAudioSupported = MediaSource.isTypeSupported(baselineAudioType);
+  logResult(baselineAudioType, baselineAudioSupported);
+
+  var invalidVideoHeightType = util.createVideoFormatStr(
+      'mp4', 'avc1.4d401e', 640, 10360);
+  var invalidVideoHeightSupported =
+      MediaSource.isTypeSupported(invalidVideoHeightType);
+  logResult(invalidVideoHeightType, invalidVideoHeightSupported);
+
+  var invalidAudioChannelsType = util.createAudioFormatStr(
+      'mp4', 'mp4a.40.2', 'channels=100');
+  var invalidAudioChannelsSupported =
+      MediaSource.isTypeSupported(invalidAudioChannelsType);
+  logResult(invalidAudioChannelsType, invalidAudioChannelsSupported);
+
+  if (baselineVideoSupported && baselineAudioSupported &&
+      !invalidVideoHeightSupported && !invalidAudioChannelsSupported) {
+    return true;
+  }
+};
+
+createSupportTest(
+    '14.14.2.1', 'isTypeSupported Extensions', isTypeSupportedTest);
+
+createSupportTest(
+    '14.14.3.1',
+    'H.264 60fps Support',
+    function(logResult) {
+      if (!(isTypeSupportedTest(logResult))) return false;
+
+      var maxWidth = util.getMaxH264SupportedWindow()[0];
+      var maxHeight = util.getMaxH264SupportedWindow()[1];
+
+      var invalidH264Type = util.createVideoFormatStr(
+          'mp4', 'avc1.4d401e', 640, 360, 9999);
+      var invalidH264Supported = MediaSource.isTypeSupported(invalidH264Type);
+      logResult(invalidH264Type, invalidH264Supported);
+
+      var baselineH264Type = util.createVideoFormatStr(
+          'mp4', 'avc1.4d401e', 640, 360, 60)
+      var baselineH264Supported = MediaSource.isTypeSupported(baselineH264Type);
+      logResult(baselineH264Type, baselineH264Supported);
+
+      var maxResolutionH264Type = util.createVideoFormatStr(
+          'mp4', 'avc1.4d401e', maxWidth, maxHeight, 60);
+      var maxResolutionH264Supported =
+          MediaSource.isTypeSupported(maxResolutionH264Type);
+      logResult(maxResolutionH264Type, maxResolutionH264Supported);
+
+      if (baselineH264Supported && maxResolutionH264Supported &&
+          !invalidH264Supported) {
+        return true;
+      }
+    });
+
+createSupportTest(
+    '14.14.4.1',
+    'VP9 60fps Support',
+    function(logResult) {
+      if (!(isTypeSupportedTest(logResult))) return false;
+
+      var maxWidth = util.getMaxVp9SupportedWindow()[0];
+      var maxHeight = util.getMaxVp9SupportedWindow()[1];
+
+      var invalidVp9Type =
+          util.createVideoFormatStr('webm', 'vp9', 640, 360, 9999);
+      var invalidVp9Supported = MediaSource.isTypeSupported(invalidVp9Type);
+      logResult(invalidVp9Type, invalidVp9Supported);
+
+      var baselineVp9Type =
+          util.createVideoFormatStr('webm', 'vp9', 640, 360, 60);
+      var baselineVp9Supported = MediaSource.isTypeSupported(baselineVp9Type);
+      logResult(baselineVp9Type, baselineVp9Supported);
+
+      var maxVp9Type =
+          util.createVideoFormatStr('webm', 'vp9', maxWidth, maxHeight, 60);
+      var maxVp9Supported = MediaSource.isTypeSupported(maxVp9Type);
+      logResult(maxVp9Type, maxVp9Supported);
+
+      if (baselineVp9Supported && maxVp9Supported && !invalidVp9Supported) {
+        return true;
+      }
+    });
+
+createSupportTest(
+    '14.14.5.1',
+    'H.264 120fps Support',
+    function(logResult) {
+      if (!(isTypeSupportedTest(logResult))) return false;
+
+      var maxWidth = util.getMaxH264SupportedWindow()[0];
+      var maxHeight = util.getMaxH264SupportedWindow()[1];
+
+      var invalidH264Type = util.createVideoFormatStr(
+          'mp4', 'avc1.4d401e', 640, 360, 9999);
+      var invalidH264Supported = MediaSource.isTypeSupported(invalidH264Type);
+      logResult(invalidH264Type, invalidH264Supported);
+
+      var baselineH264Type = util.createVideoFormatStr(
+          'mp4', 'avc1.4d401e', 640, 360, 120);
+      var baselineH264Supported = MediaSource.isTypeSupported(baselineH264Type);
+      logResult(baselineH264Type, baselineH264Supported);
+
+      var maxResolutionH264Type = util.createVideoFormatStr(
+          'mp4', 'avc1.4d401e', maxWidth, maxHeight, 120);;
+      var maxResolutionH264Supported =
+          MediaSource.isTypeSupported(maxResolutionH264Type);
+      logResult(maxResolutionH264Type, maxResolutionH264Supported);
+
+      if (baselineH264Supported && maxResolutionH264Supported &&
+          !invalidH264Supported) {
+        return true;
+      }
+    },
+    false);
+
+createSupportTest(
+    '14.14.6.1',
+    'VP9 120fps Support',
+    function(logResult) {
+      if (!(isTypeSupportedTest(logResult))) return false;
+
+      var maxWidth = util.getMaxVp9SupportedWindow()[0];
+      var maxHeight = util.getMaxVp9SupportedWindow()[1];
+
+      var invalidVp9Type =
+          util.createVideoFormatStr('webm', 'vp9', 640, 360, 9999);
+      var invalidVp9Supported = MediaSource.isTypeSupported(invalidVp9Type);
+      logResult(invalidVp9Type, invalidVp9Supported);
+
+      var baselineVp9Type =
+          util.createVideoFormatStr('webm', 'vp9', 640, 360, 120);
+      var baselineVp9Supported = MediaSource.isTypeSupported(baselineVp9Type);
+      logResult(baselineVp9Type, baselineVp9Supported);
+
+      var maxVp9Type = util.createVideoFormatStr(
+          'webm', 'vp9', maxWidth, maxHeight, 120);
+      var maxVp9Supported = MediaSource.isTypeSupported(maxVp9Type);
+      logResult(maxVp9Type, maxVp9Supported);
+
+      if (baselineVp9Supported && maxVp9Supported && !invalidVp9Supported) {
+        return true;
+      }
+    },
+    false);
+
+createSupportTest(
+    '14.14.7.1',
+    'isTypeSupported EOTF Support',
+    function(logResult) {
+      var smpte2084Type = util.createVideoFormatStr(
+          'webm', 'vp9.2', 1280, 720, 30, null, 'eotf=smpte2084');
+      var smpte2084Supported = MediaSource.isTypeSupported(smpte2084Type);
+      logResult(smpte2084Type, smpte2084Supported);
+
+      var bt709Type = util.createVideoFormatStr(
+          'webm', 'vp9.2', 1280, 720, 30, null, 'eotf=bt709');
+      var bt709Supported = MediaSource.isTypeSupported(bt709Type);
+      logResult(bt709Type, bt709Supported);
+
+      var hlgType = util.createVideoFormatStr(
+          'webm', 'vp9.2', 1280, 720, 30, null, 'eotf=arib-std-b67');
+      var hlgSupported = MediaSource.isTypeSupported(hlgType);
+      logResult(hlgType, hlgSupported);
+
+      var invalidEOTFType = util.createVideoFormatStr(
+          'webm', 'vp9.2', 1280, 720, 30, null, 'eotf=strobevision');
+      var invalidEOTFSupported = MediaSource.isTypeSupported(invalidEOTFType);
+      logResult(invalidEOTFType, invalidEOTFSupported);
+
+      if (smpte2084Supported && bt709Supported &&
+          hlgSupported && !invalidEOTFSupported) {
+        return true;
+      }
+    },
+    harnessConfig.support_hdr);
+
+createSupportTest(
+    '14.14.8.1',
+    'SMPTE2084 Support',
+    function(logResult) {
+      var smpte2084Type =
+          util.createSimpleVideoFormatStr('webm', 'vp9.2', 'eotf=smpte2084');
+      var smpte2084Supported = MediaSource.isTypeSupported(smpte2084Type);
+      logResult(smpte2084Type, smpte2084Supported);
+
+      if (smpte2084Supported) {
+        return true;
+      }
+    },
+    harnessConfig.support_hdr);
+
+createSupportTest(
+    '14.14.9.1',
+    'ARIB STD-B67 Support',
+    function(logResult) {
+      var hlgType =
+          util.createSimpleVideoFormatStr('webm', 'vp9.2', 'eotf=arib-std-b67');
+      var hlgSupported = MediaSource.isTypeSupported(hlgType);
+      logResult(hlgType, hlgSupported);
+
+      if (hlgSupported) {
+        return true;
+      }
+    },
+    harnessConfig.support_hdr);
+
+createSupportTest(
+    '14.14.10.1',
+    'ITU-R BT.709 Support',
+    function(logResult) {
+      var bt709Type =
+          util.createSimpleVideoFormatStr('webm', 'vp9.2', 'eotf=bt709');
+      var bt709Supported = MediaSource.isTypeSupported(bt709Type);
+      logResult(bt709Type, bt709Supported);
+
+      if (bt709Supported) {
+        return true;
+      }
+    },
+    harnessConfig.support_hdr);
+
+createSupportTest(
+    '14.14.11.1',
+    'Spherical(decode-to-texture) Support',
+    function(logResult) {
+      if (!(isTypeSupportedTest(logResult))) return false;
+
+      var invalidSphericalType = util.createSimpleVideoFormatStr(
+          'webm', 'vp9', 'decode-to-texture=nope');
+      var invalidSphericalSupported =
+          MediaSource.isTypeSupported(invalidSphericalType);
+      logResult(invalidSphericalType, invalidSphericalSupported);
+
+      var validSphericalTrueType = util.createSimpleVideoFormatStr(
+          'webm', 'vp9', 'decode-to-texture=true');
+      var validSphericalTrueSupported =
+          MediaSource.isTypeSupported(validSphericalTrueType);
+      logResult(validSphericalTrueType, validSphericalTrueSupported);
+
+      var validSphericalFalseType = util.createSimpleVideoFormatStr(
+          'webm', 'vp9', 'decode-to-texture=false');
+      var validSphericalFalseSupported =
+          MediaSource.isTypeSupported(validSphericalFalseType);
+      logResult(validSphericalFalseType, validSphericalFalseSupported);
+
+      if (validSphericalTrueSupported && validSphericalFalseSupported &&
+          !invalidSphericalSupported) {
+        return true;
+      }
+    },
+    util.isCobalt());
 
 /**
  * Test if specified type is supported through videoElement.isTypeSupported.
  */
-var createEMETest = function(name, evaluate, mandatory) {
-  var test = createFunctionalTest(name, 'EME Basic', mandatory);
+var createEMETest = function(testId, name, evaluate, mandatory) {
+  var test = createFunctionalTest(testId, name, 'EME Basic', mandatory);
   test.prototype.title = 'Test ' + name;
   test.prototype.start = function(runner, video) {
     try {
@@ -894,6 +1144,7 @@ var createEMETest = function(name, evaluate, mandatory) {
 };
 
 createEMETest(
+    '14.15.1.1',
     'canPlayType.keySystem',
     function(videoElement) {
       return videoElement.canPlayType(
@@ -914,7 +1165,7 @@ var widevineTest = function(videoElement) {
               'com.widevine.alpha') != undefined;
 };
 
-createEMETest('Widevine', widevineTest);
+createEMETest('14.15.2.1', 'Widevine', widevineTest);
 
 
 var playreadyTest = function(videoElement) {
@@ -923,13 +1174,14 @@ var playreadyTest = function(videoElement) {
       'com.youtube.playready') != undefined;
 };
 
-createEMETest('PlayReady', playreadyTest, false);
+createEMETest('14.15.3.1', 'PlayReady', playreadyTest, false);
 
-createEMETest('DRM', function(videoElement) {
+createEMETest('14.15.4.1', 'DRM', function(videoElement) {
   return widevineTest || playreadyTest;
 });
 
 createEMETest(
+    '14.15.5.1',
     'Video.generateKeyRequest',
     function(videoElement) {
       return Modernizr.prefixed(
@@ -941,9 +1193,10 @@ createEMETest(
  * Creates a MediaDevices test that validates whether the device has
  * Audio input media device and it implements correctly.
  */
-var createMediaDevicesTest = function() {
+var createMediaDevicesTest = function(testId) {
   var name = 'EnumerateDevices';
-  var test = createFunctionalTest(name, name, harnessConfig.support_webspeech);
+  var test =
+      createFunctionalTest(testId, name, name, harnessConfig.support_webspeech);
   test.prototype.title = 'Test if ' + name + ' exists';
   test.prototype.start = function(runner) {
     try {
@@ -970,24 +1223,25 @@ var createMediaDevicesTest = function() {
   };
 };
 
-createMediaDevicesTest();
+createMediaDevicesTest('14.16.1.1');
 
 /**
  * Create a UAString test that validates the format of current User Agent.
  */
-var createUAStringTest = function() {
+var user_agent_2020 = new RegExp(
+    [
+      '([-.A-Za-z0-9\\\\\\/]+)_([-.A-Za-z0-9\\\\\\/]*)_([a-zA-Z0-9\\-]*)',
+      '_2020 ?\\/ ?[-_.A-Za-z0-9\\\\]* \\(([a-zA-Z0-9\\-\\_]+), ',
+      '?([a-zA-Z0-9\\-\\_]*), ?([WIREDLSwiredls\\\\\\/]*)\\)'
+    ].join(''));
+
+var createUAStringTest = function(testId) {
   var name = 'User Agent';
-  var test = createFunctionalTest(name, name);
+  var test = createFunctionalTest(testId, name, name);
   test.prototype.title = 'Test if ' + name + ' format is correct';
   test.prototype.start = function(runner) {
     try{
-      var re_2019 = new RegExp(
-          [
-            '([-.A-Za-z0-9\\\\\\/]*)_([-.A-Za-z0-9\\\\\\/]*)_([-.A-Za-z0-9\\',
-            '\\\\/]*)_2019 ?\\/ ?[-_.A-Za-z0-9\\\\]* \\(([-_.A',
-            '-Za-z0-9\\\\\\/ ]+), ?([^,]*), ?([WIREDLSwiredls\\\\\\/]*)\\)'
-          ].join(''));
-      var useragentParsed = re_2019.exec(navigator.userAgent);
+      var useragentParsed = user_agent_2020.exec(navigator.userAgent);
       if (useragentParsed &&
           useragentParsed[2].match(/^(BDP|GAME|OTT|STB|TV|ATV)$/)) {
         return runner.succeed();
@@ -999,14 +1253,14 @@ var createUAStringTest = function() {
   };
 };
 
-createUAStringTest();
+createUAStringTest('14.17.1.2');
 
 /**
  * Create a UAString test that validates version of certain items in user agent.
  */
-var createCobaltVersionTest = function(regexp, version, name) {
+var createCobaltVersionTest = function(testId, regexp, version, name) {
   var title = 'User Agent';
-  var test = createFunctionalTest(name + ' ' + title, title);
+  var test = createFunctionalTest(testId, name + ' ' + title, title);
   test.prototype.title = 'Test if ' + name + title + ' format is correct';
   test.prototype.start = function(runner) {
     try {
@@ -1023,7 +1277,8 @@ var createCobaltVersionTest = function(regexp, version, name) {
               } catch (e) {
                 runner.fail(e);
               }
-              if (useragentParsed && Number(useragentParsed[1].split('.')[1]) === buildVersion) {
+              if (useragentParsed &&
+                  Number(useragentParsed[1].split('.')[1]) === buildVersion) {
                 return runner.succeed();
               }
               runner.fail(Error(name + ' version is not ' + buildVersion));
@@ -1044,15 +1299,164 @@ var createCobaltVersionTest = function(regexp, version, name) {
   };
 };
 
-createCobaltVersionTest(new RegExp(/19\.lts\.([0-9]\.[0-9]{6})/), 0, 'Cobalt');
-createCobaltVersionTest(new RegExp(/Starboard\/([0-9]+)/), 10, 'Starboard');
+createCobaltVersionTest(
+    '14.17.2.1', new RegExp(/20\.lts\.([0-9]\.[0-9]{6})/), 0, 'Cobalt');
+createCobaltVersionTest(
+    '14.17.3.2', new RegExp(/Starboard\/([0-9]+)/), 11, 'Starboard')
+
+var widevine_ua = /([-.A-Za-z0-9\\\/]*)_([-.A-Za-z0-9\\\/]*)_([-.A-Za-z0-9\\\/]*) ?\/ ?[-_.A-Za-z0-9\\]* \(([-_.A-Za-z0-9\\\/ ]+), ?([^,]*), ?([WIREDLSwiredls\\\/]*)\)/;
 
 /**
- * Create a CPU memory test that validates the size of memory allocation.
+ * Ensure information in Widevine License match User Agent and the OEMCrypto
+ * api version is at least 15.
  */
-var createMemoryTest = function(processor, size) {
-  var title = processor + ' Memory Allocation';
-  var test = createFunctionalTest(title, title);
+var testWidevine = createFunctionalTest('14.17.4.1', 'Widevine License', 'User Agent');
+testWidevine.prototype.title = 'Test if widevine versions.'
+testWidevine.prototype.start = function(runner) {
+
+  function clearPlayer() {
+    if((typeof player !== 'undefined') && (player !== null)){
+      player.unload();
+      player.destroy();
+    }
+  };
+
+  try {
+    var manifestUri =
+    'test-materials/media/manual/wv_license_request.mpd';
+    var licenseServer = 'https://cwip-shaka-proxy.appspot.com/no_auth';
+    var userAgentParsed = widevine_ua.exec(navigator.userAgent);
+    if (!userAgentParsed) {
+      throw Error('Error! User agent is not in correct format');
+    }
+    var ua_brand = userAgentParsed[4];
+    var ua_model = userAgentParsed[5];
+
+    var sessionID;
+    const initSession = () => {
+      /**
+       * Generates a GUID string, according to RFC4122 standards.
+       * @returns {String} The generated GUID.
+       * @example af8a84166e18a307bd9cf2c947bbb3aa
+       * @author Slavik Meltser (slavik@meltser.info).
+       * @link http://slavik.meltser.info/?p=142
+       */
+      function _p8(s) {
+        var p = (Math.random().toString(16) + '000000000').substr(2, 8);
+        return s ? p.substr(0, 4) + p.substr(4, 4) : p;
+      }
+      sessionID = window.location.href.split('testid=')[1] ||
+          _p8() + _p8(true) + _p8(true) + _p8();
+      runner.log('Session ID: ' + sessionID);
+    };
+
+    const initPlayer = () => {
+      // Create a Player instance.
+      var videoElement = createElement('video');
+      try {
+        videoElement.textTracks = [];
+      } catch (e) {
+        let textTracks = videoElement.textTracks;
+        textTracks = [];
+      }
+      videoElement.addTextTrack = function() {
+        return {
+          addCue: function() {}
+        }
+      };
+      var player = new shaka.Player(videoElement);
+
+      // Attach player to the window to make it easy to access in the JS console.
+      window.player = player;
+
+      // Listen for error events.
+      player.addEventListener('error', function(event) {
+        throw Error('shaka error ' + event.detail);
+      });
+
+      // Try to load a manifest.
+      // This is an asynchronous process.
+
+      player.configure({drm: {servers: {'com.widevine.alpha': licenseServer}}});
+      player.getNetworkingEngine().registerRequestFilter(function(
+          type, request) {
+        // Only manipulate license requests:
+        if (type == shaka.net.NetworkingEngine.RequestType.LICENSE) {
+          // This is the raw license request generated by the Widevine CDM.
+          var rawLicenseRequest = new Uint8Array(request.body);
+          // Encode the raw license request in base64.
+
+          var rawLicenseRequestBase64 =
+              base64js.fromByteArray(rawLicenseRequest);
+          runner.log('license request: ' + rawLicenseRequestBase64);
+
+          var xhr = new XMLHttpRequest();
+          var url = 'https://proxy.uat.widevine.com/proxy?get_client_id=true';
+          xhr.open('POST', url, true);
+          xhr.send(rawLicenseRequest);
+          xhr.onreadystatechange = function() {
+            try {
+              if (xhr.readyState == 4) {
+                if (xhr.status != 200) {
+                  throw Error('failed, HTTP status ' + xhr.status);
+                } else {
+                  runner.log("xhr.responseText: " + xhr.responseText);
+                  var parsedResponse = JSON.parse(xhr.responseText);
+                  var license = {};
+                  var client_info = parsedResponse.client_info;
+                  if (client_info.length != 0) {
+                    for (var i = 0; i < client_info.length; i++) {
+                      var key = parsedResponse.client_info[i].name;
+                      var value = parsedResponse.client_info[i].value;
+                      license[key] = value;
+                    }
+                    runner.checkEq(
+                        license["company_name"], ua_brand, "Company Name");
+                    runner.checkEq(license["model_name"], ua_model, "Model Name");
+                    runner.checkGE(
+                        parsedResponse.client_capabilities.oem_crypto_api_version,
+                        15, "OEMCrypto version");
+                    runner.succeed();
+                    clearPlayer();
+                  }
+                }
+              }
+            } catch (error) {
+              throw Error('Player Error ' + error);
+            }
+          };
+        }
+      });
+      player.load(manifestUri).then(function() {}).catch(function(error) {
+        throw Error('Load error ' + error);
+      });
+    };
+
+
+    initSession();
+    // Install built-in polyfills to patch browser incompatibilities.
+    shaka.polyfill.installAll();
+
+    // Check to see if the browser supports the basic APIs Shaka needs.
+    if (shaka.Player.isBrowserSupported()) {
+      // Everything looks good!
+      initPlayer();
+    } else {
+      // This browser does not have the minimum set of APIs we need.
+      throw Error('Browser not supported!');
+    }
+  } catch (e) {
+    return runner.fail(e);
+    clearPlayer();
+  }
+};
+
+/**
+ * Create a CPU memory test that validates the size of system memory.
+ */
+var createMemoryTest = function(testId, processor, size) {
+  var title = processor + ' System Memory';
+  var test = createFunctionalTest(testId, title, 'Memory Allocation');
   test.prototype.title = 'Test if ' + title + ' is correct';
   test.prototype.start = function(runner) {
     try{
@@ -1065,9 +1469,7 @@ var createMemoryTest = function(processor, size) {
           throw Error(processor + ' memory allocated less than ' + size);
         }
       } else {
-        var a = new Array(size - 50 * 1024 * 1024).join('M');
-        var f = function(arr){};
-        f(a);
+        throw Error('Cobalt not found');
       }
       return runner.succeed();
     } catch (e) {
@@ -1076,13 +1478,144 @@ var createMemoryTest = function(processor, size) {
   };
 };
 
-createMemoryTest('CPU', 150 * 1024 * 1024);
+createMemoryTest('14.18.1.1','CPU', 170 * 1024 * 1024);
+
+/**
+ * Create a memory test that validates the size of JavaScript allocation.
+ */
+var createMemoryAllocationTest = function(testId, size) {
+  var title = 'JavaScript Memory Allocation';
+  var test = createFunctionalTest(testId, title, 'Memory Allocation');
+  test.prototype.title = 'Test if ' + title + ' is correct';
+  test.prototype.start = function(runner) {
+    try{
+      var a = new ArrayBuffer(size * 1024 * 1024);
+      return runner.succeed();
+    } catch (e) {
+      return runner.fail(e);
+    }
+  };
+};
+
+createMemoryAllocationTest('14.18.2.1', 80);
+
+var GetMinVideoBufferSizeInMB = function() {
+  if (util.is8k()) {
+    return 300;
+  } else if (util.is4k()) {
+    return util.supportHdr() ? 80 : 50;
+  } else {
+    return 30;
+  }
+};
+
+var GetVideoSrc = function() {
+  if (util.is4k()) {
+    return util.supportHdr() ?
+        Media.VP9.Video2160pHdr1MB : Media.VP9.Video2160p1MB;
+  } else {
+    return Media.VP9.Video1080p1MB;
+  }
+}
+
+/**
+ * Test if device can hold a minimum size of video and audiosource buffer.
+ */
+var testSourceBufferSize = createFunctionalTest(
+    '14.19.1.1', 'Source Buffer Size', 'Buffer', util.isGtFHD());
+testSourceBufferSize.prototype.title = 'Determines video and audiobuffer sizes '
+    'by appending incrementally until discard occurs or requirement is met.';
+testSourceBufferSize.prototype.start = function(runner, video) {
+    var ms = new MediaSource();
+    // We start appending video clip repeatedly until we get eviction.
+    var videoStream = GetVideoSrc();
+    // The audio clip has just over 5MB, which is the requirement for audio
+    // souce buffer.
+    var audioStream = Media.AAC.AudioHuge;
+    var videoSb;
+    var audioSb;
+    ms.addEventListener('sourceopen', function() {
+      videoSb = ms.addSourceBuffer(videoStream.mimetype);
+      audioSb = ms.addSourceBuffer(audioStream.mimetype);
+    });
+    video.src = window.URL.createObjectURL(ms);
+
+    var minVideoBufferSizeMb = GetMinVideoBufferSizeInMB();
+    var minVideoBufferSize = minVideoBufferSizeMb * 1024 * 1024;
+    var videoEstimatedMinTime =
+        minVideoBufferSize * videoStream.duration / videoStream.size * 0.9;
+
+    var videoXhr =
+        runner.XHRManager.createRequest(videoStream.src, function(e) {
+      var appendCount = 0;
+      var expectedTime = 0;
+      var expectedSize = 0;
+
+      var onUpdate = function() {
+        appendCount++;
+        runner.log('Append count ' + appendCount);
+        if (videoSb.buffered.start(0) > 0 ||
+            expectedTime > videoSb.buffered.end(0)) {
+          onBufferFull();
+        } else {
+          expectedTime += videoStream.duration;
+          expectedSize += videoStream.size;
+          if (expectedSize > minVideoBufferSize) {
+            runner.log('Source buffer exceeded minimum: ' + minVideoBufferSize);
+            onBufferFull();
+            return;
+          }
+          videoSb.timestampOffset = expectedTime;
+          try {
+            videoSb.appendBuffer(videoXhr.getResponseData());
+          } catch (e) {
+            runner.log(e);
+            var QUOTA_EXCEEDED_ERROR_CODE = 22;
+            if (e.code == QUOTA_EXCEEDED_ERROR_CODE) {
+              onBufferFull();
+            } else {
+              runner.fail(e);
+            }
+          }
+        }
+      };
+      var onBufferFull = function() {
+        videoSb.removeEventListener('updateend', onUpdate);
+        runner.checkGE(
+            videoSb.buffered.end(0) - videoSb.buffered.start(0),
+            videoEstimatedMinTime,
+            'Time range in source buffer');
+        runner.succeed();
+      };
+      videoSb.addEventListener('updateend', onUpdate);
+      videoSb.appendBuffer(videoXhr.getResponseData());
+    });
+
+    var audioXhr =
+        runner.XHRManager.createRequest(audioStream.src, function(e) {
+      var minAudioBufferSizeMb = 5;
+      var minAudioBufferSize = minAudioBufferSizeMb * 1024 * 1024;
+      var audioEstimatedMinTime =
+          minAudioBufferSize * (audioStream.duration / audioStream.size) * 0.95;
+      var onUpdate = function() {
+        audioSb.removeEventListener('updateend', onUpdate);
+        runner.checkGE(
+            audioSb.buffered.end(0) - audioSb.buffered.start(0),
+            audioEstimatedMinTime,
+            'Time range in source buffer');
+        videoXhr.send();
+      };
+      audioSb.addEventListener('updateend', onUpdate);
+      audioSb.appendBuffer(audioXhr.getResponseData());
+    });
+    audioXhr.send();
+};
 
 /**
  * Ensure Same-origin Policy is enabled through accessing localStorage.
  */
-var testSameOriginPolicy = createFunctionalTest(
-    'Same-origin Policy', 'Assorted');
+var testSameOriginPolicy =
+    createFunctionalTest('14.20.1.1', 'Same-origin Policy', 'Assorted');
 testSameOriginPolicy.prototype.title = 'Test Same-origin Policy.';
 testSameOriginPolicy.prototype.start = function(runner) {
   var value = localStorage.getItem('yt.leanback::schema-version');
@@ -1105,8 +1638,8 @@ var createFontDiv = function(format, content) {
  * Validate specified font format is supported by browser.
  * Assume ttf is supported.
  */
-var createFontTest = function(format) {
-  var test = createFunctionalTest('Fonts - ' + format, 'Fonts', false);
+var createFontTest = function(testId, format) {
+  var test = createFunctionalTest(testId, 'Fonts - ' + format, 'Fonts', false);
   test.prototype.title = 'Test if font format ' + format + ' is supported.';
   test.prototype.start = function(runner) {
     try {
@@ -1141,8 +1674,8 @@ var createFontTest = function(format) {
   };
 };
 
-createFontTest('woff');
-createFontTest('woff2');
+createFontTest('14.21.1.1', 'woff');
+createFontTest('14.21.2.1', 'woff2');
 
 
 var setCookie = function(key, value, path, domain, expires, httponly) {
@@ -1234,7 +1767,7 @@ var invalid_cookies = [
 /**
  * Ensure browser could set cookie and save properly.
  */
-var testSetCookie = createFunctionalTest('Set Cookie', 'Cookie');
+var testSetCookie = createFunctionalTest('14.22.1.1', 'Set Cookie', 'Cookie');
 testSetCookie.prototype.title = 'Test if browser could save cookie.'
 testSetCookie.prototype.start = function(runner) {
   try {
@@ -1270,7 +1803,8 @@ testSetCookie.prototype.start = function(runner) {
 /**
  * Ensure browser could set cookie and save properly.
  */
-var testSetExpiredCookie = createFunctionalTest('Set Expired Cookie', 'Cookie');
+var testSetExpiredCookie =
+    createFunctionalTest('14.22.2.1', 'Set Expired Cookie', 'Cookie');
 testSetExpiredCookie.prototype.title = 'Test if browser ignores expired cookie.'
 testSetExpiredCookie.prototype.start = function(runner) {
   try {
@@ -1309,8 +1843,8 @@ testSetExpiredCookie.prototype.start = function(runner) {
 /**
  * Validate certain number of cookies is supported by browser.
  */
-var createCookieStorageTest = function(name, count) {
-  var test = createFunctionalTest(name, 'Cookie');
+var createCookieStorageTest = function(testId, name, count) {
+  var test = createFunctionalTest(testId, name, 'Cookie');
   test.prototype.title = 'Test if browser supports ' + count + '4kb cookies.';
   test.prototype.start = function(runner) {
     var cookie_size = 4000;
@@ -1340,15 +1874,15 @@ var createCookieStorageTest = function(name, count) {
   };
 };
 
-createCookieStorageTest('Min Cookie Storage', 50);
-createCookieStorageTest('Max Cookie Storage', 150);
+createCookieStorageTest('14.22.3.1', 'Min Cookie Storage', 50);
+createCookieStorageTest('14.22.4.1', 'Max Cookie Storage', 150);
 
 /**
  * Validate browser could correctly handle request from server with valid and
  * invalid certificates.
  */
-var createSslTest = function(name, origin, shouldFail = false) {
-  var test = createFunctionalTest(name, 'SSL');
+var createSslTest = function(testId, name, origin, shouldFail = false) {
+  var test = createFunctionalTest(testId, name, 'SSL');
   test.prototype.title =
       'Test if browser correctly handle to request to ' + origin;
   test.prototype.start = function(runner) {
@@ -1375,12 +1909,13 @@ var createSslTest = function(name, origin, shouldFail = false) {
   };
 };
 
-createSslTest('Self-Signed', 'https://self-signed.badssl.com/', true);
-createSslTest('expired', 'https://expired.badssl.com/', true);
-createSslTest('sha256', 'https://sha256.badssl.com/');
-createSslTest('TLS', 'https://tls-v1-2.badssl.com:1012/');
+createSslTest('14.23.1.1', 'Self-Signed', 'https://self-signed.badssl.com/', true);
+createSslTest('14.23.2.1', 'expired', 'https://expired.badssl.com/', true);
+createSslTest('14.23.3.1', 'sha256', 'https://sha256.badssl.com/');
+createSslTest('14.23.4.1', 'TLS', 'https://tls-v1-2.badssl.com:1012/');
 
-var testGlobalSignR2 = createFunctionalTest('GlobalSign RootCA R2', 'SSL');
+var testGlobalSignR2 =
+    createFunctionalTest('14.23.5.1', 'GlobalSign RootCA R2', 'SSL');
 testGlobalSignR2.prototype.title = 'Test if browser correctly handle to' +
     'request with GlobalSign RootCA R2 certificate.';
 testGlobalSignR2.prototype.start = function(runner) {
@@ -1405,7 +1940,8 @@ testGlobalSignR2.prototype.start = function(runner) {
   }
 };
 
-var testGlobalSignR3 = createFunctionalTest('GlobalSign RootCA R3', 'SSL');
+var testGlobalSignR3 =
+    createFunctionalTest('14.23.6.1', 'GlobalSign RootCA R3', 'SSL');
 testGlobalSignR3.prototype.title = 'Test if browser correctly handle to' +
     'request with GlobalSign RootCA R3 certificate.';
 testGlobalSignR3.prototype.start = function(runner) {
@@ -1430,3 +1966,10 @@ testGlobalSignR3.prototype.start = function(runner) {
 
 return {tests: tests, info: info, fields: fields, viewType: 'default'};
 };
+
+try {
+  exports.getTest = FunctionalTest;
+} catch (e) {
+  // do nothing, this function is not supposed to work for browser, but it's for
+  // Node js to generate json file instead.
+}

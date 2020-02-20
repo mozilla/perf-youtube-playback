@@ -18,82 +18,98 @@
 'use strict';
 
 var compactTestView = (function() {
+  function CompactTestView(fields, style) {
+    var self = this;
+    this.divId = 'testview';
+    this.testCount = 0;
 
-function CompactTestView(fields, style) {
-  var self = this;
-  this.divId = 'testview';
-  this.testCount = 0;
+    this.initialize = function() {
+      this.testList = createCompactTestList(style);
 
-  this.initialize = function() {
-    this.testList = createCompactTestList(style);
+      this.addSwitch('Fullscreen: ', 'fullscreen');
+      this.addSwitch('Loop: ', 'loop');
+      this.addSwitch('Stop on failure: ', 'stoponfailure');
+      this.addSwitch('Log: ', 'logging');
+      this.addSwitch('Mute: ', 'muted');
+      if (harnessConfig.controlMediaFormatSelection) {
+        this.addSwitch('WebM/VP9: ', 'enablewebm');
+      }
 
-    this.addSwitch('Loop: ', 'loop');
-    this.addSwitch('Stop on failure: ', 'stoponfailure');
-    this.addSwitch('Log: ', 'logging');
-    if (harnessConfig.controlMediaFormatSelection) {
-      this.addSwitch('WebM/VP9: ', 'enablewebm');
-    }
-
-    this.addCommand('Run All', 'run-selected', 'Run all tests in order.',
+      this.addCommand('Run All', 'run-selected', 'Run all tests in order.',
         function(e) {
-      if (self.onrunselected)
-        self.onrunselected.call(self, e);
-    });
+          if (self.onrunselected)
+            self.onrunselected.call(self, e);
+        });
+      // Begin non GitHub files
+      this.addCommand('Login', 'login', 'login to get user token.', function(e) {
+        util.login(() => {
+          if (document.getElementById('login-pop-up')) {
+            document.getElementById('login-pop-up').style.display = 'none';
+            util.uploadTestResult(() => { window.LOG(this, ['Login:', 'Successful']); });
+          }
+        });
+      });
+      this.addCommand('Submit', 'submit', 'submit test results.', function(e) {
+        util.uploadTestResult(() => { window.LOG(this, ['TestResult:', 'Sent']); });
+      });
+      //End non GitHub files
 
-    this.addLink('Links', 'links.html');
-    this.addLink('Instructions', 'instructions.html');
-    this.addLink('Changelog', 'changelog.html');
-    this.addLink('Download-Source', 'download-2019-20190520112447.tar.gz');
-    this.addLink('Download-Media-files', '//storage.cloud.google.com/ytlr-cert.appspot.com/test-materials/YTS-media-files.tar.gz');
-    if (harnessConfig.novp9) {
-      this.addLink('No VP9', 'main.html');
-    }
-    this.addLink('YouTube', 'https://youtube.com/tv');
 
-    this.addTestSuites(testSuiteVersions[this.testSuiteVer].testSuites);
-  };
+      this.addLink('Links', 'links.html');
+      this.addLink('Instructions', 'instructions.html');
+      this.addLink('Changelog', 'changelog.html');
+      this.addLink('Download-Source', 'download-2020-20200212151848.tar.gz');
+      this.addLink('Download-Media-files', '//storage.cloud.google.com/ytlr-cert.appspot.com/test-materials/YTS-media-files.tar.gz');
+      if (harnessConfig.novp9) {
+        this.addLink('No VP9', 'main.html');
+      }
+      this.addLink('Content Licenses', 'licenses.html');
+      this.addLink('YouTube', 'https://youtube.com/tv');
 
-  this.addTest = function(desc) {
-    return this.testList.addTest(desc);
-  };
+      this.addTestSuites(testSuiteVersions[this.testSuiteVer].testSuites);
+    };
 
-  this.generate = function() {
-    CompactTestView.prototype.generate.call(this);
-    document.getElementById('run-selected').focus();
+    this.addTest = function(desc) {
+      return this.testList.addTest(desc);
+    };
 
-    var USAGE = 'Use &uarr;&darr;&rarr;&larr; to move around, ' +
+    this.generate = function() {
+      CompactTestView.prototype.generate.call(this);
+      document.getElementById('run-selected').focus();
+
+      var USAGE = 'Use &uarr;&darr;&rarr;&larr; to move around, ' +
         'use ENTER to select.';
-    document.getElementById('usage').innerHTML = USAGE;
-    document.getElementById('run-selected').focus();
-  };
+      document.getElementById('usage').innerHTML = USAGE;
+      document.getElementById('run-selected').focus();
+    };
 
-  this.getTest = function(index) {
-    return this.testList.getTest(index);
-  };
+    this.getTest = function(index) {
+      return this.testList.getTest(index);
+    };
 
-  this.finishedOneTest = function() {
-    ++this.testCount;
-    document.getElementById('finish-count').innerHTML =
+    this.finishedOneTest = function() {
+      ++this.testCount;
+      document.getElementById('finish-count').innerHTML =
         this.testCount === 1 ? this.testCount + ' test finished' :
-                               this.testCount + ' tests finished';
+        this.testCount + ' tests finished';
+    };
+
+    this.anySelected = function() {
+      return this.testList.anySelected();
+    };
+
+    this.initialize();
   };
 
-  this.anySelected = function() {
-    return this.testList.anySelected();
+  CompactTestView.prototype = TestView.create();
+  CompactTestView.prototype.constructor = CompactTestView;
+
+  return {
+    create: function(testSuiteVer, fields, style) {
+      CompactTestView.prototype = TestView.create(testSuiteVer);
+      CompactTestView.prototype.constructor = CompactTestView;
+      return new CompactTestView(fields, style);
+    }
   };
-
-  this.initialize();
-};
-
-CompactTestView.prototype = TestView.create();
-CompactTestView.prototype.constructor = CompactTestView;
-
-return {
-  create: function(testSuiteVer, fields, style) {
-    CompactTestView.prototype = TestView.create(testSuiteVer);
-    CompactTestView.prototype.constructor = CompactTestView;
-    return new CompactTestView(fields, style);
-  }
-};
 
 })();

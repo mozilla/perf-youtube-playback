@@ -70,14 +70,14 @@ window.createMimeTypeStr = function(
   return mimeTypeStr;
 };
 
-window.isTypeSupported = function(videoStream) {
+window.isTypeSupported = function(stream) {
   return MediaSource.isTypeSupported(createMimeTypeStr(
-      videoStream.mimetype,
+      stream.mimetype,
       null,
-      videoStream.get("width"),
-      videoStream.get("height"),
-      videoStream.get("fps"),
-      videoStream.get("spherical")));
+      stream.get("width"),
+      stream.get("height"),
+      stream.get("fps"),
+      stream.get("spherical")));
 };
 
 // A version of 'SourceBuffer.append()' that automatically handles EOS
@@ -710,7 +710,8 @@ window.callAfterLoadedMetaData = function(media, testFunc) {
   }
 };
 
-window.setupMse = function(video, runner, videoStreams, audioStreams) {
+window.setupMse =
+    function(video, runner, videoStreams, audioStreams, maxSegments) {
   videoStreams = videoStreams instanceof Array ? videoStreams : [videoStreams];
   audioStreams = audioStreams instanceof Array ? audioStreams : [audioStreams];
   var ms = new MediaSource();
@@ -750,11 +751,13 @@ window.setupMse = function(video, runner, videoStreams, audioStreams) {
   function appendLoop(stream, sb) {
     var parsedData;
     var segmentIdx = 0;
-    var maxSegments = 4;
+    if (!maxSegments) {
+      maxSegments = 4;
+    }
     fetchStream(stream, function() {
-      if (stream.codec == 'H264' || stream.codec == 'AAC') {
+      if (['H264', 'AV1', 'AAC'].includes(stream.codec)) {
         parsedData = parseMp4(this.getResponseData());
-      } else if(stream.codec == 'VP9' || stream.codec == 'Opus') {
+      } else if (['VP9', 'Opus'].includes(stream.codec)) {
         parsedData = parseWebM(this.getResponseData().buffer);
       } else {
         runner.fail('Unsupported codec in appendLoop.');
@@ -767,11 +770,11 @@ window.setupMse = function(video, runner, videoStreams, audioStreams) {
           }
           fetchStream(stream, function() {
             sb.appendBuffer(this.getResponseData());
-            segmentIdx += 1
+            segmentIdx += 1;
           }, parsedData[segmentIdx].offset, parsedData[segmentIdx].size);
         });
         sb.appendBuffer(this.getResponseData());
-        segmentIdx += 1
+        segmentIdx += 1;
       }, 0, parsedData[0].size + parsedData[0].offset);
     }, 0, 32 * 1024);
   }

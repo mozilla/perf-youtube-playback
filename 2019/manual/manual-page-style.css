@@ -577,6 +577,16 @@ div:focus {
   background-image: url("../test-materials/media/manual/webp_animated/animated_webp_720.webp");
 }
 
+.top-left-corner {
+  position: absolute;
+  color: white;
+  width: 20%;
+  top: 10%;
+  background-color: rgba(0,0,0,0.5);
+  z-index: 11;
+  font-size: 25px;
+}
+
 /* Responsive design. Put this at the bottom of this file. */
 @media screen and (min-height: 720px) and (max-height: 721px) {
   body {

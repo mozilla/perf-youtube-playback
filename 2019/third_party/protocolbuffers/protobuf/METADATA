@@ -1,0 +1,17 @@
+name: "Closure Library"
+description:
+    "Protocol Buffers (a.k.a., protobuf) are Google's language-neutral, "
+    "platform-neutral, extensible mechanism for serializing structured data"
+
+third_party {
+  url {
+    type: HOMEPAGE
+    value: "https://developers.google.com/protocol-buffers/"
+  }
+  url {
+    type: GIT
+    value: "https://github.com/protocolbuffers/protobuf.git"
+  }
+  version: "b10d490"
+  last_upgrade_date { year: 2019 month: 6 day: 5 }
+}

@@ -26,6 +26,9 @@ var Media = (function() {
       '9C4BE99E6F517B51FED1F0B3B31966D3C5DAB9D6.6A1F30BB35F3A39A4CA814B731450D4CBD198FFD';
   const SINTEL_WIDEVINE_SIGNATURE =
       '4511DBFEF4177B5F0DF1FAA23562D4FD7FDE0D1A.457901F5F063B3D9E8252B403D120683BEE47216';
+  const WIDEVINE_L3NOHDCP_VIDEO_ID = 'f320151fa3f061b2';
+  const WIDEVINE_L3NOHDCP_SIGNATURE =
+      '81E7B33929F9F35922F7D2E96A5E7AC36F3218B2.673F553EE51A48438AE5E707AEC87A071B4FEF65';
 
   var AAC = {
     streamtype: 'AAC',
@@ -33,7 +36,19 @@ var Media = (function() {
     mediatype: 'audio',
     streams: {
       AudioTiny: ['car-20120827-8b.mp4', 717502, 181.62],
-      AudioNormal: ['car-20120827-8c.mp4', 2884572, 181.58, {200000: 12.42}],
+      AudioNormal: [
+        'car-20120827-8c.mp4', 2884572, 181.58, {
+          200000: 12.42,
+          'halfSecondRangeEnd': 10695,
+          'halfSecondDurationEnd': 7.9,
+          'halfSecondBytes': [
+              // Bytes were determined using the command:
+              // `ffprobe -i car-20120827-8c.mp4 -show_packets`
+              0, 10695, 18504, 26561, 34310, 42401, 49986, 58167, 65700, 73651,
+              81704, 89501, 97173, 104745, 112544, 120466, 128435,
+          ],
+        }
+      ],
       AudioHuge: [
         'car-20120827-8d.mp4', 5789853, 181.58, {'appendAudioOffset': 17.42}
       ],
@@ -71,6 +86,7 @@ var Media = (function() {
           'widevine_signature': WIDEVINE_SIGNATURE_1
         }
       ],
+      AudioMeridian: ['meridian_aac_med.mp4', 11638237, 719.08],
     },
   };
 
@@ -81,7 +97,19 @@ var Media = (function() {
     streams: {
       Audio51: ['opus51.webm', 15583281, 300.02],
       CarLow: ['car_opus_low.webm', 1205174, 181.48],
-      CarMed: ['car_opus_med.webm', 1657817, 181.48, {200000: 28.221}],
+      CarMed: [
+        'car_opus_med.webm', 1657817, 181.48, {
+          200000: 28.221,
+          'halfSecondRangeEnd': 832,
+          'halfSecondDurationEnd': 7.9,
+          'halfSecondBytes': [
+              // Bytes were determined using the command:
+              // `mkvinfo car_opus_med.webm -t -v -v`
+              0, 839, 4914, 9491, 14193, 19465, 24626, 28805, 33149, 36685,
+              40074, 44151, 47519, 50836, 54544, 58708, 62757,
+          ],
+        }
+      ],
       CarHigh: [
         'car_opus_high.webm', 3280103, 181.48, {'appendAudioOffset': 33.221}
       ],
@@ -92,6 +120,24 @@ var Media = (function() {
           'widevine_signature': SINTEL_WIDEVINE_SIGNATURE
         }
       ],
+    },
+  };
+
+  var AC3 = {
+    streamtype: 'AC3',
+    mimetype: 'audio/mp4; codecs="ac-3"',
+    mediatype: 'audio',
+    streams: {
+      Audio51: ['spoken_channel_positions_ac3_51.fmp4', 645818, 13.44],
+    },
+  };
+
+  var EAC3 = {
+    streamtype: 'EAC3',
+    mimetype: 'audio/mp4; codecs="ec-3"',
+    mediatype: 'audio',
+    streams: {
+      Audio51: ['spoken_channel_positions_eac3_51.fmp4', 645820, 13.44],
     },
   };
 
@@ -194,103 +240,140 @@ var Media = (function() {
           'height': 532
         }
       ],
-      SintelLowCenc: [
-        'sintel_h264_low_cenc.mp4', 21009141, 887.96, {
-          'video_id': '31e1685307acf271',
-          'widevine_signature': SINTEL_WIDEVINE_SIGNATURE,
-          'playready_signature': SINTEL_PLAYREADY_SIGNATURE,
-          'resolution': '240p',
-          'height': 182
+      DrmL3NoHDCP144p30fpsCenc: [
+        'drml3NoHdcp_h264_144p_30fps_cenc.mp4', 1463083, 101.899, {
+          'video_id': WIDEVINE_L3NOHDCP_VIDEO_ID,
+          'widevine_signature': WIDEVINE_L3NOHDCP_SIGNATURE,
+          'fps': 30,
+          'resolution': '144p'
         }
       ],
-      SintelMedCenc: [
-        'sintel_h264_med_cenc.mp4', 36242861, 887.96, {
-          'video_id': '31e1685307acf271',
-          'widevine_signature': SINTEL_WIDEVINE_SIGNATURE,
-          'playready_signature': SINTEL_PLAYREADY_SIGNATURE,
-          'resolution': '360p',
-          'height': 272
+      DrmL3NoHDCP240p30fpsCenc: [
+        'drml3NoHdcp_h264_240p_30fps_cenc.mp4', 3177191, 101.899, {
+          'video_id': WIDEVINE_L3NOHDCP_VIDEO_ID,
+          'widevine_signature': WIDEVINE_L3NOHDCP_SIGNATURE,
+          'fps': 30,
+          'resolution': '240p'
         }
       ],
-      SintelHighCenc: [
-        'sintel_h264_high_cenc.mp4', 73176349, 887.96, {
-          'video_id': '31e1685307acf271',
-          'widevine_signature': SINTEL_WIDEVINE_SIGNATURE,
-          'playready_signature': SINTEL_PLAYREADY_SIGNATURE,
-          'width': 854,
-          'height': 364
+      DrmL3NoHDCP360p30fpsCenc: [
+        'drml3NoHdcp_h264_360p_30fps_cenc.mp4', 7297992, 101.899, {
+          'video_id': WIDEVINE_L3NOHDCP_VIDEO_ID,
+          'widevine_signature': WIDEVINE_L3NOHDCP_SIGNATURE,
+          'fps': 30,
+          'resolution': '360p'
         }
       ],
-      SintelHighMqCenc: [
-        'sintel_h264_highmq_cenc.mp4', 113752205, 887.96, {
-          'video_id': '31e1685307acf271',
-          'widevine_signature': SINTEL_WIDEVINE_SIGNATURE,
-          'playready_signature': SINTEL_PLAYREADY_SIGNATURE,
-          'width': 854,
-          'height': 364
+      DrmL3NoHDCP480p30fpsCenc: [
+        'drml3NoHdcp_h264_480p_30fps_cenc.mp4', 14394742, 101.899, {
+          'video_id': WIDEVINE_L3NOHDCP_VIDEO_ID,
+          'widevine_signature': WIDEVINE_L3NOHDCP_SIGNATURE,
+          'fps': 30,
+          'resolution': '480p'
         }
       ],
-      SintelHighHqCenc: [
-        'sintel_h264_highhq_cenc.mp4', 230730559, 887.96, {
-          'video_id': '31e1685307acf271',
-          'widevine_signature': SINTEL_WIDEVINE_SIGNATURE,
-          'playready_signature': SINTEL_PLAYREADY_SIGNATURE,
-          'width': 854,
-          'height': 364
+      DrmL3NoHDCP480p30fpsMqCenc: [
+        'drml3NoHdcp_h264_480p_mq_30fps_cenc.mp4', 22118210, 101.899, {
+          'video_id': WIDEVINE_L3NOHDCP_VIDEO_ID,
+          'widevine_signature': WIDEVINE_L3NOHDCP_SIGNATURE,
+          'fps': 30,
+          'resolution': '480p',
+          'quality': 'MQ'
         }
       ],
-      Sintel720pCenc: [
-        'sintel_h264_720p_cenc.mp4', 145423482, 887.96, {
-          'video_id': '31e1685307acf271',
-          'widevine_signature': SINTEL_WIDEVINE_SIGNATURE,
-          'playready_signature': SINTEL_PLAYREADY_SIGNATURE,
-          'width': 1280,
-          'height': 546
+      DrmL3NoHDCP480p30fpsHqCenc: [
+        'drml3NoHdcp_h264_480p_hq_30fps_cenc.mp4', 44132909, 101.899, {
+          'video_id': WIDEVINE_L3NOHDCP_VIDEO_ID,
+          'widevine_signature': WIDEVINE_L3NOHDCP_SIGNATURE,
+          'fps': 30,
+          'resolution': '480p',
+          'quality': 'HQ'
         }
       ],
-      Sintel720pMqCenc: [
-        'sintel_h264_720pmq_cenc.mp4', 227431200, 887.96, {
-          'video_id': '31e1685307acf271',
-          'widevine_signature': SINTEL_WIDEVINE_SIGNATURE,
-          'playready_signature': SINTEL_PLAYREADY_SIGNATURE,
-          'width': 1280,
-          'height': 546
+      DrmL3NoHDCP720p30fpsCenc: [
+        'drml3NoHdcp_h264_720p_30fps_cenc.mp4', 28788524, 101.899, {
+          'video_id': WIDEVINE_L3NOHDCP_VIDEO_ID,
+          'widevine_signature': WIDEVINE_L3NOHDCP_SIGNATURE,
+          'fps': 30,
+          'resolution': '720p'
         }
       ],
-      Sintel720pHqCenc: [
-        'sintel_h264_720phq_cenc.mp4', 367564579, 887.96, {
-          'video_id': '31e1685307acf271',
-          'widevine_signature': SINTEL_WIDEVINE_SIGNATURE,
-          'playready_signature': SINTEL_PLAYREADY_SIGNATURE,
-          'width': 1280,
-          'height': 546
+      DrmL3NoHDCP720p30fpsMqCenc: [
+        'drml3NoHdcp_h264_720p_mq_30fps_cenc.mp4', 44199586, 101.899, {
+          'video_id': WIDEVINE_L3NOHDCP_VIDEO_ID,
+          'widevine_signature': WIDEVINE_L3NOHDCP_SIGNATURE,
+          'fps': 30,
+          'resolution': '720p',
+          'quality': 'MQ'
         }
       ],
-      Sintel1080pCenc: [
-        'sintel_h264_1080p_cenc.mp4', 273516348, 887.96, {
-          'video_id': '31e1685307acf271',
-          'widevine_signature': SINTEL_WIDEVINE_SIGNATURE,
-          'playready_signature': SINTEL_PLAYREADY_SIGNATURE,
+      DrmL3NoHDCP720p30fpsHqCenc: [
+        'drml3NoHdcp_h264_720p_hq_30fps_cenc.mp4', 73591730, 101.899, {
+          'video_id': WIDEVINE_L3NOHDCP_VIDEO_ID,
+          'widevine_signature': WIDEVINE_L3NOHDCP_SIGNATURE,
+          'fps': 30,
+          'resolution': '720p',
+          'quality': 'HQ'
+        }
+      ],
+      DrmL3NoHDCP720p60fpsCenc: [
+        'drml3NoHdcp_h264_720p_60fps_cenc.mp4', 38436183, 101.899, {
+          'video_id': WIDEVINE_L3NOHDCP_VIDEO_ID,
+          'widevine_signature': WIDEVINE_L3NOHDCP_SIGNATURE,
+          'fps': 60,
+          'resolution': '720p'
+        }
+      ],
+      DrmL3NoHDCP720p60fpsMqCenc: [
+        'drml3NoHdcp_h264_720p_mq_60fps_cenc.mp4', 61027135, 101.899, {
+          'video_id': WIDEVINE_L3NOHDCP_VIDEO_ID,
+          'widevine_signature': WIDEVINE_L3NOHDCP_SIGNATURE,
+          'fps': 60,
+          'resolution': '720p',
+          'quality': 'MQ'
+        }
+      ],
+      DrmL3NoHDCP1080p30fpsCenc: [
+        'drml3NoHdcp_h264_1080p_30fps_cenc.mp4', 55005156, 101.899, {
+          'video_id': WIDEVINE_L3NOHDCP_VIDEO_ID,
+          'widevine_signature': WIDEVINE_L3NOHDCP_SIGNATURE,
+          'fps': 30,
+          'resolution': '1080p'
+        }
+      ],
+      DrmL3NoHDCP1080p30fpsMqCenc: [
+        'drml3NoHdcp_h264_1080p_mq_30fps_cenc.mp4', 73580599, 101.899, {
+          'video_id': WIDEVINE_L3NOHDCP_VIDEO_ID,
+          'widevine_signature': WIDEVINE_L3NOHDCP_SIGNATURE,
+          'fps': 30,
           'resolution': '1080p',
-          'height': 818
+          'quality': 'MQ'
         }
       ],
-      Sintel1080pMqCenc: [
-        'sintel_h264_1080pmq_cenc.mp4', 405525381, 887.96, {
-          'video_id': '31e1685307acf271',
-          'widevine_signature': SINTEL_WIDEVINE_SIGNATURE,
-          'playready_signature': SINTEL_PLAYREADY_SIGNATURE,
+      DrmL3NoHDCP1080p30fpsHqCenc: [
+        'drml3NoHdcp_h264_1080p_hq_30fps_cenc.mp4', 102970523, 101.899, {
+          'video_id': WIDEVINE_L3NOHDCP_VIDEO_ID,
+          'widevine_signature': WIDEVINE_L3NOHDCP_SIGNATURE,
+          'fps': 30,
           'resolution': '1080p',
-          'height': 818
+          'quality': 'HQ'
         }
       ],
-      Sintel1080pHqCenc: [
-        'sintel_h264_1080phq_cenc.mp4', 562395642, 887.96, {
-          'video_id': '31e1685307acf271',
-          'widevine_signature': SINTEL_WIDEVINE_SIGNATURE,
-          'playready_signature': SINTEL_PLAYREADY_SIGNATURE,
+      DrmL3NoHDCP1080p60fpsCenc: [
+        'drml3NoHdcp_h264_1080p_60fps_cenc.mp4', 72603681, 101.899, {
+          'video_id': WIDEVINE_L3NOHDCP_VIDEO_ID,
+          'widevine_signature': WIDEVINE_L3NOHDCP_SIGNATURE,
+          'fps': 60,
+          'resolution': '1080p'
+        }
+      ],
+      DrmL3NoHDCP1080p60fpsMqCenc: [
+        'drml3NoHdcp_h264_1080p_mq_60fps_cenc.mp4', 95823710, 101.899, {
+          'video_id': WIDEVINE_L3NOHDCP_VIDEO_ID,
+          'widevine_signature': WIDEVINE_L3NOHDCP_SIGNATURE,
+          'fps': 60,
           'resolution': '1080p',
-          'height': 818
+          'quality': 'MQ'
         }
       ],
       ProgressiveLow: [
@@ -479,6 +562,22 @@ var Media = (function() {
     mimetype: 'video/webm; codecs="vp9"',
     mediatype: 'video',
     streams: {
+      Video1080p1MB: [
+        'big-buck-bunny-vp9-1080p-1mb.webm', 1184180, 7.00,
+        {'resolution': '1080p'}
+      ],
+      Video2160p1MB: [
+        'big-buck-bunny-vp9-2160p-1mb.webm', 1091680, 3.50,
+        {'resolution': '2160p'}
+      ],
+      Video2160pHdr1MB: [
+        'meridian_vp9_hdr_2160p_1mb.webm', 1479002, 1.01, {
+          'transferFunction': 'PQ',
+          'fps': 60,
+          'resolution': '2160p',
+          'mimeType': 'video/webm; codecs="vp9.2"'
+        }
+      ],
       VideoTiny: [
         'feelings_vp9-20130806-242.webm', 4478156, 135.46,
         {'videoChangeRate': 15.35, 'resolution': '240p'}
@@ -553,98 +652,11 @@ var Media = (function() {
           'height': 364
         }
       ],
-      SintelLowEnc: [
-        'sintel_vp9_low_enc.webm', 14161546, 887.96, {
-          'video_id': '31e1685307acf271',
-          'widevine_signature': SINTEL_WIDEVINE_SIGNATURE,
-          'resolution': '240p',
-          'height': 182
-        }
-      ],
-      SintelMedEnc: [
-        'sintel_vp9_med_enc.webm', 24174480, 887.96, {
-          'video_id': '31e1685307acf271',
-          'widevine_signature': SINTEL_WIDEVINE_SIGNATURE,
-          'resolution': '360p',
-          'height': 272
-        }
-      ],
-      SintelHighEnc: [
-        'sintel_vp9_high_enc.webm', 48736011, 887.96, {
-          'video_id': '31e1685307acf271',
-          'widevine_signature': SINTEL_WIDEVINE_SIGNATURE,
-          'width': 854,
-          'height': 364
-        }
-      ],
-      SintelHighMqEnc: [
-        'sintel_vp9_highmq_enc.webm', 80843219, 887.96, {
-          'video_id': '31e1685307acf271',
-          'widevine_signature': SINTEL_WIDEVINE_SIGNATURE,
-          'width': 854,
-          'height': 364
-        }
-      ],
-      SintelHighHqEnc: [
-        'sintel_vp9_highhq_enc.webm', 202775127, 887.96, {
-          'video_id': '31e1685307acf271',
-          'widevine_signature': SINTEL_WIDEVINE_SIGNATURE,
-          'width': 854,
-          'height': 364
-        }
-      ],
-      Sintel720pEnc: [
-        'sintel_vp9_720p_enc.webm', 98685774, 887.96, {
-          'video_id': '31e1685307acf271',
-          'widevine_signature': SINTEL_WIDEVINE_SIGNATURE,
-          'width': 1280,
-          'height': 546
-        }
-      ],
-      Sintel720pMqEnc: [
-        'sintel_vp9_720pmq_enc.webm', 156003788, 887.96, {
-          'video_id': '31e1685307acf271',
-          'widevine_signature': SINTEL_WIDEVINE_SIGNATURE,
-          'width': 1280,
-          'height': 546
-        }
-      ],
-      Sintel720pHqEnc: [
-        'sintel_vp9_720phq_enc.webm', 270377177, 887.96, {
-          'video_id': '31e1685307acf271',
-          'widevine_signature': SINTEL_WIDEVINE_SIGNATURE,
-          'width': 1280,
-          'height': 546
-        }
-      ],
-      Sintel1080pEnc: [
-        'sintel_vp9_1080p_enc.webm', 185239921, 887.96, {
-          'video_id': '31e1685307acf271',
-          'widevine_signature': SINTEL_WIDEVINE_SIGNATURE,
-          'resolution': '1080p',
-          'height': 818
-        }
-      ],
-      Sintel1080pMqEnc: [
-        'sintel_vp9_1080pmq_enc.webm', 288587712, 887.96, {
-          'video_id': '31e1685307acf271',
-          'widevine_signature': SINTEL_WIDEVINE_SIGNATURE,
-          'resolution': '1080p',
-          'height': 818
-        }
-      ],
-      Sintel1080pHqEnc: [
-        'sintel_vp9_1080phq_enc.webm', 432276105, 887.96, {
-          'video_id': '31e1685307acf271',
-          'widevine_signature': SINTEL_WIDEVINE_SIGNATURE,
-          'resolution': '1080p',
-          'height': 818
-        }
-      ],
       Sintel2kEnc: [
         'sintel_vp9_2k_enc.webm', 479857063, 887.96, {
           'video_id': '31e1685307acf271',
           'widevine_signature': SINTEL_WIDEVINE_SIGNATURE,
+          'fps': 24,
           'resolution': '1440p',
           'height': 1090
         }
@@ -653,8 +665,138 @@ var Media = (function() {
         'sintel_vp9_4k_enc.webm', 1037846120, 887.96, {
           'video_id': '31e1685307acf271',
           'widevine_signature': SINTEL_WIDEVINE_SIGNATURE,
+          'fps': 24,
+          'resolution': '2160p',
           'width': 3840,
           'height': 1636
+        }
+      ],
+      DrmL3NoHDCP240p30fpsEnc: [
+        'drml3NoHdcp_vp9_240p_30fps_enc.webm', 2637069, 101.9, {
+          'video_id': WIDEVINE_L3NOHDCP_VIDEO_ID,
+          'widevine_signature': WIDEVINE_L3NOHDCP_SIGNATURE,
+          'fps': 30,
+          'resolution': '240p'
+        }
+      ],
+      DrmL3NoHDCP360p30fpsEnc: [
+        'drml3NoHdcp_vp9_360p_30fps_enc.webm', 4961622, 101.9, {
+          'video_id': WIDEVINE_L3NOHDCP_VIDEO_ID,
+          'widevine_signature': WIDEVINE_L3NOHDCP_SIGNATURE,
+          'fps': 30,
+          'resolution': '360p'
+        }
+      ],
+      DrmL3NoHDCP480p30fpsEnc: [
+        'drml3NoHdcp_vp9_480p_30fps_enc.webm', 9063639, 101.9, {
+          'video_id': WIDEVINE_L3NOHDCP_VIDEO_ID,
+          'widevine_signature': WIDEVINE_L3NOHDCP_SIGNATURE,
+          'fps': 30,
+          'resolution': '480p'
+        }
+      ],
+      DrmL3NoHDCP480p30fpsMqEnc: [
+        'drml3NoHdcp_vp9_480p_mq_30fps_enc.webm', 11861551, 101.9, {
+          'video_id': WIDEVINE_L3NOHDCP_VIDEO_ID,
+          'widevine_signature': WIDEVINE_L3NOHDCP_SIGNATURE,
+          'fps': 30,
+          'resolution': '480p',
+          'quality': 'MQ'
+        }
+      ],
+      DrmL3NoHDCP480p30fpsHqEnc: [
+        'drml3NoHdcp_vp9_480p_hq_30fps_enc.webm', 15292527, 101.9, {
+          'video_id': WIDEVINE_L3NOHDCP_VIDEO_ID,
+          'widevine_signature': WIDEVINE_L3NOHDCP_SIGNATURE,
+          'fps': 30,
+          'resolution': '480p',
+          'quality': 'HQ'
+        }
+      ],
+      DrmL3NoHDCP720p30fpsEnc: [
+        'drml3NoHdcp_vp9_720p_30fps_enc.webm', 18557476, 101.9, {
+          'video_id': WIDEVINE_L3NOHDCP_VIDEO_ID,
+          'widevine_signature': WIDEVINE_L3NOHDCP_SIGNATURE,
+          'fps': 30,
+          'resolution': '720p'
+        }
+      ],
+      DrmL3NoHDCP720p30fpsMqEnc: [
+        'drml3NoHdcp_vp9_720p_mq_30fps_enc.webm', 26985702, 101.9, {
+          'video_id': WIDEVINE_L3NOHDCP_VIDEO_ID,
+          'widevine_signature': WIDEVINE_L3NOHDCP_SIGNATURE,
+          'fps': 30,
+          'resolution': '720p',
+          'quality': 'MQ'
+        }
+      ],
+      DrmL3NoHDCP720p30fpsHqEnc: [
+        'drml3NoHdcp_vp9_720p_hq_30fps_enc.webm', 27989534, 101.9, {
+          'video_id': WIDEVINE_L3NOHDCP_VIDEO_ID,
+          'widevine_signature': WIDEVINE_L3NOHDCP_SIGNATURE,
+          'fps': 30,
+          'resolution': '720p',
+          'quality': 'HQ'
+        }
+      ],
+      DrmL3NoHDCP720p60fpsEnc: [
+        'drml3NoHdcp_vp9_720p_60fps_enc.webm', 32256950, 101.9, {
+          'video_id': WIDEVINE_L3NOHDCP_VIDEO_ID,
+          'widevine_signature': WIDEVINE_L3NOHDCP_SIGNATURE,
+          'fps': 60,
+          'resolution': '720p'
+        }
+      ],
+      DrmL3NoHDCP720p60fpsMqEnc: [
+        'drml3NoHdcp_vp9_720p_mq_60fps_enc.webm', 44497411, 101.9, {
+          'video_id': WIDEVINE_L3NOHDCP_VIDEO_ID,
+          'widevine_signature': WIDEVINE_L3NOHDCP_SIGNATURE,
+          'fps': 60,
+          'resolution': '720p',
+          'quality': 'MQ'
+        }
+      ],
+      DrmL3NoHDCP1080p30fpsEnc: [
+        'drml3NoHdcp_vp9_1080p_30fps_enc.webm', 33327074, 101.9, {
+          'video_id': WIDEVINE_L3NOHDCP_VIDEO_ID,
+          'widevine_signature': WIDEVINE_L3NOHDCP_SIGNATURE,
+          'fps': 30,
+          'resolution': '1080p'
+        }
+      ],
+      DrmL3NoHDCP1080p30fpsMqEnc: [
+        'drml3NoHdcp_vp9_1080p_mq_30fps_enc.webm', 52629589, 101.9, {
+          'video_id': WIDEVINE_L3NOHDCP_VIDEO_ID,
+          'widevine_signature': WIDEVINE_L3NOHDCP_SIGNATURE,
+          'fps': 30,
+          'resolution': '1080p',
+          'quality': 'MQ'
+        }
+      ],
+      DrmL3NoHDCP1080p30fpsHqEnc: [
+        'drml3NoHdcp_vp9_1080p_hq_30fps_enc.webm', 55565306, 101.9, {
+          'video_id': WIDEVINE_L3NOHDCP_VIDEO_ID,
+          'widevine_signature': WIDEVINE_L3NOHDCP_SIGNATURE,
+          'fps': 30,
+          'resolution': '1080p',
+          'quality': 'HQ'
+        }
+      ],
+      DrmL3NoHDCP1080p60fpsEnc: [
+        'drml3NoHdcp_vp9_1080p_60fps_enc.webm', 55756449, 101.9, {
+          'video_id': WIDEVINE_L3NOHDCP_VIDEO_ID,
+          'widevine_signature': WIDEVINE_L3NOHDCP_SIGNATURE,
+          'fps': 60,
+          'resolution': '1080p'
+        }
+      ],
+      DrmL3NoHDCP1080p60fpsMqEnc: [
+        'drml3NoHdcp_vp9_1080p_mq_60fps_enc.webm', 89414670, 101.9, {
+          'video_id': WIDEVINE_L3NOHDCP_VIDEO_ID,
+          'widevine_signature': WIDEVINE_L3NOHDCP_SIGNATURE,
+          'fps': 60,
+          'resolution': '1080p',
+          'quality': 'MQ'
         }
       ],
       ProgressiveLow: [
@@ -757,10 +899,411 @@ var Media = (function() {
         'spherical_vp9_2160s_60fps.webm', 393625694, 149.29,
         {'fps': 60, 'resolution': '2160p', 'spherical': true}
       ],
+      HdrHlgUltralow: [
+        'motor_vp9_hdr_ultralow.webm', 4093046, 254.462,
+        {
+          'transferFunction': 'HLG',
+          'fps': 30,
+          'resolution': '144p',
+          'mimeType': 'video/webm; codecs="vp9.2"',
+        },
+      ],
+      HdrHlgLow: [
+        'motor_vp9_hdr_low.webm', 6157161, 254.462,
+        {
+          'transferFunction': 'HLG',
+          'fps': 30,
+          'resolution': '240p',
+          'mimeType': 'video/webm; codecs="vp9.2"',
+        },
+      ],
+      HdrHlgMed: [
+        'motor_vp9_hdr_med.webm', 13026706, 254.462,
+        {
+          'transferFunction': 'HLG',
+          'fps': 30,
+          'resolution': '360p',
+          'mimeType': 'video/webm; codecs="vp9.2"',
+        },
+      ],
+      HdrHlgHigh: [
+        'motor_vp9_hdr_high.webm', 24059408, 254.462,
+        {
+          'transferFunction': 'HLG',
+          'fps': 30,
+          'resolution': '480p',
+          'mimeType': 'video/webm; codecs="vp9.2"',
+        },
+      ],
+      HdrHlg720p: [
+        'motor_vp9_hdr_720p.webm', 54591653, 254.462,
+        {
+          'transferFunction': 'HLG',
+          'fps': 30,
+          'resolution': '720p',
+          'mimeType': 'video/webm; codecs="vp9.2"',
+        },
+      ],
+      HdrHlg1080p: [
+        'motor_vp9_hdr_1080p.webm', 96437886, 254.462,
+        {
+          'transferFunction': 'HLG',
+          'fps': 30,
+          'resolution': '1080p',
+          'mimeType': 'video/webm; codecs="vp9.2"',
+        },
+      ],
+      HdrHlg2k: [
+        'motor_vp9_hdr_2k.webm', 304356661, 254.462,
+        {
+          'transferFunction': 'HLG',
+          'fps': 30,
+          'resolution': '1440p',
+          'mimeType': 'video/webm; codecs="vp9.2"',
+        },
+      ],
+      HdrHlg4k: [
+        'motor_vp9_hdr_4k.webm', 631043806, 254.462,
+        {
+          'transferFunction': 'HLG',
+          'fps': 30,
+          'resolution': '2160p',
+          'mimeType': 'video/webm; codecs="vp9.2"',
+        },
+      ],
+      HdrHlgUltralowHfr: [
+        'news_vp9_hdr_ultralow.webm', 2629927, 136.62,
+        {
+          'transferFunction': 'HLG',
+          'fps': 60,
+          'resolution': '144p',
+          'mimeType': 'video/webm; codecs="vp9.2"',
+        },
+      ],
+      HdrHlgLowHfr: [
+        'news_vp9_hdr_low.webm', 3948184, 136.62,
+        {
+          'transferFunction': 'HLG',
+          'fps': 60,
+          'resolution': '240p',
+          'mimeType': 'video/webm; codecs="vp9.2"',
+        },
+      ],
+      HdrHlgMedHfr: [
+        'news_vp9_hdr_med.webm', 8339341, 136.62,
+        {
+          'transferFunction': 'HLG',
+          'fps': 60,
+          'resolution': '360p',
+          'mimeType': 'video/webm; codecs="vp9.2"',
+        },
+      ],
+      HdrHlgHighHfr: [
+        'news_vp9_hdr_high.webm', 15621796, 136.62,
+        {
+          'transferFunction': 'HLG',
+          'fps': 60,
+          'resolution': '480p',
+          'mimeType': 'video/webm; codecs="vp9.2"',
+        },
+      ],
+      HdrHlg720pHfr: [
+        'news_vp9_hdr_720p.webm', 34871072, 136.62,
+        {
+          'transferFunction': 'HLG',
+          'fps': 60,
+          'resolution': '720p',
+          'mimeType': 'video/webm; codecs="vp9.2"',
+        },
+      ],
+      HdrHlg1080pHfr: [
+        'news_vp9_hdr_1080p.webm', 58835191, 136.62,
+        {
+          'transferFunction': 'HLG',
+          'fps': 60,
+          'resolution': '1080p',
+          'mimeType': 'video/webm; codecs="vp9.2"',
+        },
+      ],
+      HdrHlg2kHfr: [
+        'news_vp9_hdr_2k.webm', 156656282, 136.62,
+        {
+          'transferFunction': 'HLG',
+          'fps': 60,
+          'resolution': '1440p',
+          'mimeType': 'video/webm; codecs="vp9.2"',
+        },
+      ],
+      HdrHlg4kHfr: [
+        'news_vp9_hdr_4k.webm', 314053586, 136.62,
+        {
+          'transferFunction': 'HLG',
+          'fps': 60,
+          'resolution': '2160p',
+          'mimeType': 'video/webm; codecs="vp9.2"',
+        },
+      ],
+      HdrPqUltralow: [
+        'roadtrip_vp9_hdr_ultralow.webm', 1561697, 108.358,
+        {
+          'transferFunction': 'PQ',
+          'fps': 30,
+          'resolution': '144p',
+          'mimeType': 'video/webm; codecs="vp9.2"',
+        },
+      ],
+      HdrPqLow: [
+        'roadtrip_vp9_hdr_low.webm', 2662190, 108.358,
+        {
+          'transferFunction': 'PQ',
+          'fps': 30,
+          'resolution': '240p',
+          'mimeType': 'video/webm; codecs="vp9.2"',
+        },
+      ],
+      HdrPqMed: [
+        'roadtrip_vp9_hdr_med.webm', 5719740, 108.358,
+        {
+          'transferFunction': 'PQ',
+          'fps': 30,
+          'resolution': '360p',
+          'mimeType': 'video/webm; codecs="vp9.2"',
+        },
+      ],
+      HdrPqHigh: [
+        'roadtrip_vp9_hdr_high.webm', 10715789, 108.358,
+        {
+          'transferFunction': 'PQ',
+          'fps': 30,
+          'resolution': '480p',
+          'mimeType': 'video/webm; codecs="vp9.2"',
+        },
+      ],
+      HdrPq720p: [
+        'roadtrip_vp9_hdr_720p.webm', 24453226, 108.358,
+        {
+          'transferFunction': 'PQ',
+          'fps': 30,
+          'resolution': '720p',
+          'mimeType': 'video/webm; codecs="vp9.2"',
+        },
+      ],
+      HdrPq1080p: [
+        'roadtrip_vp9_hdr_1080p.webm', 43377155, 108.358,
+        {
+          'transferFunction': 'PQ',
+          'fps': 30,
+          'resolution': '1080p',
+          'mimeType': 'video/webm; codecs="vp9.2"',
+        },
+      ],
+      HdrPq2k: [
+        'roadtrip_vp9_hdr_2k.webm', 121051265, 108.358,
+        {
+          'transferFunction': 'PQ',
+          'fps': 30,
+          'resolution': '1440p',
+          'mimeType': 'video/webm; codecs="vp9.2"',
+        },
+      ],
+      HdrPq4k: [
+        'roadtrip_vp9_hdr_4k.webm', 286332111, 108.358,
+        {
+          'transferFunction': 'PQ',
+          'fps': 30,
+          'resolution': '2160p',
+          'mimeType': 'video/webm; codecs="vp9.2"',
+        },
+      ],
+      HdrPqUltralowHfr: [
+        'meridian_vp9_hdr_ultralow.webm', 12680814, 718.94,
+        {
+          'transferFunction': 'PQ',
+          'fps': 60,
+          'resolution': '144p',
+          'mimeType': 'video/webm; codecs="vp9.2"',
+        },
+      ],
+      HdrPqLowHfr: [
+        'meridian_vp9_hdr_low.webm', 26899101, 718.94,
+        {
+          'transferFunction': 'PQ',
+          'fps': 60,
+          'resolution': '240p',
+          'mimeType': 'video/webm; codecs="vp9.2"',
+        },
+      ],
+      HdrPqMedHfr: [
+        'meridian_vp9_hdr_med.webm', 63165785, 718.94,
+        {
+          'transferFunction': 'PQ',
+          'fps': 60,
+          'resolution': '360p',
+          'mimeType': 'video/webm; codecs="vp9.2"',
+        },
+      ],
+      HdrPqHighHfr: [
+        'meridian_vp9_hdr_high.webm', 132217173, 718.94,
+        {
+          'transferFunction': 'PQ',
+          'fps': 60,
+          'resolution': '480p',
+          'mimeType': 'video/webm; codecs="vp9.2"',
+        },
+      ],
+      HdrPq720pHfr: [
+        'meridian_vp9_hdr_720p.webm', 339235754, 718.94,
+        {
+          'transferFunction': 'PQ',
+          'fps': 60,
+          'resolution': '720p',
+          'mimeType': 'video/webm; codecs="vp9.2"',
+        },
+      ],
+      HdrPq1080pHfr: [
+        'meridian_vp9_hdr_1080p.webm', 531408862, 718.94,
+        {
+          'transferFunction': 'PQ',
+          'fps': 60,
+          'resolution': '1080p',
+          'mimeType': 'video/webm; codecs="vp9.2"',
+        },
+      ],
+      HdrPq2kHfr: [
+        'meridian_vp9_hdr_2k.webm', 1259703408, 718.94,
+        {
+          'transferFunction': 'PQ',
+          'fps': 60,
+          'resolution': '1440p',
+          'mimeType': 'video/webm; codecs="vp9.2"',
+        },
+      ],
+      HdrPq4kHfr: [
+        'meridian_vp9_hdr_4k.webm', 2249443995, 718.94,
+        {
+          'transferFunction': 'PQ',
+          'fps': 60,
+          'resolution': '2160p',
+          'mimeType': 'video/webm; codecs="vp9.2"',
+        },
+      ],
     },
   };
 
-  var streamTypes = [AAC, Opus, H264, VP9];
+  var AV1 = {
+    streamtype: 'AV1',
+    mimetype: `video/mp4; codecs="${util.av1Codec()}"`,
+    mediatype: 'video',
+    streams: {
+      VideoSmall: [
+        'iPLm0O-flS8-56.62-Vlog_2160_240p.mp4', 338002, 18.08,
+        {
+          'fps': 30,
+          'resolution': '240p',
+          'mimeType': `video/mp4; codecs="${util.av1Codec('2.0')}"`,
+        }
+      ],
+      Video1MB: [
+        'big-buck-bunny-av1-144p-30fps.mp4', 1000000, 108.33,
+        {
+          'fps': 30,
+          'resolution': '144p',
+          'mimeType': `video/mp4; codecs="${util.av1Codec('2.0')}"`,
+        }
+      ],
+      Bunny144p30fps: [
+        'big-buck-bunny-av1-144p-30fps.mp4', 5829002, 634.60,
+        {
+          'fps': 30,
+          'resolution': '144p',
+          'mimeType': `video/mp4; codecs="${util.av1Codec('2.0')}"`,
+        }
+      ],
+      Bunny240p30fps: [
+        'big-buck-bunny-av1-240p-30fps.mp4', 11684317, 634.60,
+        {
+          'fps': 30,
+          'resolution': '240p',
+          'mimeType': `video/mp4; codecs="${util.av1Codec('2.0')}"`,
+          'videoChangeRate': 25.37,
+        }
+      ],
+      Bunny360p30fps: [
+        'big-buck-bunny-av1-360p-30fps.mp4', 20805110, 634.60,
+        {
+          'fps': 30,
+          'resolution': '360p',
+          'mimeType': `video/mp4; codecs="${util.av1Codec('2.1')}"`,
+        }
+      ],
+      Bunny480p30fps: [
+        'big-buck-bunny-av1-480p-30fps.mp4', 36194938, 634.60,
+        {
+          'fps': 30,
+          'resolution': '480p',
+          'mimeType': `video/mp4; codecs="${util.av1Codec('3.0')}"`,
+        }
+      ],
+      Bunny720p30fps: [
+        'big-buck-bunny-av1-720p-30fps.mp4', 70832592, 634.60,
+        {
+          'fps': 30,
+          'resolution': '720p',
+          'mimeType': `video/mp4; codecs="${util.av1Codec('3.1')}"`,
+        }
+      ],
+      Bunny720p60fps: [
+        'big-buck-bunny-av1-720p-60fps.mp4', 77454477, 634.57,
+        {
+          'fps': 60,
+          'resolution': '720p',
+          'mimeType': `video/mp4; codecs="${util.av1Codec('4.0')}"`,
+        }
+      ],
+      Bunny1080p30fps: [
+        'big-buck-bunny-av1-1080p-30fps.mp4', 131929783, 634.60,
+        {
+          'fps': 30,
+          'resolution': '1080p',
+          'mimeType': `video/mp4; codecs="${util.av1Codec('4.0')}"`,
+        }
+      ],
+      Bunny1080p60fps: [
+        'big-buck-bunny-av1-1080p-60fps.mp4', 132082214, 634.57,
+        {
+          'fps': 60,
+          'resolution': '1080p',
+          'mimeType': `video/mp4; codecs="${util.av1Codec('4.1')}"`,
+        }
+      ],
+      Bunny1440p30fps: [
+        'big-buck-bunny-av1-1440p-30fps.mp4', 389127462, 624.00,
+        {
+          'fps': 30,
+          'resolution': '1440p',
+          'mimeType': `video/mp4; codecs="${util.av1Codec('5.0')}"`,
+        }
+      ],
+      Bunny1440p60fps: [
+        'big-buck-bunny-av1-1440p-60fps.mp4', 406942546, 334.40,
+        {
+          'fps': 60,
+          'resolution': '1440p',
+          'mimeType': `video/mp4; codecs="${util.av1Codec('5.0')}"`,
+        }
+      ],
+      Sports2160p30fps: [
+        'sports_2160p30.mp4', 30760646, 19.99,
+        {
+          'fps': 30,
+          'resolution': '2160p',
+          'mimeType': `video/mp4; codecs="${util.av1Codec('5.0')}"`,
+        }
+      ],
+    },
+  };
+
+  var streamTypes = [AAC, Opus, H264, VP9, AV1, AC3, EAC3];
 
   var defaultWidth = {
     '144p': 256,
@@ -785,8 +1328,17 @@ var Media = (function() {
   };
 
   var createStreamDefFunc = function(codec, mediaType, mimeType) {
+    /**
+     * @param {string} src - path to stream source file
+     * @param {number} size - size of stream in bytes
+     * @param {number} duration - duration of stream in seconds
+     * @param {?Object<string, *> customMap - other stream properties
+     */
     return function(src, size, duration, customMap) {
       var get = function(attribute) {
+        if (!customMap) {
+          return null;
+        }
         return attribute in customMap ? customMap[attribute] : null;
       };
       var mime = mimeType;
@@ -834,3 +1386,10 @@ var Media = (function() {
 
   return mediaStreams;
 })();
+
+try {
+  exports.media = Media;
+} catch (e) {
+  // do nothing, this function is not supposed to work for browser, but it's for
+  // Node js to generate json file instead.
+}

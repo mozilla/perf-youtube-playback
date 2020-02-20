@@ -31,16 +31,10 @@ var info = 'Spec Version: ' + domVersion + ' | Default Timeout: ' +
 
 var fields = ['passes', 'failures', 'timeouts'];
 
-var createDomTest = function(name, category, mandatory) {
-  var t = createTest(name);
+var createDomTest = function(testId, name, category = 'DOM Misc', mandatory = true) {
+  var t = createTest(name, category, mandatory, testId,
+      'DOM chardata, window & Miscellaneous Tests');
   t.prototype.index = tests.length;
-  t.prototype.passes = 0;
-  t.prototype.failures = 0;
-  t.prototype.timeouts = 0;
-  t.prototype.category = category || 'DOM Misc';
-  if (typeof mandatory === 'boolean') {
-    t.prototype.mandatory = mandatory;
-  }
   tests.push(t);
   return t;
 };
@@ -63,9 +57,9 @@ var isValueInElement = function(value, name, element, runner) {
 /**
  * Ensure the DOM methods are correctly supported through Modernizr.
  */
-var createCommonDomTest = function(value, category, element, mandatory) {
+var createCommonDomTest = function(testId, value, category, element, mandatory) {
   var name = category.replace(/\s/g, '') + '.' + value;
-  var test = createDomTest(name, category, mandatory);
+  var test = createDomTest(testId, name, category, mandatory);
   test.prototype.title = 'Test DOM Implementation of ' + name;
   test.prototype.start = function() {
     isValueInElement(value, name, element, this.runner);
@@ -73,92 +67,92 @@ var createCommonDomTest = function(value, category, element, mandatory) {
 };
 
 // Category: CharacterData.
-var createCharDataTest = function(value, mandatory) {
+var createCharDataTest = function(testId, value, mandatory) {
   createCommonDomTest(
-      value, 'CharacterData', document.createTextNode('Test'), mandatory);
+      testId, value, 'CharacterData', document.createTextNode('Test'), mandatory);
 };
 
-createCharDataTest('appendData', false);
-createCharDataTest('data');
-createCharDataTest('deleteData', false);
-createCharDataTest('insertData', false);
-createCharDataTest('length', false);
-createCharDataTest('replaceData', false);
-createCharDataTest('substringData', false);
+createCharDataTest('19.1.1.1', 'appendData', false);
+createCharDataTest('19.1.2.1', 'data');
+createCharDataTest('19.1.3.1', 'deleteData', false);
+createCharDataTest('19.1.4.1', 'insertData', false);
+createCharDataTest('19.1.5.1', 'length', false);
+createCharDataTest('19.1.6.1', 'replaceData', false);
+createCharDataTest('19.1.7.1', 'substringData', false);
 
 // Category: NamedNodeMap.
-var createNameNodeMapTest = function(value, mandatory) {
+var createNameNodeMapTest = function(testId, value, mandatory) {
   createCommonDomTest(
-      value, 'NamedNodeMap', document.documentElement.attributes, mandatory);
+      testId, value, 'NamedNodeMap', document.documentElement.attributes, mandatory);
 };
 
-createNameNodeMapTest('getNamedItem');
-createNameNodeMapTest('getNamedItemNS', false);
-createNameNodeMapTest('item');
-createNameNodeMapTest('length');
-createNameNodeMapTest('removeNamedItem', false);
-createNameNodeMapTest('removeNamedItemNS', false);
-createNameNodeMapTest('setNamedItem', false);
-createNameNodeMapTest('setNamedItemNS', false);
+createNameNodeMapTest('19.2.1.1', 'getNamedItem');
+createNameNodeMapTest('19.2.2.1', 'getNamedItemNS', false);
+createNameNodeMapTest('19.2.3.1', 'item');
+createNameNodeMapTest('19.2.4.1', 'length');
+createNameNodeMapTest('19.2.5.1', 'removeNamedItem', false);
+createNameNodeMapTest('19.2.6.1', 'removeNamedItemNS', false);
+createNameNodeMapTest('19.2.7.1', 'setNamedItem', false);
+createNameNodeMapTest('19.2.8.1', 'setNamedItemNS', false);
 
 // Category: Node.
-var createNodeTest = function(value, mandatory) {
-  createCommonDomTest(value, 'Node', document.body, mandatory);
+var createNodeTest = function(testId, value, mandatory) {
+  createCommonDomTest(testId, value, 'Node', document.body, mandatory);
 };
 
-createNodeTest('appendChild');
-createNodeTest('attributes');
-createNodeTest('childNodes');
-createNodeTest('cloneNode');
-createNodeTest('firstChild');
-createNodeTest('hasAttributes', false);
-createNodeTest('hasChildNodes');
-createNodeTest('insertBefore');
-createNodeTest('lastChild');
-createNodeTest('nextSibling');
-createNodeTest('nodeName');
-createNodeTest('nodeType');
-createNodeTest('nodeValue');
-createNodeTest('normalize', false);
-createNodeTest('ownerDocument');
-createNodeTest('parentNode');
-createNodeTest('previousSibling');
-createNodeTest('removeChild');
-createNodeTest('replaceChild');
+createNodeTest('19.3.1.1', 'appendChild');
+createNodeTest('19.3.2.1', 'attributes');
+createNodeTest('19.3.3.1', 'childNodes');
+createNodeTest('19.3.4.1', 'cloneNode');
+createNodeTest('19.3.5.1', 'firstChild');
+createNodeTest('19.3.6.1', 'hasAttributes', false);
+createNodeTest('19.3.7.1', 'hasChildNodes');
+createNodeTest('19.3.8.1', 'insertBefore');
+createNodeTest('19.3.9.1', 'lastChild');
+createNodeTest('19.3.10.1', 'nextSibling');
+createNodeTest('19.3.11.1', 'nodeName');
+createNodeTest('19.3.12.1', 'nodeType');
+createNodeTest('19.3.13.1', 'nodeValue');
+createNodeTest('19.3.14.1', 'normalize', false);
+createNodeTest('19.3.15.1', 'ownerDocument');
+createNodeTest('19.3.16.1', 'parentNode');
+createNodeTest('19.3.17.1', 'previousSibling');
+createNodeTest('19.3.18.1', 'removeChild');
+createNodeTest('19.3.19.1', 'replaceChild');
 
-createCommonDomTest('getElementById', 'Node', document, false);
-createCommonDomTest('localName', 'Node', document.documentElement, false);
-createCommonDomTest('namespaceURI', 'Node', document.documentElement, false);
-createCommonDomTest('prefix', 'Node', document.documentElement, false);
+createCommonDomTest('19.3.20.1', 'getElementById', 'Node', document, false);
+createCommonDomTest('19.3.21.1', 'localName', 'Node', document.documentElement, false);
+createCommonDomTest('19.3.22.1', 'namespaceURI', 'Node', document.documentElement, false);
+createCommonDomTest('19.3.23.1', 'prefix', 'Node', document.documentElement, false);
 
 
 // Category: Rect.
-var createRectTest = function(value) {
-  createCommonDomTest(value, 'Rect', window.getComputedStyle.getRectValue);
+var createRectTest = function(testId, value) {
+  createCommonDomTest(testId, value, 'Rect', window.getComputedStyle.getRectValue);
 };
 
-createRectTest('bottom');
-createRectTest('left');
-createRectTest('right');
-createRectTest('top');
+createRectTest('19.4.1.1', 'bottom');
+createRectTest('19.4.2.1', 'left');
+createRectTest('19.4.3.1', 'right');
+createRectTest('19.4.4.1', 'top');
 
 // Category: window.
-var createWindowTest = function(value) {
-  createCommonDomTest(value, 'window', window);
+var createWindowTest = function(testId, value) {
+  createCommonDomTest(testId, value, 'window', window);
 };
 
-createWindowTest('addEventListener');
-createWindowTest('clearInterval');
-createWindowTest('clearTimeout');
-createWindowTest('location');
-createWindowTest('navigator');
-createWindowTest('close');
-createWindowTest('removeEventListener');
-createWindowTest('setInterval');
-createWindowTest('setTimeout');
+createWindowTest('19.5.1.1', 'addEventListener');
+createWindowTest('19.5.2.1', 'clearInterval');
+createWindowTest('19.5.3.1', 'clearTimeout');
+createWindowTest('19.5.4.1', 'location');
+createWindowTest('19.5.5.1', 'navigator');
+createWindowTest('19.5.6.1', 'close');
+createWindowTest('19.5.7.1', 'removeEventListener');
+createWindowTest('19.5.8.1', 'setInterval');
+createWindowTest('19.5.9.1', 'setTimeout');
 
-var createEventTest = function(value) {
-  var test = createDomTest('window.'+ value, 'window', false);
+var createEventTest = function(testId, value) {
+  var test = createDomTest(testId, 'window.'+ value, 'window', false);
   test.prototype.title = 'Test event existence of window.' + value;
   test.prototype.start = function() {
     try {
@@ -173,20 +167,20 @@ var createEventTest = function(value) {
   }
 };
 
-createEventTest('keydown');
-createEventTest('keypress');
-createEventTest('keyup');
+createEventTest('19.5.10.1', 'keydown');
+createEventTest('19.5.11.1', 'keypress');
+createEventTest('19.5.12.1', 'keyup');
 
 /**
  * Ensure that onerror event is correctly fired.
  */
-var testOnerror = createDomTest('Window.onerror stack trace', 'window');
+var testOnerror = createDomTest('19.5.13.1', 'Window.onerror stack trace', 'window');
 testOnerror.prototype.title = 'Test window.onerror';
 testOnerror.prototype.start = function(runner) {
   window.addEventListener('error', function onerror(e) {
     window.removeEventListener('error', onerror);
     // line number should match
-    if (e.lineno == 199 && (e.colno == 5 || e.colno == 12)) {
+    if (e.lineno == 193 && (e.colno == 5 || e.colno == 12)) {
       runner.succeed();
     }
     else {
@@ -201,19 +195,29 @@ testOnerror.prototype.start = function(runner) {
 };
 
 /**
- * Ensure that device pixel ratio is either 1, 1.5 or 2.
+ * Ensure that device pixel ratio is valid under current output resolution.
  */
-var testDevicePixelRatio = createDomTest('Window.devicePixelRatio', 'window');
+var testDevicePixelRatio = createDomTest('19.5.14.1', 'Window.devicePixelRatio', 'window');
 testDevicePixelRatio.prototype.title = 'Test window.devicePixelRatio';
 testDevicePixelRatio.prototype.start = function() {
   try {
-    var devicePixelRatio = window.devicePixelRatio;
-    if (devicePixelRatio == 2 ||
-        devicePixelRatio == 1.5 || devicePixelRatio == 1 )
+    var validDevicePixelRatios;
+    if (util.isGt4K()) {
+      validDevicePixelRatios = [2, 4];
+    } else if (util.isGtFHD()) {
+      validDevicePixelRatios = [1, 1.5, 2];
+    } else {
+      validDevicePixelRatios = [1, 1.5];
+    }
+
+    if (validDevicePixelRatios.indexOf(window.devicePixelRatio) > -1) {
       this.runner.succeed();
-    else
+    }
+    else {
       throw 'Value returned: devicePixelRatio is ' +
-          devicePixelRatio + '. Value must be 1, 1.5 or 2.';
+          window.devicePixelRatio + '. Value must be in [' +
+          validDevicePixelRatios.toString() + ']';
+    }
   } catch(e) {
     this.runner.fail(e);
   }
@@ -223,7 +227,7 @@ testDevicePixelRatio.prototype.start = function() {
 /**
  * Validate that totalJSHeapSizs API is supported.
  */
-var testTotalJSHeapSize = createDomTest('totalJSHeapSize', 'Heap');
+var testTotalJSHeapSize = createDomTest('19.6.1.1', 'totalJSHeapSize', 'Heap');
 testTotalJSHeapSize.prototype.title = 'Test totalJSHeapSize is valid';
 testTotalJSHeapSize.prototype.start = function() {
   try {
@@ -241,7 +245,7 @@ testTotalJSHeapSize.prototype.start = function() {
 /**
  * Validate that usedJSHeapSizs API is supported.
  */
-var testUsedJSHeapSize = createDomTest('usedJSHeapSize', 'Heap');
+var testUsedJSHeapSize = createDomTest('19.6.2.1', 'usedJSHeapSize', 'Heap');
 testUsedJSHeapSize.prototype.title = 'Test usedJSHeapSize is valid';
 testUsedJSHeapSize.prototype.start = function() {
   try {
@@ -257,39 +261,49 @@ testUsedJSHeapSize.prototype.start = function() {
 };
 
 // Category: Assorted.
-var createAssortedTest = function(value, name, element, mandatory) {
-  var test = createDomTest(name, 'Assorted', mandatory);
+var createAssortedTest = function(testId, value, name, element, mandatory) {
+  var test = createDomTest(testId, name, 'Assorted', mandatory);
   test.prototype.title = 'Test DOM Implementation of ' + name;
   test.prototype.start = function() {
     isValueInElement(value, name, element, this.runner);
   }
 };
 
-createAssortedTest('item', 'NodeList.list', document.body.div);
+createAssortedTest('19.7.1.1', 'item', 'NodeList.list', document.body.div);
 createAssortedTest(
-    'length', 'NodeList.length', document.documentElement.childNodes);
-createAssortedTest('publicId', 'Notation.publicId', document.doctype, false);
-createAssortedTest('systemId', 'Notation.systemId', document.doctype, false);
+    '19.7.2.1',
+    'length',
+    'NodeList.length',
+    document.documentElement.childNodes);
 createAssortedTest(
-    'data', 'ProcessingInstruction.data', document.body.firstChild);
-createAssortedTest('item', 'StyleSheetList.item', document.StyleSheetLists);
-createAssortedTest('length', 'StyleSheetList.length', document.StyleSheetLists);
+    '19.7.3.1', 'publicId', 'Notation.publicId', document.doctype, false);
 createAssortedTest(
-    'splitText', 'Text.splitText', document.body.firstChild, false);
-createAssortedTest('getComputedStyle', 'ViewCSS.getComputedStyle', window);
+    '19.7.4.1', 'systemId', 'Notation.systemId', document.doctype, false);
 createAssortedTest(
+    '19.7.5.1', 'data', 'ProcessingInstruction.data', document.body.firstChild);
+createAssortedTest(
+    '19.7.6.1', 'item', 'StyleSheetList.item', document.StyleSheetLists);
+createAssortedTest(
+    '19.7.7.1', 'length', 'StyleSheetList.length', document.StyleSheetLists);
+createAssortedTest(
+    '19.7.8.1', 'splitText', 'Text.splitText', document.body.firstChild, false);
+createAssortedTest(
+    '19.7.9.1', 'getComputedStyle', 'ViewCSS.getComputedStyle', window);
+createAssortedTest(
+    '19.7.10.1',
     'sheet',
     'LinkStyle.sheet',
     document.getElementsByTagName('link')[0],
     false);
-createAssortedTest('item', 'MediaList.item', document.mediaList);
-createAssortedTest('length', 'MediaList.length', document.mediaList);
+createAssortedTest('19.7.11.1', 'item', 'MediaList.item', document.mediaList);
+createAssortedTest(
+    '19.7.12.1', 'length', 'MediaList.length', document.mediaList);
 
 
 // Category: CreateEvent.
-var createInitEventTest = function(value, event, mandatory) {
+var createInitEventTest = function(testId, value, event, mandatory) {
   var name = event + '.' + value;
-  var test = createDomTest(name, 'CreateEvent', mandatory);
+  var test = createDomTest(testId, name, 'CreateEvent', mandatory);
   test.prototype.title = 'Test DOM Implementation of ' + name;
   test.prototype.start = function() {
     try {
@@ -301,10 +315,17 @@ var createInitEventTest = function(value, event, mandatory) {
   }
 };
 
-createInitEventTest('initUIEvent', 'UIEvents');
-createInitEventTest('initMouseEvent', 'MouseEvents', false);
-createInitEventTest('initMutationEvent', 'MutationEvents', false);
+createInitEventTest('19.8.1.1', 'initUIEvent', 'UIEvents');
+createInitEventTest('19.8.2.1', 'initMouseEvent', 'MouseEvents', false);
+createInitEventTest('19.8.3.1', 'initMutationEvent', 'MutationEvents', false);
 
 
 return {tests: tests, info: info, fields: fields, viewType: 'default'};
 };
+
+try {
+  exports.getTest = DommiscTest;
+} catch (e) {
+  // do nothing, this function is not supposed to work for browser, but it's for
+  // Node js to generate json file instead.
+}

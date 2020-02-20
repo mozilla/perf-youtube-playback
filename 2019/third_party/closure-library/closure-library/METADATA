@@ -1,0 +1,19 @@
+name: "Closure Library"
+description:
+    "Closure Library is a powerful, low-level JavaScript library designed "
+    "for building complex and scalable web applications. It is used by "
+    "many Google web applications, such as Google Search, Gmail, Google Docs, "
+    "Google+, Google Maps, and others."
+
+third_party {
+  url {
+    type: HOMEPAGE
+    value: "https://developers.google.com/closure/library/"
+  }
+  url {
+    type: GIT
+    value: "https://github.com/google/closure-library.git"
+  }
+  version: "6c91e85"
+  last_upgrade_date { year: 2019 month: 6 day: 4 }
+}
