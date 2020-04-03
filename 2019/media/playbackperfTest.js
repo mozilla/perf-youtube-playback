@@ -204,7 +204,14 @@ var createPlaybackPerfTest = function(
           test.prototype.status = 'Fail';
           runner.fail('UserAgent was unable to render any frames.');
         }
-        runner.checkLE(totalDroppedFrames, 1, 'Total dropped frames');
+        if (runner.isRaptorTest()){
+          if (totalDroppedFrames > 1) {
+            runner.log('Total dropped frames is (' + totalDroppedFrames +
+                ') which should be less than or equal to (1)');
+          }
+        } else {
+          runner.checkLE(totalDroppedFrames, 1,'Total dropped frames');
+        }
         runner.succeed();
       }
     });
