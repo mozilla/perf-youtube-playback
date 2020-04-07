@@ -240,6 +240,10 @@ TestExecutor.prototype.updateStatus = function() {
   this.testView.getTest(this.currentTestIdx).updateStatus();
 };
 
+TestExecutor.prototype.isRaptorTest = function(){
+  return harnessConfig.is_raptor;
+};
+
 TestExecutor.prototype.initialize = function() {
   var self = this;
   this.testView = compactTestView.create(this.testSuiteVer, this.fields,
@@ -310,7 +314,9 @@ TestExecutor.prototype.onfinished = function() {
         if (test) {
           switch (harnessConfig.testType) {
             case "playbackperf-test":
+              // Add frame test results and status if test failed
               results[test.prototype.desc] = {
+                fail: test.prototype.failures,
                 decodedFrames: test.prototype.decoded_frames,
                 droppedFrames: test.prototype.dropped_frames,
               }
