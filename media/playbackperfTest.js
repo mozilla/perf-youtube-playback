@@ -259,7 +259,20 @@ var PlaybackperfTest = function(subgroup, suite) {
           if (video.playbackRate != playbackRate) {
             runner.fail('playbackRate is not set');
           }
-          assertTest(perfTestUtil);
+
+          if (runner.isRaptorTest()){
+            if (test.prototype.decoded_frames <= 0) {
+              test.prototype.status = 'Fail';
+              runner.fail('UserAgent was unable to render any frames.');
+            }
+            if (test.prototype.dropped_frames > 1) {
+              runner.log('Total dropped frames is (' + totalDroppedFrames +
+                  ') which should be less than or equal to (1)');
+            }
+          } else {
+            assertTest(perfTestUtil);
+          }
+
           runner.succeed();
         }
       });
