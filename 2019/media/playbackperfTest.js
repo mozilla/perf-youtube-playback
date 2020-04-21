@@ -256,6 +256,13 @@ var PlaybackperfTest = function(subgroup, suite) {
           test.prototype.decoded_frames = perfTestUtil.getTotalDecodedFrames();
           test.prototype.dropped_frames = perfTestUtil.getTotalDroppedFrames();
 
+          if (runner.isRaptorTest()) {
+            if (test.prototype.dropped_frames > 1) {
+              runner.log('Total dropped frames is (' + test.prototype.dropped_frames +
+                ') which should be less than or equal to (1)');
+            }
+          }
+
           if (video.playbackRate != playbackRate) {
             runner.fail('playbackRate is not set');
           }
