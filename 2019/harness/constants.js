@@ -17,4 +17,4 @@
 
 'use strict';
 
-var testVersion = '2020';
+var testVersion = '2019';

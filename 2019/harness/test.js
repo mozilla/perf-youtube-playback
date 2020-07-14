@@ -28,14 +28,6 @@ if (!window.LOG) {
 
 var TestBase = {};
 
-// YouTube Test result outcome, conforms with what inside API.
-var TestOutcome = {
-  UNKNOWN: 0,
-  PASSED: 1,
-  FAILED: 2,
-  OPTIONAL_FAILED: 3
-};
-
 TestBase.onsourceopen = function() {
   this.log('default onsourceopen()');
 };
@@ -91,43 +83,21 @@ TestBase.dump = function() {
   }
 };
 
-TestBase.setStreams = function(streams) {
-  this.streams = streams;
-  streams.forEach(stream => {
-    if (!isTypeSupported(stream)) {
-      // If any stream codecs are unsupported, make the test optional
-      this.mandatory = false;
-    }
-  });
-};
-
 TestBase.timeout = 30000;
 
-window.createTest = function (name, category = '', mandatory = true, id = '',
-    suite = '', title = '', passingCriteria = '', instruction = '',
-    is_manual = false, href = '', description = '') {
+window.createTest = function(name) {
   var t = function() {};
-  t.prototype = Object.create(TestBase);
-  t.prototype.name = name;
-  t.prototype.title = title;
-  t.prototype.passingCriteria = passingCriteria;
-  t.prototype.instruction = instruction;
-  t.prototype.id = id;
+  t.prototype.__proto__ = TestBase;
   t.prototype.desc = name;
   t.prototype.running = false;
-  t.prototype.passes = 0;
-  t.prototype.failures = 0;
-  t.prototype.timeouts = 0;
-  t.prototype.outcome = TestOutcome.UNKNOWN;
-  t.prototype.category = category;
-  t.prototype.mandatory = mandatory;
+  t.prototype.category = '';
+  t.prototype.mandatory = true;
 
   return t;
 };
 
-window.createMSTest = function (testId, name, category = '', mandatory = true,
-    suite = "") {
-  var t = createTest(name, category, mandatory, testId, suite);
+window.createMSTest = function(name) {
+  var t = createTest(name);
   t.prototype.start = function(runner, video) {
     this.ms = new MediaSource();
     this.ms.addEventListener('sourceopen', this.onsourceopen.bind(this));
@@ -270,10 +240,6 @@ TestExecutor.prototype.updateStatus = function() {
   this.testView.getTest(this.currentTestIdx).updateStatus();
 };
 
-TestExecutor.prototype.isRaptorTest = function(){
-  return harnessConfig.is_raptor;
-};
-
 TestExecutor.prototype.initialize = function() {
   var self = this;
   this.testView = compactTestView.create(this.testSuiteVer, this.fields,
@@ -292,7 +258,7 @@ TestExecutor.prototype.initialize = function() {
 
   document.getElementById('info').innerHTML = this.info;
   this.log('Media Source and Encrypted Media Conformance Tests ' +
-           '(version 20200212151848)');
+           '(version 20190520112447)');
 
   this.longestTimeRatio = -1;
   this.longestTest = null;
@@ -318,57 +284,19 @@ TestExecutor.prototype.onfinished = function() {
     for (var i = 0; i < window.globalRunner.testList.length; i++) {
       var test =  window.globalRunner.testList[i];
       if (test.prototype.failures > 0) {
-        this.log((test.prototype.index + 1) + ':' + test.prototype.name +
+        this.log((test.prototype.index + 1) + ':' + test.prototype.desc +
            ': Failed with "' + test.prototype.lastError.message + '"');
       }
     }
   }
 
   this.log('[PLEASE VERIFY]Device Status: {HDR: ' + harnessConfig.support_hdr +
-      '}, {WebSpeech: ' + harnessConfig.support_webspeech + '}.');
+      '}, {WebGL: ' + harnessConfig.support_webgl + '}, {WebSpeech: ' +
+      harnessConfig.support_webspeech + '}.');
 
   if (document.URL.indexOf('appspot.com') >= 0 ||
       document.URL.indexOf('googleapis.com') >= 0) {
     this.sendTestReport(getTestResults());
-  }
-
-  if (harnessConfig.is_raptor) {
-    function getRaptorTestResults(testStartId, testEndId) {
-      testStartId = testStartId || 0;
-      testEndId = testEndId || window.globalRunner.testList.length;
-
-      var results = {};
-      for (var i = testStartId; i < testEndId; ++i) {
-        var test = window.globalRunner.testList[i];
-        if (test) {
-          switch (harnessConfig.testType) {
-            case 'playbackperf-sfr-vp9-test':
-            case 'playbackperf-sfr-h264-test':
-            case 'playbackperf-sfr-av1-test':
-            case 'playbackperf-hfr-test':
-            case 'playbackperf-widevine-sfr-vp9-test':
-            case 'playbackperf-widevine-sfr-h264-test':
-            case 'playbackperf-widevine-hfr-test':
-              // Add frame test results and status if test failed
-              results[test.prototype.desc] = {
-                fail: test.prototype.failures,
-                decodedFrames: test.prototype.decoded_frames,
-                droppedFrames: test.prototype.dropped_frames,
-              }
-            break;
-          }
-        }
-      }
-      return results;
-    };
-
-    let message = [
-      'raptor-benchmark',
-      'youtube-' + harnessConfig.testType,
-      getRaptorTestResults()
-    ];
-    this.log('sending youtube-' + harnessConfig.testType + ' results to Raptor');
-    window.postMessage(message, '*');
   }
 };
 
@@ -439,12 +367,6 @@ TestExecutor.prototype.startNextTest = function() {
     }
   };
 
-  if (this.currentTest.streams) {
-    this.currentTest.streams.forEach(stream => {
-      this.failIfTypeUnsupported(stream);
-    });
-  }
-
   this.currentTest.start(this, this.currentTest.video);
 };
 
@@ -455,7 +377,6 @@ TestExecutor.prototype.succeed = function() {
   this.blockTestResults = true;
   this.lastResult = 'pass';
   ++this.testList[this.currentTestIdx].prototype.passes;
-  this.testList[this.currentTestIdx].prototype.outcome = TestOutcome.PASSED;
   this.updateStatus();
   this.log('Test ' + (this.currentTest.index + 1) + ':' +
       this.currentTest.desc + ' PASSED.');
@@ -475,8 +396,8 @@ TestExecutor.prototype.error = function(msg, isTimeout) {
   } catch (e) {
   }
 
-  this.log('Test ' + this.testList[this.currentTestIdx].prototype.id + ':' +
-      this.testList[this.currentTestIdx].prototype.name +
+  this.log('Test ' + (this.currentTest.index + 1) + ':' +
+      this.testList[this.currentTestIdx].prototype.desc +
       ' threw an error: ' + msg);
   var stack = '';
 
@@ -499,30 +420,11 @@ TestExecutor.prototype.error = function(msg, isTimeout) {
 
 TestExecutor.prototype.fail = function(msg) {
   ++this.testList[this.currentTestIdx].prototype.failures;
-  if (this.testList[this.currentTestIdx].prototype.mandatory) {
-    this.testList[this.currentTestIdx].prototype.outcome = TestOutcome.FAILED;
-  } else {
-    this.testList[this.currentTestIdx].prototype.outcome = TestOutcome.OPTIONAL_FAILED;
-  }
-
   this.updateStatus();
   this.log('Test ' + (this.currentTest.index + 1) + ':' +
       this.currentTest.desc + ' FAILED');
   this.error(msg, false);
 };
-
-TestExecutor.prototype.failIfTypeUnsupported = function(stream) {
-  if (!isTypeSupported(stream)) {
-    var mimeType = createMimeTypeStr(
-      stream.mimetype,
-      null,
-      stream.get("width"),
-      stream.get("height"),
-      stream.get("fps"),
-      stream.get("spherical"));
-    this.fail(`Stream type unsupported: ${mimeType}`);
-  }
-}
 
 TestExecutor.prototype.timeout = function() {
   var isTestTimedOut = false;
@@ -555,11 +457,6 @@ TestExecutor.prototype.timeout = function() {
 
   if (isTestTimedOut) {
     ++this.testList[this.currentTestIdx].prototype.timeouts;
-    if (this.testList[this.currentTestIdx].prototype.mandatory) {
-      this.testList[this.currentTestIdx].prototype.outcome = TestOutcome.FAILED;
-    } else {
-      this.testList[this.currentTestIdx].prototype.outcome = TestOutcome.OPTIONAL_FAILED;
-    }
     this.updateStatus();
     this.error('Test ' + (this.currentTest.index + 1) + ':' +
         this.currentTest.desc + ' TIMED OUT!', true);
@@ -623,7 +520,7 @@ window.getTestResults = function(testStartId, testEndId) {
     if (window.globalRunner.testList[i]) {
       var test = window.globalRunner.testList[i];
       var category = test.prototype.category;
-      var name = test.prototype.name;
+      var name = test.prototype.desc;
       if (test.prototype.failures > 0) {
         if (!failResults[category]) {
           failResults[category] = [];
@@ -639,13 +536,6 @@ window.getTestResults = function(testStartId, testEndId) {
   }
   return results;
 };
-})();
 
-try {
-  exports.TestBase = window.TestBase;
-  exports.createTest = window.createTest;
-  exports.createMSTest = window.createMSTest;
-} catch (e) {
-  // do nothing, this function is not supposed to work for browser, but it's for
-  // Node js to generate json file instead.
-}
+
+})();
