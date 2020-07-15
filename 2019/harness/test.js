@@ -240,6 +240,10 @@ TestExecutor.prototype.updateStatus = function() {
   this.testView.getTest(this.currentTestIdx).updateStatus();
 };
 
+TestExecutor.prototype.isRaptorTest = function(){
+  return harnessConfig.is_raptor;
+};
+
 TestExecutor.prototype.initialize = function() {
   var self = this;
   this.testView = compactTestView.create(this.testSuiteVer, this.fields,
@@ -297,6 +301,39 @@ TestExecutor.prototype.onfinished = function() {
   if (document.URL.indexOf('appspot.com') >= 0 ||
       document.URL.indexOf('googleapis.com') >= 0) {
     this.sendTestReport(getTestResults());
+  }
+
+  if (harnessConfig.is_raptor) {
+    function getRaptorTestResults(testStartId, testEndId) {
+      testStartId = testStartId || 0;
+      testEndId = testEndId || window.globalRunner.testList.length;
+
+      var results = {};
+      for (var i = testStartId; i < testEndId; ++i) {
+        var test = window.globalRunner.testList[i];
+        if (test) {
+          switch (harnessConfig.testType) {
+            case "playbackperf-test":
+              // Add frame test results and status if test failed
+              results[test.prototype.desc] = {
+                fail: test.prototype.failures,
+                decodedFrames: test.prototype.decoded_frames,
+                droppedFrames: test.prototype.dropped_frames,
+              }
+            break;
+          }
+        }
+      }
+      return results;
+    };
+
+    let message = [
+      'raptor-benchmark',
+      'youtube-' + harnessConfig.testType,
+      getRaptorTestResults()
+    ];
+    this.log('sending youtube-' + harnessConfig.testType + ' results to Raptor');
+    window.postMessage(message, '*');
   }
 };
 
@@ -536,6 +573,4 @@ window.getTestResults = function(testStartId, testEndId) {
   }
   return results;
 };
-
-
 })();

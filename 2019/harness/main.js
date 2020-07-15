@@ -39,16 +39,21 @@ var parseParams = function(testSuiteConfig) {
   config.command = parseParam('command', '');
   config.timeout = Number(parseParam('timeout', TestBase.timeout));
   config.logging = !util.stringToBoolean(parseParam('disable_log', false));
+  config.fullscreen = util.stringToBoolean(parseParam('fullscreen', false));
   config.loop = util.stringToBoolean(parseParam('loop', false));
   config.stoponfailure = util.stringToBoolean(
       parseParam('stoponfailure', false));
   config.enablewebm = util.stringToBoolean(
       parseParam('enablewebm', testSuiteConfig.enablewebm));
+  config.muted = util.stringToBoolean(parseParam('muted', false));
   config.novp9 = util.stringToBoolean(parseParam('novp9', false));
   config.tests = parseParam('tests');
   config.exclude = parseParam('exclude');
   config.testsMask = parseParam('tests_mask', '');
   config.testid = parseParam('testid', '');
+
+  // See: https://wiki.mozilla.org/Performance_sheriffing/Raptor
+  config.is_raptor = util.stringToBoolean(parseParam('raptor', false));
 
   config.is_cobalt = util.isCobalt();
   config.support_hdr = util.supportHdr();
@@ -155,6 +160,14 @@ var createRunner = function(testSuite, testSuiteVer, testsMask) {
       testarea.innerHTML = '';
       testarea.appendChild(util.createElement('video', vid, 'box-right'));
       document.getElementById(vid).controls = true;
+      document.getElementById(vid).muted = harnessConfig.muted;
+      if (harnessConfig.fullscreen) {
+        try {
+          document.getElementById(vid).requestFullscreen();
+        } catch(e) {
+          this.fail('Failed to start video in fullscreen mode: ' + e);
+        }
+      }
     }
     return document.getElementById(vid);
   };

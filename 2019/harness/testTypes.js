@@ -41,9 +41,9 @@
       heading: 'WebGL Performance Tests'
     },
     'playbackperf-test': {
-      name: 'Playback Performance Tests',
-      title: 'Tests for performance of video playback and decoding',
-      heading: 'Playback Performance Tests'
+      name: '[raptor] Playback Performance Tests',
+      title: '[raptor] Tests for performance of video playback and decoding',
+      heading: '[raptor] Playback Performance Tests'
     },
     'sphericalOnCobalt-test': {
       name: 'Cobalt Spherical Tests',
