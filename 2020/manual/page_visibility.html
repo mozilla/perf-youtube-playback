@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<!--
+Copyright 2018 Google Inc. All rights reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<html>
+<head>
+  <title>Application Lifecycle Test</title>
+  <link rel="stylesheet" href="manual-page-style.css" type="text/css">
+</head>
+<body>
+  <div class="outer">
+    <div class="h1">Application Lifecycle Test</div>
+    <div class="padding"></div>
+    <div class="h3">* Tip: 'Back' key press will redirect to the previous page.</div>
+    <div class="h3" style="white-space:pre-line;line-height: 1.4em;">
+        This page logs Cobalt deeplinks, blur/focus events, and changes to the document.visibilityState when the visibilitychange event is fired.
+        The visibilityState value should properly reflect if the current page is visible/partially-visible or hidden (not visible).
+        Window.onblur and window.onfocus must be called respectively whenever the application loses or gains focus of the device's input mechanism (IR Remote, etc).
+        Toggling of System menus, like Picture or Sound settings "quick menus", must fire a blur/focus event.
+        Suspending and Resuming the application must fire both blur/focus and visibilitychange events.
+        Anytime the app is resumed, the appropriate ?launch= parameter MUST be sent via deeplink once the application is Unpaused.
+      </div>
+    <div class="padding"></div>
+    <div class="h1">Logs:</div>
+    <div class="padding"></div>
+    <div id="output" style="white-space: pre-wrap; word-wrap: break-word;"></div>
+</body>
+<script src="../harness/key.js"></script>
+<script src="../harness/keyEvent.js"></script>
+<script src="../lib/manual/page_visibility.js"></script>
+<script>
+  document.addEventListener('keyup', function(event) {
+    pushBackKeyToReturnManualPage(event);
+  });
+</script>
+</html>

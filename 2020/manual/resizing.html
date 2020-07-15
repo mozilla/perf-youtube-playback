@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<!--
+Copyright 2019 Google Inc. All rights reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<html>
+  <head lang="en">
+    <meta charset="UTF-8">
+    <title>Resizing Demo</title>
+  </head>
+
+  <body>
+  <div id="resizing-container">
+    <video id='resizing-vid' loop autoplay src="https://storage.googleapis.com/ytlr-cert.appspot.com/test-materials/media/manual/avsync_30fps_120s.mp4"></video>
+    <div id="meta">Lorem Ipsum</div>
+  </div>
+
+  <div id="fps-result"></div>
+  <div id="frame-result"></div>
+  <style>
+  html {
+    background-color: #fff;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-size: 16px;
+  }
+
+  #fps-result {
+    position: absolute;
+    color: white;
+    width: 20%;
+    top: 10%;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 11;
+    font-size: 25px;
+  }
+
+  #frame-result {
+    position: absolute;
+    color: white;
+    width: 20%;
+    right: 0;
+    top: 10%;
+    z-index: 12;
+    background-color: rgba(0,0,0,0.5);
+    font-size: 25px;
+  }
+
+  #resizing-container {
+    position: absolute;
+    width: 1280px;
+    height: 720px;
+
+    -o-transform-origin: 0 0;
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+  }
+
+  #resizing-vid {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    z-index: 10;
+    background-color: #0f0;
+
+    -o-transform-origin: 0 0;
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+  }
+
+  #resizing-vid.shrink {
+    -o-animation: shrink 1s 1 forwards;
+    -webkit-animation: shrink 1s 1 forwards;
+    animation: shrink 1s 1 forwards;
+  }
+
+  @-o-keyframes shrink {
+    from {
+      -o-transform: scale(1)
+    }
+    to {
+      -o-transform: scale(0.2375) translate(1650.5px, 1650.5px);
+    }
+  }
+
+  @-webkit-keyframes shrink {
+    from {
+      -wekbit-transform: scale(1);
+    }
+    to {
+      -wekbit-transform: scale(0.2375) translate(1650.5px, 1650.5px);
+    }
+  }
+
+  @keyframes shrink {
+    from {
+      transform: scale(1);
+    }
+    to {
+      transform: scale(0.2375) translate(1650.5px, 1650.5px);
+    }
+  }
+
+  #resizing-vid.grow {
+    -o-animation: grow 1s 1 forwards;
+    -webkit-animation: grow 1s 1 forwards;
+    animation: grow 1s 1 forwards;
+  }
+
+  @-o-keyframes grow {
+    from {
+      -o-transform: scale(0.2375) translate(1650.5px, 1650.5px);
+    }
+    to {
+      -o-transform: scale(1)
+    }
+  }
+
+  @-webkit-keyframes grow {
+    from {
+      -wekbit-transform: scale(0.2375) translate(1650.5px, 1650.5px);
+    }
+    to {
+      -wekbit-transform: scale(1);
+    }
+  }
+
+  @keyframes grow {
+    from {
+      transform: scale(0.2375) translate(1650.5px, 1650.5px);
+    }
+    to {
+      transform: scale(1);
+    }
+  }
+
+  #meta {
+    position: absolute;
+    width: 17em;
+    height: 8.7em;
+    left: 24.5em;
+    top: 24.5em;
+    border: 0.5em solid #000;
+    z-index: 2;
+    color: #fff;
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0));
+    padding: 0.5em;
+  }
+  </style>
+  <script src="../harness/key.js"></script>
+  <script src="../harness/keyEvent.js"></script>
+  <script src="../lib/manual/resizing.js"></script>
+  </body>
+</html>
