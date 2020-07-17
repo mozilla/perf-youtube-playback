@@ -342,7 +342,13 @@ TestExecutor.prototype.onfinished = function() {
         var test = window.globalRunner.testList[i];
         if (test) {
           switch (harnessConfig.testType) {
-            case "playbackperf-test":
+            case 'playbackperf-sfr-vp9-test':
+            case 'playbackperf-sfr-h264-test':
+            case 'playbackperf-sfr-av1-test':
+            case 'playbackperf-hfr-test':
+            case 'playbackperf-widevine-sfr-vp9-test':
+            case 'playbackperf-widevine-sfr-h264-test':
+            case 'playbackperf-widevine-hfr-test':
               // Add frame test results and status if test failed
               results[test.prototype.desc] = {
                 fail: test.prototype.failures,
