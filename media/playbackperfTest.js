@@ -269,10 +269,9 @@ var PlaybackperfTest = function(subgroup, suite) {
               runner.log('Total dropped frames is (' + totalDroppedFrames +
                   ') which should be less than or equal to (1)');
             }
-          } else {
-            assertTest(perfTestUtil);
           }
 
+          assertTest(perfTestUtil);
           runner.succeed();
         }
       });
