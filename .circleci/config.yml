@@ -50,6 +50,7 @@ workflows:
             branches:
               only:
                 - raptor
+                - raptor-2020
       - deploy:
           requires:
             - build
@@ -57,3 +58,4 @@ workflows:
             branches:
               only:
                 - raptor
+                - raptor-2020
