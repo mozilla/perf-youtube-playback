@@ -25,7 +25,19 @@ main() {
       exit 1
   fi
 
-  CODE_DIR=2019
+  # We deploy different code based on the branch name.
+  # See https://github.com/mozilla/perf-youtube-playback/issues/19 for the background.
+  case "$CIRCLE_BRANCH" in
+    raptor)
+      CODE_DIR=2019
+    ;;
+    raptor-2020)
+      CODE_DIR=2020
+    ;;
+    * )
+      echo "Unrecognized branch name \`$CIRCLE_BRANCH'." 1>&2
+      exit 1
+  esac
 
   case "$1" in
     code)
