@@ -71,7 +71,7 @@ deploy_code() {
     --metadata "{${CSP}, ${HSTS}, ${TYPE}, ${XSS}, ${REFERRER}}" \
     --metadata-directive "REPLACE" \
     --acl "public-read" \
-    "." "s3://$YTTEST_BUCKET/$CODE_DIR/"
+    "./" "s3://$YTTEST_BUCKET/$CODE_DIR/"
 
   # JS; short cache
   aws s3 sync \
@@ -82,7 +82,7 @@ deploy_code() {
     --metadata "{${CSP}, ${HSTS}, ${TYPE}, ${XSS}, ${REFERRER}}" \
     --metadata-directive "REPLACE" \
     --acl "public-read" \
-    "." "s3://$YTTEST_BUCKET/$CODE_DIR/"
+    "./" "s3://$YTTEST_BUCKET/$CODE_DIR/"
 
   # Everything else; long cache
   aws s3 sync \
@@ -92,7 +92,7 @@ deploy_code() {
     --metadata "{${CSPSTATIC}, ${HSTS}, ${TYPE}, ${XSS}, ${REFERRER}}" \
     --metadata-directive "REPLACE" \
     --acl "public-read" \
-    "." "s3://$YTTEST_BUCKET/$CODE_DIR/"
+    "./" "s3://$YTTEST_BUCKET/$CODE_DIR/"
 }
 
 _download_and_prepare_media_files() {
