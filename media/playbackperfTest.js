@@ -266,7 +266,7 @@ var PlaybackperfTest = function(subgroup, suite) {
               runner.fail('UserAgent was unable to render any frames.');
             }
             if (test.prototype.dropped_frames > 1) {
-              runner.log('Total dropped frames is (' + totalDroppedFrames +
+              runner.log('Total dropped frames is (' + test.prototype.dropped_frames +
                   ') which should be less than or equal to (1)');
             }
           } else {
