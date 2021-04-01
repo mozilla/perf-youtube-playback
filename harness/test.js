@@ -362,13 +362,20 @@ TestExecutor.prototype.onfinished = function() {
       return results;
     };
 
-    let message = [
-      'raptor-benchmark',
-      'youtube-' + harnessConfig.testType,
-      getRaptorTestResults()
-    ];
-    this.log('sending youtube-' + harnessConfig.testType + ' results to Raptor');
+    let raptorData = getRaptorTestResults();
+    let testName = 'youtube-' + harnessConfig.testType;
+
+    let message = ['raptor-benchmark', testName, raptorData];
+    this.log('sending ' + testName + ' results to Raptor');
+
+    // Post the message for raptor-webext
     window.postMessage(message, '*');
+
+    // Use session storage for raptor-browsertime results
+    window.sessionStorage.setItem(
+      'benchmark_results',
+      JSON.stringify({[testName]: raptorData})
+    );
   }
 };
 
