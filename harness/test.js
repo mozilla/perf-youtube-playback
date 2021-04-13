@@ -374,7 +374,7 @@ TestExecutor.prototype.onfinished = function() {
     // Use session storage for raptor-browsertime results
     window.sessionStorage.setItem(
       'benchmark_results',
-      JSON.stringify({[testName]: raptorData})
+      JSON.stringify({[testName]: [raptorData]})
     );
   }
 };
