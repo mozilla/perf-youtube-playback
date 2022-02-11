@@ -136,13 +136,19 @@ deploy_media_files() {
   _download_and_prepare_media_files
 
   # Media files; long cache
-  aws s3 sync \
-    --delete \
-    --cache-control "max-age=${ONE_YEAR}, immutable" \
-    --metadata "{${CSPSTATIC}, ${HSTS}, ${TYPE}, ${XSS}, ${REFERRER}}" \
-    --metadata-directive "REPLACE" \
-    --acl "public-read" \
-    test-materials/ "s3://$YTTEST_BUCKET/$CODE_DIR/test-materials/"
+  gsutil                                                \
+    -h "cache-control: max-age=${ONE_YEAR}, immutable"  \
+    -h "$CSPSTATIC"                                     \
+    -h "$HSTS"                                          \
+    -h "$TYPE"                                          \
+    -h "$XSS"                                           \
+    -h "$REFERRER"                                      \
+    -m                                                  \
+    rsync                                               \
+    -R                                                  \
+    -d                                                  \
+    -a public-read                                      \
+    ./test-materials/ "gs://$YTTEST_BUCKET/$CODE_DIR/test-materials/"
 }
 
 main "$@"
