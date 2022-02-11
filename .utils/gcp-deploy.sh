@@ -66,26 +66,9 @@ deploy_code() {
   # first, and then sync everything else which will get defaults
 
   # HTML; short cache
-  gsutil                                        \
-    -h "cache-control: max-age=${FIVE_DAYS}"    \
-    -h "content-type: text/html; charset=utf-8" \
-    -h "$CSP"                                   \
-    -h "$HSTS"                                  \
-    -h "$TYPE"                                  \
-    -h "$XSS"                                   \
-    -h "$REFERRER"                              \
-    -m                                          \
-    rsync                                       \
-    -R                                          \
-    -J                                          \
-    -a public-read                              \
-    -x '.*(?<!\.html)$'                           \
-    "./$CODE_DIR/" "gs://$YTTEST_BUCKET/$CODE_DIR/"
-
-#  # JS; short cache
 #  gsutil                                        \
 #    -h "cache-control: max-age=${FIVE_DAYS}"    \
-#    -h "content-type: text/javascript"          \
+#    -h "content-type: text/html; charset=utf-8" \
 #    -h "$CSP"                                   \
 #    -h "$HSTS"                                  \
 #    -h "$TYPE"                                  \
@@ -96,9 +79,26 @@ deploy_code() {
 #    -R                                          \
 #    -J                                          \
 #    -a public-read                              \
-#    -x '.*(?<!\.js)$'                             \
+#    -x '.*(?<!\.html)$'                         \
 #    "./$CODE_DIR/" "gs://$YTTEST_BUCKET/$CODE_DIR/"
-#
+
+  # JS; short cache
+  gsutil                                        \
+    -h "cache-control: max-age=${FIVE_DAYS}"    \
+    -h "content-type: text/javascript"          \
+    -h "$CSP"                                   \
+    -h "$HSTS"                                  \
+    -h "$TYPE"                                  \
+    -h "$XSS"                                   \
+    -h "$REFERRER"                              \
+    -m                                          \
+    rsync                                       \
+    -R                                          \
+    -J                                          \
+    -a public-read                              \
+    -x '.*(?<!\.js)$'                           \
+    "./$CODE_DIR/" "gs://$YTTEST_BUCKET/$CODE_DIR/"
+
 #  # Everything else; long cache
 #  gsutil                                                \
 #    -h "cache-control: max-age=${ONE_YEAR}, immutable"  \
