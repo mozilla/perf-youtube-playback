@@ -82,39 +82,39 @@ deploy_code() {
     -x "(?<!\.html)$"                           \
     "./$CODE_DIR/" "gs://$YTTEST_BUCKET/$CODE_DIR/"
 
-  # JS; short cache
-  gsutil                                        \
-    -h "cache-control: max-age=${FIVE_DAYS}"    \
-    -h "content-type: text/javascript"          \
-    -h "$CSP"                                   \
-    -h "$HSTS"                                  \
-    -h "$TYPE"                                  \
-    -h "$XSS"                                   \
-    -h "$REFERRER"                              \
-    -m                                          \
-    rsync                                       \
-    -R                                          \
-    -J                                          \
-    -a "public-read"                            \
-    -x "(?<!\.js)$"                             \
-    "./$CODE_DIR/" "gs://$YTTEST_BUCKET/$CODE_DIR/"
-
-  # Everything else; long cache
-  gsutil                                                \
-    -h "cache-control: max-age=${ONE_YEAR}, immutable"  \
-    -h "$CSPSTATIC"                                     \
-    -h "$HSTS"                                          \
-    -h "$TYPE"                                          \
-    -h "$XSS"                                           \
-    -h "$REFERRER"                                      \
-    -m                                                  \
-    rsync                                               \
-    -R                                                  \
-    -J                                                  \
-    -d                                                  \
-    -a "public-read"                                    \
-    -x "^test-materials/"                               \
-    "./$CODE_DIR/" "gs://$YTTEST_BUCKET/$CODE_DIR/"
+#  # JS; short cache
+#  gsutil                                        \
+#    -h "cache-control: max-age=${FIVE_DAYS}"    \
+#    -h "content-type: text/javascript"          \
+#    -h "$CSP"                                   \
+#    -h "$HSTS"                                  \
+#    -h "$TYPE"                                  \
+#    -h "$XSS"                                   \
+#    -h "$REFERRER"                              \
+#    -m                                          \
+#    rsync                                       \
+#    -R                                          \
+#    -J                                          \
+#    -a "public-read"                            \
+#    -x "(?<!\.js)$"                             \
+#    "./$CODE_DIR/" "gs://$YTTEST_BUCKET/$CODE_DIR/"
+#
+#  # Everything else; long cache
+#  gsutil                                                \
+#    -h "cache-control: max-age=${ONE_YEAR}, immutable"  \
+#    -h "$CSPSTATIC"                                     \
+#    -h "$HSTS"                                          \
+#    -h "$TYPE"                                          \
+#    -h "$XSS"                                           \
+#    -h "$REFERRER"                                      \
+#    -m                                                  \
+#    rsync                                               \
+#    -R                                                  \
+#    -J                                                  \
+#    -d                                                  \
+#    -a "public-read"                                    \
+#    -x "^test-materials/"                               \
+#    "./$CODE_DIR/" "gs://$YTTEST_BUCKET/$CODE_DIR/"
 }
 
 _download_and_prepare_media_files() {
