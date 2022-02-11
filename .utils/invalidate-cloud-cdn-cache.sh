@@ -6,4 +6,4 @@ if [ -z "$GCP_LOAD_BALANCER_NAME" ]; then
     exit 1
 fi
 
-gcloud compute url-maps invalidate-cdn-cache "$GCP_LOAD_BALANCER_NAME" --path "/*"
+gcloud compute url-maps invalidate-cdn-cache "$GCP_LOAD_BALANCER_NAME" --path "/*" --async
