@@ -45,7 +45,7 @@ main() {
   case "$1" in
     code)
       if [ -z "$CODE_DIR" ]; then
-        echo "The CODE_DIR value is not set, unknown branch: '$CIRCLE_BRANCH'."
+        echo "The CODE_DIR value is not set, unknown branch: \`$CIRCLE_BRANCH'."
         exit 1
       fi
       deploy_code
@@ -54,7 +54,7 @@ main() {
       deploy_media_files
     ;;
     *)
-      echo "Unrecognized deploying target \`$1'. Try 'code' or 'media'." 1>&2
+      echo "Unrecognized deploying target \`$1'. Try \"code\" or \"media\"." 1>&2
       exit 1
     ;;
   esac
@@ -79,7 +79,7 @@ deploy_code() {
     -R                                          \
     -J                                          \
     -a public-read                              \
-    -x '.*(?<!\.html)$'                         \
+    -x ".*(?<\!\.html)$"                        \
     "./$CODE_DIR/" "gs://$YTTEST_BUCKET/$CODE_DIR/"
 
   # JS; short cache
@@ -96,7 +96,7 @@ deploy_code() {
     -R                                          \
     -J                                          \
     -a public-read                              \
-    -x '.*(?<!\.js)$'                           \
+    -x ".*(?<\!\.js)$"                          \
     "./$CODE_DIR/" "gs://$YTTEST_BUCKET/$CODE_DIR/"
 
   # Everything else; long cache
@@ -120,7 +120,7 @@ deploy_code() {
 _download_and_prepare_media_files() {
 
   TO_BE_DOWNLOADED=(
-    'https://storage.googleapis.com/ytlr-cert.appspot.com/test-materials/YTS-media-files.tar.gz'
+    "https://storage.googleapis.com/ytlr-cert.appspot.com/test-materials/YTS-media-files.tar.gz"
   )
 
   for i in "${TO_BE_DOWNLOADED[@]}"; do
