@@ -64,6 +64,9 @@ deploy_code() {
 
   # The basic strategy is to sync all the files that need special attention
   # first, and then sync everything else which will get defaults
+  #
+  # Note that we use single quotes below for the regex pattern so that we don't
+  # have to deal with history expansion in shell.
 
   # HTML; short cache
   gsutil                                        \
@@ -79,7 +82,7 @@ deploy_code() {
     -R                                          \
     -J                                          \
     -a public-read                              \
-    -x ".*(?<\!\.html)$"                        \
+    -x '.*(?<!\.html)$'                         \
     "./$CODE_DIR/" "gs://$YTTEST_BUCKET/$CODE_DIR/"
 
   # JS; short cache
@@ -96,7 +99,7 @@ deploy_code() {
     -R                                          \
     -J                                          \
     -a public-read                              \
-    -x ".*(?<\!\.js)$"                          \
+    -x '.*(?<!\.js)$'                           \
     "./$CODE_DIR/" "gs://$YTTEST_BUCKET/$CODE_DIR/"
 
   # Everything else; long cache
