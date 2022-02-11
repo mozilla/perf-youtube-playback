@@ -116,7 +116,7 @@ deploy_code() {
     -J                                                  \
     -d                                                  \
     -a public-read                                      \
-    -x "test-materials/"                                \
+    -x '\..*|test-materials/'                           \
     "./$CODE_DIR/" "gs://$YTTEST_BUCKET/$CODE_DIR/"
 }
 
