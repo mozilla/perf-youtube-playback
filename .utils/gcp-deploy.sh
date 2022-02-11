@@ -69,11 +69,11 @@ deploy_code() {
   gsutil                                        \
     -h "cache-control: max-age=${FIVE_DAYS}"    \
     -h "content-type: text/html; charset=utf-8" \
-    -h "\"$CSP\""                               \
-    -h "\"$HSTS\""                              \
-    -h "\"$TYPE\""                              \
-    -h "\"$XSS\""                               \
-    -h "\"$REFERRER\""                          \
+    -h "$CSP"                                   \
+    -h "$HSTS"                                  \
+    -h "$TYPE"                                  \
+    -h "$XSS"                                   \
+    -h "$REFERRER"                              \
     -m                                          \
     rsync                                       \
     -R                                          \
@@ -86,11 +86,11 @@ deploy_code() {
   gsutil                                        \
     -h "cache-control: max-age=${FIVE_DAYS}"    \
     -h "content-type: text/javascript"          \
-    -h "\"$CSP\""                               \
-    -h "\"$HSTS\""                              \
-    -h "\"$TYPE\""                              \
-    -h "\"$XSS\""                               \
-    -h "\"$REFERRER\""                          \
+    -h "$CSP"                                   \
+    -h "$HSTS"                                  \
+    -h "$TYPE"                                  \
+    -h "$XSS"                                   \
+    -h "$REFERRER"                              \
     -m                                          \
     rsync                                       \
     -R                                          \
@@ -103,11 +103,11 @@ deploy_code() {
   gsutil                                                \
     -h "cache-control: max-age=${ONE_YEAR}, immutable"  \
     -h "content-type: text/javascript"                  \
-    -h "\"$CSPSTATIC\""                                 \
-    -h "\"$HSTS\""                                      \
-    -h "\"$TYPE\""                                      \
-    -h "\"$XSS\""                                       \
-    -h "\"$REFERRER\""                                  \
+    -h "$CSPSTATIC"                                     \
+    -h "$HSTS"                                          \
+    -h "$TYPE"                                          \
+    -h "$XSS"                                           \
+    -h "$REFERRER"                                      \
     -m                                                  \
     rsync                                               \
     -R                                                  \
