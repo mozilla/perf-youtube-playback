@@ -78,8 +78,8 @@ deploy_code() {
     rsync                                       \
     -R                                          \
     -J                                          \
-    -a "public-read"                            \
-    -x "(?<!\.html)$"                           \
+    -a public-read                              \
+    -x '(?<!\.html)$'                           \
     "./$CODE_DIR/" "gs://$YTTEST_BUCKET/$CODE_DIR/"
 
 #  # JS; short cache
@@ -95,8 +95,8 @@ deploy_code() {
 #    rsync                                       \
 #    -R                                          \
 #    -J                                          \
-#    -a "public-read"                            \
-#    -x "(?<!\.js)$"                             \
+#    -a public-read                              \
+#    -x '(?<!\.js)$'                             \
 #    "./$CODE_DIR/" "gs://$YTTEST_BUCKET/$CODE_DIR/"
 #
 #  # Everything else; long cache
@@ -112,8 +112,8 @@ deploy_code() {
 #    -R                                                  \
 #    -J                                                  \
 #    -d                                                  \
-#    -a "public-read"                                    \
-#    -x "^test-materials/"                               \
+#    -a public-read                                      \
+#    -x "test-materials/"                                \
 #    "./$CODE_DIR/" "gs://$YTTEST_BUCKET/$CODE_DIR/"
 }
 
