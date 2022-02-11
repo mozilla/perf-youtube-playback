@@ -79,7 +79,7 @@ deploy_code() {
     -R                                          \
     -J                                          \
     -a public-read                              \
-    -x '(?<!\.html)$'                           \
+    -x '.*(?<!\.html)$'                           \
     "./$CODE_DIR/" "gs://$YTTEST_BUCKET/$CODE_DIR/"
 
 #  # JS; short cache
@@ -96,7 +96,7 @@ deploy_code() {
 #    -R                                          \
 #    -J                                          \
 #    -a public-read                              \
-#    -x '(?<!\.js)$'                             \
+#    -x '.*(?<!\.js)$'                             \
 #    "./$CODE_DIR/" "gs://$YTTEST_BUCKET/$CODE_DIR/"
 #
 #  # Everything else; long cache
