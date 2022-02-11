@@ -58,6 +58,7 @@ jobs:
             export YTTEST_BUCKET="${STAGE_GCP_GCS_BUCKET}"
             echo "$GCP_SERVICE_KEY" | gcloud auth activate-service-account --key-file=-
             gcloud config set project "$GCP_PROJECT_ID"
+            gcloud config list
             ./.utils/gcp-deploy.sh code
             ./.utils/invalidate-cloud-cdn-cache.sh
 
@@ -69,6 +70,7 @@ jobs:
             exit 0
             echo "$GCP_SERVICE_KEY" | gcloud auth activate-service-account --key-file=-
             gcloud config set project "$GCP_PROJECT_ID"
+            gcloud config list
             ./.utils/gcp-deploy.sh code
             ./.utils/invalidate-cloud-cdn-cache.sh
 
