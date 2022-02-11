@@ -102,7 +102,6 @@ deploy_code() {
   # Everything else; long cache
   gsutil                                                \
     -h "cache-control: max-age=${ONE_YEAR}, immutable"  \
-    -h "content-type: text/javascript"                  \
     -h "$CSPSTATIC"                                     \
     -h "$HSTS"                                          \
     -h "$TYPE"                                          \
@@ -112,6 +111,7 @@ deploy_code() {
     rsync                                               \
     -R                                                  \
     -J                                                  \
+    -d                                                  \
     -a "public-read"                                    \
     -x "^test-materials/"                               \
     "./" "gs://$YTTEST_BUCKET/$CODE_DIR/"
