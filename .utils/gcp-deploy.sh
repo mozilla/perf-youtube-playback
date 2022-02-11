@@ -14,7 +14,7 @@ main() {
   ONE_YEAR="31536000"
 
   CSPSTATIC="x-goog-meta-content-security-policy: default-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors: 'none'; object-src 'none'"
-  CSP="x-goog-meta-content-security-policy: default-src 'none'; img-src 'self' data:; script-src 'self' 'unsafe-inline'; font-src 'self'; frame-ancestors 'none'; base-uri 'none'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://dash-mse-test.appspot.com"
+  CSP="x-goog-meta-content-security-policy: default-src 'none'; img-src 'self' data:; media-src 'self' blob:; script-src 'self' 'unsafe-inline'; font-src 'self'; frame-ancestors 'none'; base-uri 'none'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://dash-mse-test.appspot.com"
   HSTS="x-goog-meta-strict-transport-security: max-age=${ONE_YEAR}; includeSubDomains; preload"
   TYPE="x-goog-meta-x-content-type-options: nosniff"
   XSS="x-goog-meta-x-xss-protection: 1; mode=block"
