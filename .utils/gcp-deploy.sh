@@ -34,9 +34,6 @@ main() {
     raptor-2020)
       CODE_DIR=2020
     ;;
-    add-gcp-deploy)
-      CODE_DIR=2020
-    ;;
     * )
       echo "Unrecognized branch name \`$CIRCLE_BRANCH'." 1>&2
       exit 1
