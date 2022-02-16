@@ -80,7 +80,7 @@ deploy_code() {
     -J                                          \
     -a public-read                              \
     -x '.*(?<!\.html)$'                         \
-    "./$CODE_DIR/" "gs://$YTTEST_BUCKET/$CODE_DIR/"
+    "./" "gs://$YTTEST_BUCKET/$CODE_DIR/"
 
   # JS; short cache
   gsutil                                        \
@@ -97,7 +97,7 @@ deploy_code() {
     -J                                          \
     -a public-read                              \
     -x '.*(?<!\.js)$'                           \
-    "./$CODE_DIR/" "gs://$YTTEST_BUCKET/$CODE_DIR/"
+    "./" "gs://$YTTEST_BUCKET/$CODE_DIR/"
 
   # Everything else; long cache
   gsutil                                                \
@@ -114,7 +114,7 @@ deploy_code() {
     -d                                                  \
     -a public-read                                      \
     -x '\..*|test-materials/'                           \
-    "./$CODE_DIR/" "gs://$YTTEST_BUCKET/$CODE_DIR/"
+    "./" "gs://$YTTEST_BUCKET/$CODE_DIR/"
 }
 
 _download_and_prepare_media_files() {
