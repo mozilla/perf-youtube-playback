@@ -41,6 +41,38 @@ jobs:
             ./.utils/deploy.sh code
             ./.utils/invalidate-cloudfront-cache.sh
 
+  gcp-deploy:
+    docker:
+      - image: google/cloud-sdk
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: deployment
+          command: |
+            # deploy stage
+            # stage is used by ops to verify infrastructure setups
+            export GCP_SERVICE_KEY="${STAGE_GCP_SERVICE_KEY}"               &&\
+            export GCP_PROJECT_ID="${STAGE_GCP_PROJECT_ID}"                 &&\
+            export GCP_LOAD_BALANCER_NAME="${STAGE_GCP_LOAD_BALANCER_NAME}" &&\
+            export YTTEST_BUCKET="${STAGE_GCP_GCS_BUCKET}"
+            echo "$GCP_SERVICE_KEY" | gcloud auth activate-service-account --key-file=-
+            gcloud config set project "$GCP_PROJECT_ID"
+            gcloud config list
+            ./.utils/gcp-deploy.sh code
+            ./.utils/invalidate-cloud-cdn-cache.sh
+
+            # deploy production
+            export GCP_SERVICE_KEY="${PROD_GCP_SERVICE_KEY}"                &&\
+            export GCP_PROJECT_ID="${PROD_GCP_PROJECT_ID}"                  &&\
+            export GCP_LOAD_BALANCER_NAME="${PROD_GCP_LOAD_BALANCER_NAME}"  &&\
+            export YTTEST_BUCKET="${PROD_GCP_GCS_BUCKET}"
+            echo "$GCP_SERVICE_KEY" | gcloud auth activate-service-account --key-file=-
+            gcloud config set project "$GCP_PROJECT_ID"
+            gcloud config list
+            ./.utils/gcp-deploy.sh code
+            ./.utils/invalidate-cloud-cdn-cache.sh
+
 workflows:
   version: 2
   build-and-deploy:
@@ -52,6 +84,14 @@ workflows:
                 - raptor
                 - raptor-2020
       - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - raptor
+                - raptor-2020
+      - gcp-deploy:
           requires:
             - build
           filters:
