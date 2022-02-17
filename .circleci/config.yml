@@ -4,3 +4,8 @@
 # for some details. Basically, it is because we only deploy from the
 # `raptor[-xxxx]` branches. The CircleCI configuration and deployment
 # scripts can be found in those branches.
+version: 2.1
+
+jobs: {}
+
+workflows: {}
