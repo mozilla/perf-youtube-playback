@@ -1,101 +1,11 @@
-version: 2.0
-jobs:
-  build:
-    docker:
-      - image: circleci/python:3.7
-    steps:
-      - checkout
-      - persist_to_workspace:
-          root: ./
-          paths:
-            - ./*
+# This configuration file in this branch is intentionally empty.
+#
+# Please see https://github.com/mozilla/perf-youtube-playback/wiki#update-the-raptor-branch-for-deployment
+# for some details. Basically, it is because we only deploy from the
+# `raptor[-xxxx]` branches. The CircleCI configuration and deployment
+# scripts can be found in those branches.
+version: 2.1
 
-  deploy:
-    docker:
-      - image: circleci/python:3.7
-    steps:
-      - run:
-          name: Install AWS CLI
-          command: |
-            sudo pip install --upgrade pip
-            sudo pip install --upgrade awscli
-      - attach_workspace:
-          at: .
-      - run:
-          name: deployment
-          command: |
-            # deploy stage
-            # stage is used by ops to verify infrastructure setups
-            export AWS_ACCESS_KEY_ID="${STAGE_AWS_ACCESS_KEY_ID}"         \
-            export AWS_SECRET_ACCESS_KEY="${STAGE_AWS_SECRET_ACCESS_KEY}" \
-            export DISTRIBUTION_ID="${STAGE_DISTRIBUTION_ID}"             \
-            export YTTEST_BUCKET="${STAGE_YTTEST_BUCKET}"
-            ./.utils/deploy.sh code
-            ./.utils/invalidate-cloudfront-cache.sh
+jobs: {}
 
-            # deploy production
-            export AWS_ACCESS_KEY_ID="${AWS_ACCESS_KEY_ID}"         \
-            export AWS_SECRET_ACCESS_KEY="${AWS_SECRET_ACCESS_KEY}" \
-            export DISTRIBUTION_ID="${DISTRIBUTION_ID}"             \
-            export YTTEST_BUCKET="${YTTEST_BUCKET}"
-            ./.utils/deploy.sh code
-            ./.utils/invalidate-cloudfront-cache.sh
-
-  gcp-deploy:
-    docker:
-      - image: google/cloud-sdk
-    steps:
-      - attach_workspace:
-          at: .
-      - run:
-          name: deployment
-          command: |
-            # deploy stage
-            # stage is used by ops to verify infrastructure setups
-            export GCP_SERVICE_KEY="${STAGE_GCP_SERVICE_KEY}"               &&\
-            export GCP_PROJECT_ID="${STAGE_GCP_PROJECT_ID}"                 &&\
-            export GCP_LOAD_BALANCER_NAME="${STAGE_GCP_LOAD_BALANCER_NAME}" &&\
-            export YTTEST_BUCKET="${STAGE_GCP_GCS_BUCKET}"
-            echo "$GCP_SERVICE_KEY" | gcloud auth activate-service-account --key-file=-
-            gcloud config set project "$GCP_PROJECT_ID"
-            gcloud config list
-            ./.utils/gcp-deploy.sh code
-            ./.utils/invalidate-cloud-cdn-cache.sh
-
-            # deploy production
-            export GCP_SERVICE_KEY="${PROD_GCP_SERVICE_KEY}"                &&\
-            export GCP_PROJECT_ID="${PROD_GCP_PROJECT_ID}"                  &&\
-            export GCP_LOAD_BALANCER_NAME="${PROD_GCP_LOAD_BALANCER_NAME}"  &&\
-            export YTTEST_BUCKET="${PROD_GCP_GCS_BUCKET}"
-            echo "$GCP_SERVICE_KEY" | gcloud auth activate-service-account --key-file=-
-            gcloud config set project "$GCP_PROJECT_ID"
-            gcloud config list
-            ./.utils/gcp-deploy.sh code
-            ./.utils/invalidate-cloud-cdn-cache.sh
-
-workflows:
-  version: 2
-  build-and-deploy:
-    jobs:
-      - build:
-          filters:
-            branches:
-              only:
-                - raptor
-                - raptor-2020
-      - deploy:
-          requires:
-            - build
-          filters:
-            branches:
-              only:
-                - raptor
-                - raptor-2020
-      - gcp-deploy:
-          requires:
-            - build
-          filters:
-            branches:
-              only:
-                - raptor
-                - raptor-2020
+workflows: {}
