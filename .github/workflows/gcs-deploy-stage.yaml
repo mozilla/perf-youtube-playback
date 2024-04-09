@@ -1,0 +1,49 @@
+on:
+  push:
+    branches:
+      - raptor
+      - raptor-2020
+  inputs:
+    raptor:
+      default: "2019"
+    raptor-2020:
+      default: "2020"
+jobs:
+  deploy-raptor-stage:
+    if: github.ref == 'refs/heads/raptor'
+    runs-on: ubuntu-latest
+    environment: stage
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: set up gcloud
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: run deploy sh
+        run: |
+          sh  ./bin/gcs-deploy.sh ${{vars.YTTEST_BUCKET_STAGE}} ${{ inputs.raptor}}
+  deploy-raptor2020-stage:
+    if: github.ref == 'refs/heads/raptor-2020'
+    runs-on: ubuntu-latest
+    environment: stage
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: set up gcloud
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: run deploy sh
+        run: |
+          sh  ./bin/gcs-deploy.sh ${{vars.YTTEST_BUCKET_STAGE }} ${{ inputs.raptor-2020 }}
