@@ -3,11 +3,11 @@ on:
     branches:
       - raptor-2020
   workflow_dispatch:
-
-  inputs:
-    raptor-2020:
-      required: true
-      default: "2020"
+    inputs:
+      raptor-2020:
+        description: variable for code_dir
+        required: true
+        default: "2020"
 jobs:
   deploy-stage:
     runs-on: ubuntu-latest
