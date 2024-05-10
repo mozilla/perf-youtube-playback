@@ -1,0 +1,1264 @@
+{
+    "test_case": [
+        {
+            "branch": "2020",
+            "test_case_id": "21.1.1.1",
+            "test_case": {
+                "test_category": "In-APP",
+                "test_title": "Playlist Endurance",
+                "test_description": "Testing that the device can play back 12 hours of continuous video.",
+                "passing_criteria": "Provide acknowledgement of passing result in txt file below as 12h_endurance.txt\r\n\r\nThe device must make it to the last video in the playlist without further interaction. ",
+                "is_manual": true,
+                "file_href": "https://www.youtube.com/tv?list=PLT2JIu9jdshr-q6fs7BCqAygvTHwnZUIt",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Navigate to YTS -> Manual Tests\r\n2. Under In-APP section, hit ENTER on '**12H Endurance**'\r\n3. Observe playback of video from playlist \r\n4. Device must make it to last video of 12 hour list without interaction "
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.1.2.1",
+            "test_case": {
+                "test_category": "In-APP",
+                "test_title": "LiveDRM",
+                "test_description": "Testing that Live videos using DRM display properly. ",
+                "passing_criteria": "Please provide a screenshot of Stats for nerds during playback of a Live video. \r\n\r\nThe fields \"Live Latency\" and \"Live Mode\" must appear in the Stats for nerds box. \r\n\r\nThe Protected field in Stats for nerds must indicate that the video is using Widevine DRM.\r\n\r\nObserve the \"Dropped Frames\" field in the Stats for nerds box and ensure that no more than 0.5% of frames are dropped.\r\n\r\nFrequent and excessive skipping, stuttering, buffering or pausing cannot occur in the video or audio. After approximately 18 minutes, stuttering might occur, but at no point should improperly decrypted frames be shown (typically seen as green and magenta artifacts). \r\n\r\nExcessive issues with video or audio playback cause this test to fail. ",
+                "is_manual": true,
+                "file_href": "https://www.youtube.com/tv?list=PLT2JIu9jdshrFoCo9B81bRwsToEazVdpj",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Navigate to YTS -> Manual Tests\r\n2. Under In-APP section, hit ENTER on '**LiveDRM**'\r\n3. Ensure LIVE badge overlaid where the duration usually is\r\n4. Enable **Stats for nerds**\r\n5. Observe playback for 18 minutes\r\n\r\n_Note: These are special endurance videos that rotate keys at a high frequency for testing/debugging_"
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.1.3.1",
+            "test_case": {
+                "test_category": "In-APP",
+                "test_title": "User-Agent",
+                "test_description": "Testing the user agent implemenation. \r\n\r\n",
+                "passing_criteria": "Please provide a readable screenshot of the entire test page. \r\n\r\nThe device must provide the above User-Agent fields in the following format:\r\n\r\nBrowser_name/Browser_version, **Device_name**/Firmware_version(Brand, Model, Connection_Type)\r\n\r\n_**Note if Operator device, Brand is the Operator name**_\r\n\r\nFormat for **Device name** must be a fully-concatenated and underscore-delimited string containing the ODM, device type, chipset model number, model year:\r\n\r\n<ODM>_<Device Type>_<Chipset Model Number>_<Model Year>\r\n\r\nExample of User-Agent string:\r\n\r\n\r\n```\r\nMozilla/5.0 (Linux) Cobalt/20.lts.1.224508-gold (unlike Gecko) v8/6.5.254.43 Starboard/12,Google_TV_MK120P_2020/V3.02 (Google, 43D2700K-US, Wireless)\r\n```\r\n\r\n\r\nODM **MUST** be populated as specified in the Technical Requirements.\r\n\r\nNote that the characters used to represent the Device_name field **MUST** be from the following character set:` [a-zA-Z0-9\\-]`\r\n\r\nAll other User-Agent fields **MUST** be represented from the following character set:` [a-zA-Z0-9\\-\\_]`\r\n",
+                "is_manual": true,
+                "file_href": "https://www.youtube.com/tv",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Launch the YouTube application.\r\n2. Navigate to application Settings and scroll down to App version.\r\n3. Ensure that Device and User-Agent fields are populated."
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.1.4.1",
+            "test_case": {
+                "test_category": "In-APP",
+                "test_title": "Specific request parameters",
+                "test_description": "Testing the request parameter implementation. ",
+                "passing_criteria": "Please provide a readable screenshot of the entire test page.\r\n\r\nThe method on which the user has launched the YouTube application must match the correct launch parameter of its launch action.\r\n\r\nA scenario of app launch from menu would display:\r\n\r\n_[https://www.youtube.com/tv?**launch=menu**&additionalDataUrl=http%3A%2F%2Flocalhost%3A8060%2FdialData&env_isVideoInfoVisible=true](https://www.youtube.com/tv?launch=menu&additionalDataUrl=http%3A%2F%2Flocalhost%3A8060%2FdialData&env_isVideoInfoVisible=true)_",
+                "is_manual": true,
+                "file_href": "https://www.youtube.com/tv",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Launch the YouTube application.\r\n2. Navigate to application Settings and scroll down to App version.\r\n3. Observe the YouTube URL for launch parameter that match the method of app launch.\r\n"
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.1.5.1",
+            "test_case": {
+                "test_category": "In-APP",
+                "test_title": "HDR - PQ",
+                "test_description": "Testing that HDR(PQ) is supported. ",
+                "passing_criteria": "Please provide a screenshot of Stats for nerds during playback of a VP9 Profile 2 video. \r\n\r\nThe Codecs field in Stats for nerds must indicate that the video codec is VP9 Profile 2 (typically VP9.2 or vp09.02).\r\n\r\nThe Color field in Stats for nerds must indicate that the eotf is **smpte2084 (PQ)** and the colorspace is **bt2020**.\r\n\r\nIf the device has a display, it must automatically enable \"HDR mode\" when playing back HDR content.\r\n\r\nIf the device has an HDMI output, the device must propagate the HDR metadata conveyed in the Matroska container into HDMI InfoFrames. This will typically trigger the connected display to switch to \"HDR mode\". ",
+                "is_manual": true,
+                "file_href": "https://www.youtube.com/tv?v=Ss75O8yllyc&list=PLT2JIu9jdshorooZOhIZJNIxa5hAVnToP",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Navigate to YTS -> Manual Tests\r\n2. Under In-APP section, hit ENTER on '**HDR-1**'\r\n3. Ensure the video plays with **Stats for nerds** enabled and visible"
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.1.6.1",
+            "test_case": {
+                "test_category": "In-APP",
+                "test_title": "HDR - HLG",
+                "test_description": "Testing that HLG is supported. ",
+                "passing_criteria": "Please provide a screenshot of Stats for nerds during playback of a VP9 Profile 2 video. \r\n\r\nThe Codecs field in Stats for nerds must indicate that the video codec is VP9 Profile 2 (typically VP9.2 or vp09.02).\r\n\r\nThe Color field in Stats for nerds must indicate that the eotf is **arib-std-b67** (HLG) and the colorspace is **bt2020**.\r\n\r\nIf the device has a display, it must automatically enable \"HDR mode\" when playing back HDR content.\r\n\r\nIf the device has an HDMI output, the device must propagate the HDR metadata conveyed in the Matroska container into HDMI InfoFrames. This will typically trigger the connected display to switch to \"HDR mode\". ",
+                "is_manual": true,
+                "file_href": "https://www.youtube.com/tv?v=5w58p6iVhPc",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Navigate to YTS -> Manual Tests\r\n2. Under In-APP section, hit ENTER on '**HDR-2**'\r\n3. Ensure the video plays back with **Stats for nerds** enabled and visible."
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.1.7.1",
+            "test_case": {
+                "test_category": "In-APP",
+                "test_title": "60FPS + devicePixelRatio",
+                "test_description": "Target device ability for playback of 60fps at minimum 1080p.\n\nThe target device MUST implement the following property: window.devicePixelRatio, including the following configuration requirement: If the target device’s video decode capability is less than or equal to 1920x1080, the value of this property MUST be 1. \nIf the target device’s video decode capability is greater than 1920x1080, the value of this property MUST be one of the following: 1, 1.5, 2, 4. ",
+                "passing_criteria": "Please provide a screenshot of Stats for nerds during playback of a high frame rate video. \r\n\r\nThe **Stats for nerds** box must indicate that the “Current” resolution is the maximum resolution supported by the device and the frame rate must be 60.\n\nNo skipping, stuttering or pausing can occur in the video or audio. \n\n_Note: YTS playback tests allow 1 frame drop for every 15 seconds, the same criteria can be applied here._\n\nAny issues with video or audio playback cause this test to fail. \n\nFor HDMI output devices, the maximum display resolution is dependent on the display connected to the device. For certification purposes, ensure tests are performed on a display that matches the decode capability of the devices.\n",
+                "is_manual": true,
+                "file_href": "https://www.youtube.com/tv?v=aqz-KE-bpKQ&list=PLT2JIu9jdshoBsbCTUq15c1554EoRNhj3",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Navigate to YTS -> Manual Tests\n2. Under In-APP section, hit ENTER on '**60FPS + devicePixelRatio**'\n2. Enable **Stats for nerds**\n3. Closely observe for the entire playback, checking particularly for pixelation, judder or other video artifacts"
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.1.8.1",
+            "test_case": {
+                "test_category": "In-APP",
+                "test_title": "3D Video",
+                "test_description": "Testing that 3D content is appropriately rendered if supported. ",
+                "passing_criteria": "Please provide a video capture of the first 10 seconds of each video in the 3D playlist. No output is required for devices that do not support 3D.\r\n\r\nThe device must detect that each video is stereo/3D and automatically switch its display to 3D mode. \n\nThe application UI (title of video and transport controls) must not change at all between 2D and 3D modes.\n\nFor Step #4, the device should automatically switch back to 2D display mode when playing a regular video.",
+                "is_manual": true,
+                "file_href": "https://www.youtube.com/tv?list=PLT2JIu9jdshqvVr-ZdjndoIYn_HggixZI",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Navigate to YTS -> Manual Tests\n2. Under In-APP section, hit ENTER on '**3D**'\n3. Play all videos in the playlist\n4. After the playlist has completed, play any non-3D video"
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.1.9.1",
+            "test_case": {
+                "test_category": "In-APP",
+                "test_title": "Language",
+                "test_description": "Testing language implementation\n\nThe device must be capable of changing languages at a platform level. \nIf the device only supports one language, this test is not applicable. ",
+                "passing_criteria": "Please provide a screenshot of the system language settings page and the YouTube application page for each language tested.\r\n\r\n\"The language of the YouTube application must match the language specified by the user in the system settings.\n\nNote: The language preference is sent to YouTube using the Accept-Language header in the request to https://www.youtube.com/tv\"",
+                "is_manual": true,
+                "file_href": "https://www.youtube.com/tv",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Launch the YouTube application using the YouTube launcher icon\n2. Observe the language of the initially loaded page.\n3. Exit YouTube.\n4. Change the language of the device using the appropriate system settings and menus.\n5. Launch the YouTube application using the YouTube launcher icon\n6. Observe the language of the initially loaded page.\n7. Repeat steps 4-6 for five languages, if applicable.\n8. Repeat steps 4-6, launching YouTube using any other methods supported by the system, in place of using the launcher icon. (ex: DIAL, Remote Button, Deeplink)."
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.1.10.1",
+            "test_case": {
+                "test_category": "In-APP",
+                "test_title": "21:9 Aspect Ratio",
+                "test_description": "21:9 aspect ratio is properly rendered (Not cropped, stretched or zoomed)\r\n\r\nThe target device MUST be able to correctly parse and display video content at arbitrary aspect ratios. ",
+                "passing_criteria": "Please provide Video capture of the first 10 seconds of the video\r\n\r\nThe videos must playback in their originally uploaded aspect ratio, without cropping, stretching or other artifacts introduced by the device.\r\n\r\n* 21:9, \"**_TRON LEGACY - Trailer 2 - HQ - 1080p_**\" \r\n  * The top and bottom of the screen must be blank, creating a video image in the center that is a wide rectangle. \r\n  * The video must not be cropped. At times 0:06-0:10, the flag on top of the castle must be fully visible, and the word \"PICTURES\" at the bottom of the frame must be fully visible.",
+                "is_manual": true,
+                "file_href": "https://www.youtube.com/tv?v=L9szn1QQfas",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Navigate to YTS -> Manual Tests\n2. Under In-APP section, hit ENTER on '**21:9 Aspect Ratio**'\n3. Play video and observe each carefully"
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.1.10.2",
+            "test_case": {
+                "test_category": "In-APP",
+                "test_title": "21:9 Aspect Ratio",
+                "test_description": "21:9 aspect ratio is properly rendered (Not cropped, stretched or zoomed)\r\n\r\nThe target device MUST be able to correctly parse and display video content at arbitrary aspect ratios. ",
+                "passing_criteria": "Please provide Video capture of the first 10 seconds of the video\r\n\r\nThe videos must playback in their originally uploaded aspect ratio, without cropping, stretching or other artifacts introduced by the device.\n\n* 21:9, “**_TRON LEGACY - Trailer 2 - HQ - 1080p_**” \n        * The top and bottom of the screen must be blank, creating a video image in the center that is a wide rectangle. \n        * The video must not be cropped. At times 0:06-0:10, the flag on top of the castle must be fully visible, and the word “PICTURES” at the bottom of the frame must be fully visible.",
+                "is_manual": true,
+                "file_href": "https://www.youtube.com/tv?v=L9szn1QQfas",
+                "test_suite": "Manual Tests",
+                "status": 3,
+                "test_instruction": "1. Navigate to YTS -> Manual Tests\n2. Under In-APP section, hit ENTER on '**21:9 Aspect Ratio**'\n3. Play video and observe each carefully"
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.1.11.1",
+            "test_case": {
+                "test_category": "In-APP",
+                "test_title": "4:3 Aspect Ratio",
+                "test_description": "4:3 aspect ratio is properly rendered (Not cropped, stretched or zoomed)\r\n\r\nThe target device MUST be able to correctly parse and display video content at arbitrary aspect ratios. ",
+                "passing_criteria": "Please provide Video capture of the first 10 seconds of the video\r\n\r\nThe videos must playback in their originally uploaded aspect ratio, without cropping, stretching or other artifacts introduced by the device.\r\n\r\n*   4:3, \"**_Falcon 4.0 Intro Video. 4:3 Aspect Ratio_**\"\r\n    *   The left and right of the screen must be blank, creating a video image in the center that is almost square.\r\n    *   The video must not be cropped.",
+                "is_manual": true,
+                "file_href": "https://www.youtube.com/tv?v=MJ62hh0a9U4",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Navigate to YTS -> Manual Tests\r\n2. Under In-APP section, hit ENTER on '**4:3 Aspect Ratio**'\r\n3. Play video and observe each carefully."
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.1.12.1",
+            "test_case": {
+                "test_category": "In-APP",
+                "test_title": "16:9 Aspect Ratio",
+                "test_description": "16:9 aspect ratio is properly rendered (Not cropped, stretched or zoomed)\r\n\r\nThe target device MUST be able to correctly parse and display video content at arbitrary aspect ratios. ",
+                "passing_criteria": "Please provide Video capture of the first 10 seconds of the video\r\n\r\nThe videos must playback in their originally uploaded aspect ratio, without cropping, stretching or other artifacts introduced by the device.\r\n\r\n*  16:9, \"**_Philips PM5644 test pattern 1920 x 1080px HD_**\"\r\n    *   The black and white border must be visible around the entire video, and the video must not be cropped.\r\n    *   The circles in the corners and middle must be perfectly round, and not stretched into ovals.\r\n    *   For most devices, this video should fill all pixels on the screen.",
+                "is_manual": true,
+                "file_href": "https://www.youtube.com/tv?v=yaqe1qesQ8c",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Navigate to YTS -> Manual Tests\r\n2. Under In-APP section, hit ENTER on '**16:9 Aspect Ratio**'\r\n3. Play video and observe each carefully"
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.1.13.1",
+            "test_case": {
+                "test_category": "In-APP",
+                "test_title": "17:30 Aspect Ratio",
+                "test_description": "17:30 aspect ratio is properly rendered (Not cropped, stretched or zoomed)\r\n\r\nThe target device MUST be able to correctly parse and display video content at arbitrary aspect ratios. ",
+                "passing_criteria": "\r\n\r\nPlease provide Video capture of the first 10 seconds of the video\r\n\r\nThe videos must playback in their originally uploaded aspect ratio, without cropping, stretching or other artifacts introduced by the device.\r\n\r\n*  17:30, \"**_17:30 Aspect Ratio_**\"\r\n    *   The left and right of the screen must be blank, creating a video image in the center that is a tall rectangle.\r\n    *   The video must not be cropped. The width of the white bar on the left edge of the video and the black bar on the right edge of the video should match the width of all other vertical color bars.",
+                "is_manual": true,
+                "file_href": "https://www.youtube.com/watch?v=-NfJS30FrXQ&list=PLT2JIu9jdshrYJpL6Gu7OccHT1sOiV8tD&index=5&t=23s",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Navigate to YTS -> Manual Tests \r\n2. Under In-APP section, hit ENTER on '**17:30 Aspect Ratio**' \r\n3. Play video and observe each carefully"
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.1.14.1",
+            "test_case": {
+                "test_category": "In-APP",
+                "test_title": "High Bitrate",
+                "test_description": "High bitrate content is decoded and displayed properly. ",
+                "passing_criteria": "\r\n\r\nPlease provide a video capture of the first 60 seconds of the test procedure.\r\n\r\nThe video must smoothly transition to the new resolution.\r\n\r\nNo skipping, stuttering or pausing can occur in the video or audio. \r\n\r\nAny issues with video or audio playback cause this test to fail. ",
+                "is_manual": true,
+                "file_href": "https://www.youtube.com/tv?v=n2hMafme3e0",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Navigate to YTS -> Manual Tests\r\n2. Under In-APP section, hit ENTER on '**High Birate**'\r\n3. Closely observe for the entire playback, checking particularly for pixelation, judder or other video artifacts"
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.1.15.1",
+            "test_case": {
+                "test_category": "In-APP",
+                "test_title": "Audio Sync",
+                "test_description": "Testing that AV sync is properly maintained during video playback. ",
+                "passing_criteria": "\r\n\r\nPlease provide a video capture of the test procedure.\r\n\r\nAudio-video sync must be maintained at all times, even after seeking forwards or backwards in substantial amounts. \r\n\r\nThe **Stats for nerds** box must indicate that the \"Current\" frame rate must match the \"Optimal\" value, which will be 60 for most videos in the playlist.",
+                "is_manual": true,
+                "file_href": "https://www.youtube.com/tv?list=PLT2JIu9jdshqNyrN5gzxaihngAjwFOFMB",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Navigate to YTS -> Manual Tests\r\n2. Under In-APP section, hit ENTER on '**Audio sync**'\r\n3. Enable **Stats for nerds**\r\n4. Pause, resume, seek backward and forward at least twice per action on each video\r\n5. Play each video in the playlist for at least 30 seconds\r\n6. Observe sync between audio and video for each playback"
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.1.16.1",
+            "test_case": {
+                "test_category": "In-APP",
+                "test_title": "Live Channel",
+                "test_description": "Operation and usage of Live channel content. ",
+                "passing_criteria": "\r\n\r\nPlease provide a screenshot of Stats for nerds during playback of a Live video. \r\n\r\nPlayback should begin within a similar amount of time as static videos. Pausing and playing should work normally (seeking is disabled on this video). There should be little to no rebuffering/stuttering, and little to no bitrate changes during playback.",
+                "is_manual": true,
+                "file_href": "https://www.youtube.com/tv?c=UC4R8DWoMoI7CAwX8_LjQHig",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Navigate to YTS -> Manual Test\r\n2. Under In-APP section, hit ENTER on '**Live channel**'\r\n3. Play a video with a LIVE badge overlaid where the duration usually is\r\n4. Enable **Stats for nerds**\r\n5. Pause the video for 10 seconds\r\n6. Resume playing the video\r\n7. Observe playback\r\n\r\n_Note: A device should be capable of sustaining continuous playback of Live stream videos for at least 12 hours_"
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.1.17.1",
+            "test_case": {
+                "test_category": "In-APP",
+                "test_title": "Device Authentication",
+                "test_description": "Testing that the device has a valid Lightweight Auth Key.",
+                "passing_criteria": " \r\n\r\nPlease provide a screenshot of the test page.\r\n\r\n\r\nThe red banner overlayed on the screen must not indicate any errors. Only the following are acceptable results:\r\n\r\nTV_SIGNATURE_VERIFICATION_RESULT_PASSED\r\n\r\nTV_SIGNATURE_VERIFICATION_RESULT_PASSED_PROVISIONAL\r\n",
+                "is_manual": true,
+                "file_href": "https://www.youtube.com/tv?show_signature_verification_watermark=true",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Launch Cobalt with test URL:  \r\nhttps://www.youtube.com/tv?show_signature_verification_watermark=true \r\n2. The YouTube application will load with a red debug banner overlay"
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.1.18.1",
+            "test_case": {
+                "test_category": "In-APP",
+                "test_title": "Device Authentication Storage & Updates.",
+                "test_description": "Please provide an acknowledgement that the device complies with the Technical Requirements regarding updating the securely stored authentication data.",
+                "passing_criteria": "The target device MUST have a mechanism for updating the value of the certification_scope and secret_key stored in the secure storage. ",
+                "is_manual": true,
+                "file_href": "",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "Mark pass if you comply, otherwise mark fail and comment explanation "
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.1.19.1",
+            "test_case": {
+                "test_category": "In-APP",
+                "test_title": "Acknowledgement of Keystore Data Storage Requirements",
+                "test_description": "Please provide an acknowledgement of device auth keystore implementation. \nDetailed description or diagram should be included for solution of storing device authentication keys.",
+                "passing_criteria": "The target device MUST have a secure method of storing authentication data per technical requirements.",
+                "is_manual": true,
+                "file_href": "",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "Mark pass if you comply, otherwise mark fail and comment explanation "
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.1.20.1",
+            "test_case": {
+                "test_category": "In-APP",
+                "test_title": "Sign-in Persistence",
+                "test_description": "Cookies and other locally stored data MUST be persisted unless manually cleared by a user. \nThis includes, but is not limited to preserving data between application sessions, during firmware or similar software updates, and after hard or soft power cycles. ",
+                "passing_criteria": "\r\n\r\nPlease provide a Video capture of test procedure.\r\n\r\nThe YouTube account should remain signed in, despite a controlled loss of power. \r\n\r\nNote that sign-in state must also be maintained between firmware updates, and should only be lost if performing a factory reset, or by manual user action within the YouTube application.",
+                "is_manual": true,
+                "file_href": "",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Launch the YouTube application.\r\n2. Sign into a YouTube account. The sign-in flow can be started from the account icon on the left interface of the application.\r\n3. Exit YouTube.\r\n4. Unplug the device from power and wait at least 90 seconds. \r\n5. Return power to the device and relaunch the YouTube application. "
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.1.21.1",
+            "test_case": {
+                "test_category": "In-APP",
+                "test_title": "Dynamic Network Interface Signaling",
+                "test_description": "The device must support both Wired and Wireless network interfaces to complete this test. If the device does not support Wired and Wireless network connections, only complete the portion of the test applicable to the device capabilities (1-6 for Wired-only devices, 7-11 for Wireless-only devices).",
+                "passing_criteria": " \r\n\r\nPlease provide a video capture of the entire test procedure. \r\n\r\nThe User-Agent should always reflect the network interface currently in use by the device.",
+                "is_manual": true,
+                "file_href": "https://youtube.com/tv?env_isVideoInfoVisible=1",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Begin this test while using a wired ethernet network connection.\r\n2. Launch the YouTube application using the test URL. This URL will enable debug details within the App Version pane of the YouTube application.\r\n3. Navigate to the **Settings** section of the application.\r\n4. Navigate to the **App Version** screen.\r\n5. Verify the User-Agent includes \"Wired\" in the Connection_Type field.\r\n6. Exit the YouTube Application.\r\n7. Enable the wireless network interface on the device, and ensure network connectivity. \r\n8. Launch the YouTube application using the test URL.\r\n9. Navigate to the **Settings** section of the application.\r\n10. Navigate to the **App Version** screen.\r\n11. Verify the User-Agent includes \"Wireless\" in the Connection_Type field."
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.1.22.1",
+            "test_case": {
+                "test_category": "In-APP",
+                "test_title": "WebAudio Navigation Sounds",
+                "test_description": "The target device MUST properly implement the following W3C Web Audio API elements. ",
+                "passing_criteria": "\r\n\r\nPlease provide a video capture of navigation sounds playing within the YouTube application. \r\n\r\nNavigating throughout the YouTube application must result in beep/click sounds being played for most transitions and animations. \r\nWhen Sounds are turned OFF, navigation sounds must not play.",
+                "is_manual": true,
+                "file_href": "",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Launch the YouTube application.\r\n2. Using the device remote, navigate throughout the application.\r\n3. Navigate to the Settings section of the application.\r\n4. Under the **Sounds** section, turn sounds off.\r\n5. Resuming navigating throughout the application."
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.1.23.1",
+            "test_case": {
+                "test_category": "In-APP",
+                "test_title": "System-wide Exit Key",
+                "test_description": "Devices implementing a system-wide \"exit\" key MUST use that key to gracefully exit the application. ",
+                "passing_criteria": "\r\n\r\nPlease provide a video capture of the test procedure. \r\b\r\nThe application should close gracefully and in a reasonable amount of time. ",
+                "is_manual": true,
+                "file_href": "",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Launch the YouTube application.\r\n2. Using the device remote, exit the application using whatever applicable exit button exists. \r\n    1. Acceptable exit keys are generally: Home, Home icon, Exit, Cancel, and Menu. \r\n    2. \"Back\", \"Return\", and related pictographic representations of these functions should NOT exit the application from any place other than the top-level application menu."
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.1.24.1",
+            "test_case": {
+                "test_category": "In-APP",
+                "test_title": "In-app Exit",
+                "test_description": "Devices MUST implement window.close to gracefully exit the application. ",
+                "passing_criteria": "\r\n\r\nPlease provide a video capture of the test procedure. \r\n\r\nThe application should close gracefully and in a reasonable amount of time. \r\nThis test verifies the platform's support for Window.close()",
+                "is_manual": true,
+                "file_href": "",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Launch the YouTube application.\r\n2. Using the device remote, press the BACK button\r\n3. An Exit dialog should appear.\r\n4. Select the \"Exit\" option on the dialog box and press ENTER"
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.2.1.1",
+            "test_case": {
+                "test_category": "In-APP Performance",
+                "test_title": "Cert Performance",
+                "test_description": "Overall in-application performance usage of general latency, navigation, and watch.",
+                "passing_criteria": " Please provide a screenshot of the summary screen showing all measurements passing.\r\n\r\nThe routine may take approximately one hour to complete.\r\n\r\nA passing device must have: \r\n\r\n\r\n\r\n*   A browse-to-watch \"Sample Size\" >= 150\r\n*   95th percentile value for \"Browse to watch\" <= 1850ms\r\n*   A row-to-row  \"Sample Size\" >= 150\r\n*   95th percentile value for \"Row to Row\" >= 30\r\n*   A tile-to-tile  \"Sample Size\" >= 300\r\n*   95th percentile value for \"Tile to Tile\" >= 30\r\n*   A   \"Sample Size\" >= 300\r\n*   95th percentile value for \"Input Latency\" < 200ms",
+                "is_manual": true,
+                "file_href": "https://www.youtube.com/tv?loader=certperf",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Navigate to YTS -> Manual Tests\r\n2. Under In-APP Performance section, hit ENTER on '**Cert Performance**'\r\n3. An automated performance routine will run. Wait until the routine is completed and a summary screen is shown.\r\n4. Capture an image of the summary screen"
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.2.2.1",
+            "test_case": {
+                "test_category": "In-APP Performance",
+                "test_title": "Multi-App Performance",
+                "test_description": "The performance of the target device MUST NOT degrade in any way upon resuming or re-launching the YouTube App after running other applications during a user session. ",
+                "passing_criteria": "Please provide a screenshot of the summary screen \r\n\r\nA passing device will have performance figures from Step 3 be no worse than +-% of the performance figures captured in Step 11. \r\n\r\nLaunching and switching between other applications, as is typical for users of Application-capable CE devices, should not in any way degrade performance of the YouTube application.\r\n",
+                "is_manual": true,
+                "file_href": "https://www.youtube.com/tv",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "\r\n1. Navigate to YTS -> Manual Tests\r\n2. Under In-APP Performance section, hit ENTER on '**Cert Performance**'\r\n3. An automated performance routine will run. Wait until the routine is completed and a summary screen is shown.\r\n4. Capture a screenshot of the summary\r\n5. Exit the YouTube application\r\n6. Launch a secondary OTT media application\r\n7. Browse throughout the application and initiate playback of at least 5 five videos.\r\n8. Re-launch the YTS -> Manual Tests\r\n9. Under In-APP Performance section, hit ENTER on '**Cert Performance**'\r\n10. An automated performance routine will run. Wait until the routine is completed and a summary screen is shown.\r\n11. Capture a screenshot of the summary"
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.2.3.1",
+            "test_case": {
+                "test_category": "In-APP Performance",
+                "test_title": "12 Hours Key Input Stress",
+                "test_description": "12 hour in-app D-pad navigation endurance. ",
+                "passing_criteria": "\r\n\r\nPlease provide a text file stating the completion of at least 12 hours of routine.\r\n\r\nTarget device must be able to perform the automated browse for a continuous 12 hours without any interruption.",
+                "is_manual": true,
+                "file_href": "https://www.youtube.com/tv?automationRoutine=airstreamBrowseRoutine&env_useZylon=false",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Navigate to YTS -> Manual Tests\r\n2. Under In-APP Performance section, hit ENTER on '**12 Hours Key Input Stress**'\r\n3. Ensure automated routine is in session\r\n4. Conclude routine after 12 hours\r\n5. Provide txt file acknowledging completion"
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.2.4.1",
+            "test_case": {
+                "test_category": "In-APP Performance",
+                "test_title": "4 Hours Browse Watch",
+                "test_description": "4 hours in-app navigation and watch endurance. ",
+                "passing_criteria": "\r\n\r\nPlease provide a text file stating the completion of at least 4 hours of routine.\r\n\r\nTarget device must be able to perform the automated browse and watch for a continuous 4 hours without any interruption.",
+                "is_manual": true,
+                "file_href": "https://www.youtube.com/tv?automationRoutine=deviceCertRoutine&env_useZylon=false",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Navigate to YTS -> Manual Tests\r\n2. Under In-APP Performance section, hit ENTER on '**4 Hours Browse Watch**'\r\n3. Ensure automated routine is in session\r\n4. Routine will continue for approximately 4 hours \r\n5. Provide txt file acknowledging completion\r\n"
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.2.5.1",
+            "test_case": {
+                "test_category": "In-APP Performance",
+                "test_title": "System Overlay",
+                "test_description": "In-app focus/blur performance degration. ",
+                "passing_criteria": "\r\n\r\nPlease provide a video capture of the first entire test procedure (approximately 120 seconds).\r\n\r\nThe usage of, or visibility of a system-level menu must not degrade the YouTube application's responsiveness in any way.\r\n\r\nAny slowed transitions, stuttering or buffering video, or other observable degradation in performance cause this test to fail.\r\n",
+                "is_manual": true,
+                "file_href": "https://www.youtube.com/tv?automationRoutine=deviceCertRoutine&env_showUIStats=true&env_useZylon=false",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Navigate to YTS -> Manual Tests\r\n2. Under In-APP Performance section, hit ENTER on '**System Overlay**' \r\n3. An automated performance routine will run. \r\n4. During the first 120 seconds of the routine (or longer, if needed), open any system menus that are overlaid on top of the application UI, such as Picture or Sound settings, Mute icons, etc. \r\n5. Visually observe the routine and the performance metrics in the top right corner while the system menus are visible and in-use."
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.2.6.1",
+            "test_case": {
+                "test_category": "In-APP Performance",
+                "test_title": "Loading Time",
+                "test_description": "The target device MUST be able to load the YouTube application in 9 seconds , measuring the 95th percentile duration value from the time the user selects the YouTube application for launch to the time the browser finishes rendering the YouTube application and factoring out network transfer times. ",
+                "passing_criteria": "\n\r\r\n\r\nPlease provide a video capture of the test procedure and a text file containing the measured loading times, listed in the following format:\r\n\r\n  \r\n```\r\n<LOADING_TIME_IN_MS_FIRST_LAUNCH>\r\n\r\n<LOADING_TIME_IN_MS_SECOND_LAUNCH>\r\n\r\n\u2026\r\n```\r\n \r\n\r\nExample loading_time.txt file contents:\r\n\r\n  \r\n```\r\n6013\r\n\r\n6102\r\n\r\n6345\r\n\r\n5976\r\n\r\n5725\r\n```\r\n\r\nThe application should always load in under 9000ms, measuring from the time the ENTER button was pressed on the launcher icon to the time that all thumbnails and page elements are fully rendered.\r\n\r\nUsing the captured footage, calculate the loading time of the application via frame-by-frame analysis. This can be done using many freely available video tools that allow stepping through videos in single frame increments. \r\n\r\nAlternatively, ffmpeg or similar tools can break the video into images to allow for easier analysis. \r\n\r\nExample: \r\n\r\n\r\n    $ ffmpeg -i <VIDEO_FILE> frame%04d.jpg \r\n\r\n\r\n    To calculate the loading time, find the first frame after the ENTER button has been pressed and record the frame number. \r\n\r\n\r\n    Then find the first frame that the screen has loaded and record the frame number. \r\n\r\n\r\n    Take the difference between the start and end frame numbers, and multiply that number by the frame rate of the video captured.\r\n\r\n\r\n    Ex: 359 frames * 16.66ms = 5981ms",
+                "is_manual": true,
+                "file_href": "https://www.youtube.com/tv?loader=certperf",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Begin camera capture recording. If an IR sensor is not used, you must ensure that the remote button presses are in view of the camera.\r\n2. Using the device remote, launch the YouTube application from the YouTube icon launcher\r\n3. Wait until the YouTube application home screen is completely loaded, including thumbnails.\r\n4. Exit the application\r\n5. Repeat Steps 2-4 at least five times. "
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.3.1.1",
+            "test_case": {
+                "test_category": "Media",
+                "test_title": "Adaptive Bit Rate",
+                "test_description": "The target device MUST properly implement Media Source Extensions W3C adaptive bitrate playback. ",
+                "passing_criteria": "\r\n\r\nPlease provide a video capture of the test page showing the resolution of the video adapting up.\r\n\r\nThe video must begin playing at a low resolution, and must adapt to a higher resolution track. \r\n\r\nThe video must smoothly transition to the new resolution.\r\n\r\nNo skipping, stuttering or pausing can occur in the video or audio. \r\n\r\nAny issues with video or audio playback cause this test to fail. \r\n",
+                "is_manual": true,
+                "file_href": "https://ytlr-cert.appspot.com/demoplayer/2020/dash-player.html?manifest_url=assets/waymo_vp9_opus.mpd",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Navigate to YTS -> Manual Tests\r\n2. Using the device remote, navigate to the test named '**Adaptive Bit Rate**'  and press ENTER.\r\n3. The YouTube Demo Player page will load and begin playing a video. \r\n4. Observe the **Stream Info** panel, which will indicate the current video track in **BOLD**\r\n\r\n\r\nExample of Stream Info panel indicating a success transition:\r\n**_Stream Info at playback start:_**\r\nVideo Tracks:              \r\n* 256x144, 107984 bits/s, 24 fps\r\n* **426x240, 262822 bits/s, 24 fps**\r\n* 640x360, 483858 bits/s, 24 fps\r\n* 854x480, 849687 bits/s, 24 fps\r\n* 1280x720, 1732571 bits/s, 24 fps\r\n* 1920x1080, 3232002 bits/s, 24 fps\r\n\r\n\r\n**_Stream Info after 30-90 seconds:_**\r\nVideo Tracks:\r\n* 256x144, 107984 bits/s, 24 fps\r\n* 426x240, 262822 bits/s, 24 fps\r\n* 640x360, 483858 bits/s, 24 fps\r\n* 854x480, 849687 bits/s, 24 fps\r\n* 1280x720, 1732571 bits/s, 24 fps\r\n* **1920x1080, 3232002 bits/s, 24 fps**"
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.3.2.1",
+            "test_case": {
+                "test_category": "Media",
+                "test_title": "Dual Video",
+                "test_description": "Testing dual video playback, one DRM and one 15fps non-DRM. ",
+                "passing_criteria": "\r\n\r\nPlease provide a video capture of the test page showing both videos playing for at least 30 seconds.\r\n\r\nIn the background, a full screen DRM video should playback with audio.\r\n\r\nIn the foreground, a thumbnail sized, non-DRM video should playback simultaneously.",
+                "is_manual": true,
+                "file_href": "https://ytlr-cert.appspot.com/2020/manual/dual_video.html",
+                "test_suite": "Manual Tests",
+                "status": 3,
+                "test_instruction": "1. Navigate to YTS -> Manual Tests\r\n2. Using the device remote, navigate to the test named '**Dual Video**'  and press ENTER.\r\n3. The test page will load and begin playing two videos.\r\n"
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.3.2.2",
+            "test_case": {
+                "test_category": "Media",
+                "test_title": "Dual Video",
+                "test_description": "Testing dual video playback, one DRM and one 15fps non-DRM. ",
+                "passing_criteria": "\r\n\r\nPlease provide a video capture of the test page showing both videos playing for at least 30 seconds.\r\n\r\nIn the background, a full screen DRM video should playback with audio.\r\n\r\nIn the foreground, a thumbnail sized, non-DRM video should playback simultaneously.",
+                "is_manual": true,
+                "file_href": "https://ytlr-cert.appspot.com/2020/manual/dual_video.html",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Navigate to YTS -> Manual Tests\r\n2. Using the device remote, navigate to the test named '**Dual Video**'  and press ENTER.\r\n3. The test page will load and begin playing two videos.\r\n"
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.3.3.1",
+            "test_case": {
+                "test_category": "Media",
+                "test_title": "Resizing",
+                "test_description": "Testing video resizing and graphics layer alignment. ",
+                "passing_criteria": "\r\n\r\nPlease provide a video capture of the test page showing the video resizing until the transitions stop.\r\n\r\nThe video must playback without issues, and the video plane and graphics plane should maintain perfect synchronization. \r\n\r\nThe \"Total dropped frames\" value must not exceed 10.\r\n\r\nThe \"75th FPS\" value must be greater than or equal to 27 at all times. \r\n\r\nThe maximum lag/advance MUST be less than 100ms and the appearance of any black bars MUST be avoided for as long as the resizing is happening.\r\n\r\nIn order to calculate the resizing gap:\r\n\r\n\r\n\r\n1. Record a video of the resizing animation in 60fps\r\n2. Find the first frame of gap between graphics layer(black border) and video layer \r\n3. Increment total frame count for every video frame that increases in sizing gap\r\n4. If no visual sizing gap is observed that frame may be omitted from total frame count\r\n\r\n  1 frame = 16.67ms in a 60fps video environment\r\n\r\n\r\n  Total frame count must be less than 100ms \r\n",
+                "is_manual": true,
+                "file_href": "https://ytlr-cert.appspot.com/2020/manual/resizing.html",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Navigate to YTS -> Manual Tests\r\n2. Using the device remote, navigate to the test named '**Resizing**'  and press ENTER.\r\n3. The test page will load and begin playing a single video, with the size of the video dynamical scaling up and down approximately 5 times. Press Enter/OK to continue scaling if desired."
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.3.4.1",
+            "test_case": {
+                "test_category": "Media",
+                "test_title": "Current Time",
+                "test_description": "Testing that the video.currentTime is accurate within 32ms of a paused frame of video. ",
+                "passing_criteria": "\r\n\r\nPlease provide a video capture of the test procedure, ensuring the currentTime value is visible and readable.\r\n\r\nAt all times during the test, the time displayed in the uiMetrics overlay must be within 32 milliseconds of the time displayed in the paused video. \r\n",
+                "is_manual": true,
+                "file_href": "https://www.youtube.com/tv?env_showUIStats=true#/watch/video/idle?v=RgodTgI2EDo&resume",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Navigate to YTS -> Manual Tests\r\n2. Using the device remote, navigate to the test named '**Current Time**'  and press ENTER.\r\n3. This will load a video in the YouTube application with uiMetrics enabled. \r\n4. Pause the video.\r\n    1. When the video is paused, the currentTime value is updated and displayed in the top right corner. \r\n5. Resume the video.\r\n6. Repeat steps 4-5 five times.\r\n7. Seek forward 40 seconds or more. \r\n8. Repeat steps 4-5 five times.\r\n9. Seek backwards 40 seconds or more.\r\n10. Repeat steps 4-5 five times."
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.4.1.1",
+            "test_case": {
+                "test_category": "Playback Rate",
+                "test_title": "Playback Rate:0.25x",
+                "test_description": "Device must be capable of adjusting variable playback speed upon initial start. The rate of 0.25 is assessed.\r\n\r\nThe target device MUST properly implement HTMLMediaElement.playbackRate supporting values: \r\n0.25, 0.50, 0.75, 1.00, 1.25, 1.50, 1.75, 2.00. \r\n\r\n_Note: Audio MAY be muted for 0.25x._",
+                "passing_criteria": "Please provide a video capture of the first 10 seconds of playback at each specified rate.\n\nFor each playbackRate value, the video must begin playback at the specified rate, and continue playback at that rate without issues (such as pausing, stuttering, etc). \n\nAudio for each playbackRate should be pitch corrected and sound similar to Chrome on a desktop PC.\n\nFor “0.25x”, audio may be muted.\n",
+                "is_manual": true,
+                "file_href": "https://ytlr-cert.appspot.com/demoplayer/2020/dash-player.html?manifest_url=assets/waymo_vp9_opus.mpd&playbackRate=0.25",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Navigate to YTS -> Manual Tests\r\n2. Using the device remote, navigate to the test named \"**0.25x**\"  and press ENTER.\r\n3. This will load a video in the YouTube Demo Player with the playbackRate attribute of the video set to 0.25 \r\n"
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.4.2.1",
+            "test_case": {
+                "test_category": "Playback Rate",
+                "test_title": "Playback Rate:0.5x",
+                "test_description": "Device must be capable of adjusting variable playback speed upon initial start. The rate of 0.5 is assessed.\r\n \r\n\r\nThe target device MUST properly implement HTMLMediaElement.playbackRate supporting values: \r\n0.25, 0.50, 0.75, 1.00, 1.25, 1.50, 1.75, 2.00. \r\n",
+                "passing_criteria": "Please provide a video capture of the first 10 seconds of playback at each specified rate.\n\nFor each playbackRate value, the video must begin playback at the specified rate, and continue playback at that rate without issues (such as pausing, stuttering, etc). \n\nAudio for each playbackRate should be pitch corrected and sound similar to Chrome on a desktop PC.\n\n",
+                "is_manual": true,
+                "file_href": "https://ytlr-cert.appspot.com/demoplayer/2020/dash-player.html?manifest_url=assets/waymo_vp9_opus.mpd&playbackRate=0.5",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Navigate to YTS -> Manual Tests\r\n2. Using the device remote, navigate to the test named \"**0.5x**\"  and press ENTER.\r\n3. This will load a video in the YouTube Demo Player with the playbackRate attribute of the video set to 0.50 \r\n"
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.4.8.1",
+            "test_case": {
+                "test_category": "Playback Rate",
+                "test_title": "Playback Rate:0.75x",
+                "test_description": "Device must be capable of adjusting variable playback speed upon initial start. The rate of 0.75 is assessed.\r\n \r\n\r\nThe target device MUST properly implement HTMLMediaElement.playbackRate supporting values: \r\n0.25, 0.50, 0.75, 1.00, 1.25, 1.50, 1.75, 2.00. \r\n",
+                "passing_criteria": "Please provide a video capture of the first 10 seconds of playback at each specified rate.\n\nFor each playbackRate value, the video must begin playback at the specified rate, and continue playback at that rate without issues (such as pausing, stuttering, etc). \n\nAudio for each playbackRate should be pitch corrected and sound similar to Chrome on a desktop PC.\n\n",
+                "is_manual": true,
+                "file_href": "https://ytlr-cert.appspot.com/demoplayer/2020/dash-player.html?manifest_url=assets/waymo_vp9_opus.mpd&playbackRate=0.75",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Navigate to YTS -> Manual Tests\r\n2. Using the device remote, navigate to the test named \"**0.75x**\"  and press ENTER.\r\n3. This will load a video in the YouTube Demo Player with the playbackRate attribute of the video set to 0.75 \r\n"
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.4.3.1",
+            "test_case": {
+                "test_category": "Playback Rate",
+                "test_title": "Playback Rate:1.0x",
+                "test_description": "Device must be capable of adjusting variable playback speed upon initial start. The rate of 1.0 is assessed.\r\n \r\n\r\nThe target device MUST properly implement HTMLMediaElement.playbackRate supporting values: \r\n0.25, 0.50, 0.75, 1.00, 1.25, 1.50, 1.75, 2.00. ",
+                "passing_criteria": "Please provide a video capture of the first 10 seconds of playback at each specified rate.\n\nFor each playbackRate value, the video must begin playback at the specified rate, and continue playback at that rate without issues (such as pausing, stuttering, etc). \n\nAudio for each playbackRate should be pitch corrected and sound similar to Chrome on a desktop PC.\n\n",
+                "is_manual": true,
+                "file_href": "https://ytlr-cert.appspot.com/demoplayer/2020/dash-player.html?manifest_url=assets/waymo_vp9_opus.mpd&playbackRate=1.0",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Navigate to YTS -> Manual Tests\r\n2. Using the device remote, navigate to the test named \"**1.0x**\"  and press ENTER.\r\n3. This will load a video in the YouTube Demo Player with the playbackRate attribute of the video set to 1.00 \r\n"
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.4.4.1",
+            "test_case": {
+                "test_category": "Playback Rate",
+                "test_title": "Playback Rate:1.25x",
+                "test_description": "Device must be capable of adjusting variable playback speed upon initial start. The rate of 1.25 is assessed. \r\n\r\nThe target device MUST properly implement HTMLMediaElement.playbackRate supporting values: \r\n0.25, 0.50, 0.75, 1.00, 1.25, 1.50, 1.75, 2.00. \r\n",
+                "passing_criteria": "Please provide a video capture of the first 10 seconds of playback at each specified rate.\n\nFor each playbackRate value, the video must begin playback at the specified rate, and continue playback at that rate without issues (such as pausing, stuttering, etc). \n\nAudio for each playbackRate should be pitch corrected and sound similar to Chrome on a desktop PC.\n\n",
+                "is_manual": true,
+                "file_href": "https://ytlr-cert.appspot.com/demoplayer/2020/dash-player.html?manifest_url=assets/waymo_vp9_opus.mpd&playbackRate=1.25",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Navigate to YTS -> Manual Tests\r\n2. Using the device remote, navigate to the test named \"**1.25x**\"  and press ENTER.\r\n3. This will load a video in the YouTube Demo Player with the playbackRate attribute of the video set to 1.25 \r\n"
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.4.5.1",
+            "test_case": {
+                "test_category": "Playback Rate",
+                "test_title": "Playback Rate:1.5x",
+                "test_description": "Device must be capable of adjusting variable playback speed upon initial start. The rate of 1.5 is assessed.\r\n\r\nThe target device MUST properly implement HTMLMediaElement.playbackRate supporting values: \r\n0.25, 0.50, 0.75, 1.00, 1.25, 1.50, 1.75, 2.00. \r\n",
+                "passing_criteria": "Please provide a video capture of the first 10 seconds of playback at each specified rate.\n\nFor each playbackRate value, the video must begin playback at the specified rate, and continue playback at that rate without issues (such as pausing, stuttering, etc). \n\nAudio for each playbackRate should be pitch corrected and sound similar to Chrome on a desktop PC.\n\n",
+                "is_manual": true,
+                "file_href": "https://ytlr-cert.appspot.com/demoplayer/2020/dash-player.html?manifest_url=assets/waymo_vp9_opus.mpd&playbackRate=1.5",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Navigate to YTS -> Manual Tests\r\n2. Using the device remote, navigate to the test named \"**1.5x**\"  and press ENTER.\r\n3. This will load a video in the YouTube Demo Player with the playbackRate attribute of the video set to 1.50 \r\n"
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.4.9.1",
+            "test_case": {
+                "test_category": "Playback Rate",
+                "test_title": "Playback Rate:1.75x",
+                "test_description": "Device must be capable of adjusting variable playback speed upon initial start. The rate of 1.75 is assessed. \r\n\r\nThe target device MUST properly implement HTMLMediaElement.playbackRate supporting values: \r\n0.25, 0.50, 0.75, 1.00, 1.25, 1.50, 1.75, 2.00. \r\n",
+                "passing_criteria": "Please provide a video capture of the first 10 seconds of playback at each specified rate.\n\nFor each playbackRate value, the video must begin playback at the specified rate, and continue playback at that rate without issues (such as pausing, stuttering, etc). \n\nAudio for each playbackRate should be pitch corrected and sound similar to Chrome on a desktop PC.\n\n",
+                "is_manual": true,
+                "file_href": "https://ytlr-cert.appspot.com/demoplayer/2020/dash-player.html?manifest_url=assets/waymo_vp9_opus.mpd&playbackRate=1.75",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Navigate to YTS -> Manual Tests\r\n2. Using the device remote, navigate to the test named \"**1.75x**\"  and press ENTER.\r\n3. This will load a video in the YouTube Demo Player with the playbackRate attribute of the video set to 1.75 \r\n"
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.4.6.1",
+            "test_case": {
+                "test_category": "Playback Rate",
+                "test_title": "Playback Rate:2.0x",
+                "test_description": "Device must be capable of adjusting variable playback speed upon initial start. The rate of 2.0 is assessed. \r\n\r\nThe target device MUST properly implement HTMLMediaElement.playbackRate supporting values: \r\n0.25, 0.50, 0.75, 1.00, 1.25, 1.50, 1.75, 2.00. \r\n",
+                "passing_criteria": "Please provide a video capture of the first 10 seconds of playback at each specified rate.\n\nFor each playbackRate value, the video must begin playback at the specified rate, and continue playback at that rate without issues (such as pausing, stuttering, etc). \n\nAudio for each playbackRate should be pitch corrected and sound similar to Chrome on a desktop PC.\n\n",
+                "is_manual": true,
+                "file_href": "https://ytlr-cert.appspot.com/demoplayer/2020/dash-player.html?manifest_url=assets/waymo_vp9_opus.mpd&playbackRate=2.0",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Navigate to YTS -> Manual Tests\r\n2. Using the device remote, navigate to the test named \"**2.0x**\"  and press ENTER.\r\n3. This will load a video in the YouTube Demo Player with the playbackRate attribute of the video set to 2.00 \r\n"
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.4.7.1",
+            "test_case": {
+                "test_category": "Playback Rate",
+                "test_title": "Playback Rate:Runtime Change",
+                "test_description": "Testing that after starting a video with a playbackRate of 1.0, subsequent changes of playbackRate to other values are respected.",
+                "passing_criteria": "Please provide a video capture, with audio, of the entire test procedure.\n\nFor each playbackRate value, the video must begin playback at the selected rate within 200ms of pressing ENTER. At no point should the video or audio stutter or buffer.\n\nAudio for each playbackRate should be pitch corrected and sound similar to Chrome on a desktop PC.\n\nFor “0.25x”, audio may be muted.\n",
+                "is_manual": true,
+                "file_href": "https://ytlr-cert.appspot.com/demoplayer/2020/dash-player.html?manifest_url=assets/waymo_vp9_opus.mpd",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Navigate to YTS -> Manual Tests\r\n2. Using the device remote, navigate to the test named \"**Runtime Change**\"  and press ENTER.\r\n3. This will load a video in the YouTube Demo Player with the playbackRate attribute of the video set to 1.00\r\n4. Using the device remote, navigate to the **Controls** panel of the demo player:\r\n\r\n```\r\nControls\r\nPlaybackRate:  0.25 0.50 0.75 1.00 1.25 1.50 1.75 2.00\r\nPlay/Pause:      Pause\r\n```\r\n5. While the video is playing back, using the device remote, select \"**0.25**\" and press ENTER\r\n6. Observe video for 10 seconds to ensure the rate of the video and audio has changed. _Note: Audio may be muted for a playbackRate value of 0.25_\r\n7. Repeat steps 5-6 for each available value of playbackRate.\r\n8. Using the device remote, select \"**1.00**\" and press ENTER\r\n9. Using the device remote, select \"Pause\" and press ENTER\r\n10. Using the device remote, select \"**0.25**\" and press ENTER\r\n11. Using the device remote, select \"Play\" and press ENTER\r\n12. Observe video for 10 seconds to ensure the rate of the video and audio has changed. _Note: Audio may be muted for a playbackRate value of 0.25_\r\n13. Repeat steps 9-12, selecting each of the available playbackRate values and while the video is paused, then resume playback."
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.5.1.1",
+            "test_case": {
+                "test_category": "DRM",
+                "test_title": "Widevine",
+                "test_description": "Testing that the Widevine settings meet the requirements for identification of the device and OEMCrypto version.",
+                "passing_criteria": "Please provide a readable screenshot of the entire test page.\n\nThe Widevine License Values should match, identically, the identification values used within the User-Agent of the device.\n\nSpecifically, the BRAND and MODEL in the User-Agent must match the company_name and model_name in the Widevine License respectively. \n\nThe value for oem_crypto_api_version must be displayed and must be 14 or greater\n\n",
+                "is_manual": true,
+                "file_href": "https://ytlr-cert.appspot.com/2020/manual/widevine_license_request.html",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Navigate to YTS -> Manual Tests\r\nUsing the device remote, navigate to the test named \"**Widevine**\"  and press ENTER.\r\nThis will load a page displaying the client_info fields of the Widevine License Request\r\n"
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.5.2.1",
+            "test_case": {
+                "test_category": "DRM",
+                "test_title": "DRM",
+                "test_description": "Testing the combination of MediaSource Adaptive Bitrate playback and DRM.",
+                "passing_criteria": "Please provide a video capture of the first 60 seconds of video playback.\n\nThe video must begin playing at a low resolution, and must adapt to a higher resolution track. \nThe video must smoothly transition to the new resolution.\nNo skipping, stuttering or pausing can occur in the video or audio. \nThe video must play from start to finish.\nAny issues with video or audio playback cause this test to fail. \n",
+                "is_manual": true,
+                "file_href": "https://ytlr-cert.appspot.com/demoplayer/2020/dash-player.html?manifest_url=assets/oops_cenc_pssh.mpd",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Navigate to YTS -> Manual Tests\r\n2. Using the device remote, navigate to the test named \"**DRM**\"  and press ENTER.\r\n3. The YouTube Demo Player page will load and begin playing a video. \r\n4. Observe the **Stream Info** panel, which will indicate the current video track in **BOLD**"
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.5.3.1",
+            "test_case": {
+                "test_category": "DRM",
+                "test_title": "Purchased Movie",
+                "test_description": "Target device functionality of purchase and play of select paid content.\r\n\r\n\r\n**Pre-Requisites**\r\n\r\nA YouTube/Google Account is required for this test. See the following article for help creating an account:\r\n\r\n[https://support.google.com/youtube/answer/161805](https://support.google.com/youtube/answer/161805)\r\n\r\nThis test requires a video be purchased and account with purchased content to be signed into the test device. \r\n\r\nProceed with option#2 if video region restrictions apply. \r\n\r\nOption 1:\r\n\r\n\r\nTest video to purchase (Cost is $0.00):\r\n\r\n\r\n[https://www.youtube.com/watch?v=MeFoUwes8nE](https://www.youtube.com/watch?v=MeFoUwes8nE)\r\n\r\n\r\nOption 2:\r\n\r\n\r\nTest video (No purchase necessary):\r\n\r\n\r\n[https://www.youtube.com/tv?v=iNvUS1dnwfw](https://www.youtube.com/tv?v=iNvUS1dnwfw)\r\n\r\n\r\nPurchase Instructions:\r\n\r\n\r\n[https://support.google.com/youtube/answer/1231720?hl=en&ref_topic=1316015#](https://support.google.com/youtube/answer/1231720?hl=en&ref_topic=1316015#)",
+                "passing_criteria": "Please provide a video screenshot after 60 seconds of video playback.\n\nStats for nerds must indicate the key system used is “WVA”\n\nStats for nerds must indicate that the Optimal Resolution for the video is the maximum display resolution the device is capable of. \n\nFor HD devices, the optimal resolution must be 1280x546@24.\nFor FHD devices, the optimal resolution must be 1920x818@24. \nFor 4k devices, the optimal resolution must be 2560x1090@24.\n\nFor HDMI output devices, the maximum display resolution is dependent on the display connected to the device. For certification purposes, ensure tests are performed on a display that matches the decode capability of the devices.\n",
+                "is_manual": true,
+                "file_href": "https://www.youtube.com/tv?env_isVideoInfoVisible=1&v=MeFoUwes8nE",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Navigate to YTS -> Manual Tests\r\n2. Using the device remote, navigate to the test named \"**Purchased Movie #1**\" or \"**Purchased Movie #2**\"  and press ENTER.\r\n3. The YouTube application will load and begin playing a video. \r\n4. Enable the **Stats for nerds** panel if it is not already enabled.\r\n5. Observe the **Stats for nerds** panel during video playback."
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.5.4.1",
+            "test_case": {
+                "test_category": "DRM",
+                "test_title": "Purchased Movie #2",
+                "test_description": "Target device functionality of purchase and play of select paid content.\r\n\r\n\r\n**Pre-Requisites**\r\n\r\nA YouTube/Google Account is required for this test. See the following article for help creating an account:\r\n\r\n[https://support.google.com/youtube/answer/161805](https://support.google.com/youtube/answer/161805)\r\n\r\nThis test requires a video be purchased and account with purchased content to be signed into the test device. \r\n\r\nProceed with option#2 if video region restrictions apply. \r\n\r\nOption 1:\r\n\r\n\r\nTest video to purchase (Cost is $0.00):\r\n\r\n\r\n[https://www.youtube.com/watch?v=MeFoUwes8nE](https://www.youtube.com/watch?v=MeFoUwes8nE)\r\n\r\n\r\nOption 2:\r\n\r\n\r\nTest video (No purchase necessary):\r\n\r\n\r\n[https://www.youtube.com/tv?v=iNvUS1dnwfw](https://www.youtube.com/tv?v=iNvUS1dnwfw)\r\n\r\n\r\nPurchase Instructions:\r\n\r\n\r\n[https://support.google.com/youtube/answer/1231720?hl=en&ref_topic=1316015#](https://support.google.com/youtube/answer/1231720?hl=en&ref_topic=1316015#)",
+                "passing_criteria": "Please provide a video screentshot after 60 seconds of video playback.\n\nStats for nerds must indicate the key system used is “WVA”\n\nStats for nerds must indicate that the Optimal Resolution for the video is the maximum display resolution the device is capable of. \n\nFor HD devices, the optimal resolution must be 1280x546@24.\nFor FHD devices, the optimal resolution must be 1920x818@24. \nFor 4k devices, the optimal resolution must be 2560x1090@24.\n\nFor HDMI output devices, the maximum display resolution is dependent on the display connected to the device. For certification purposes, ensure tests are performed on a display that matches the decode capability of the devices.\n",
+                "is_manual": true,
+                "file_href": "https://www.youtube.com/watch?env_isVideoInfoVisible=1&v=iNvUS1dnwfw",
+                "test_suite": "Manual Tests",
+                "status": 3,
+                "test_instruction": "1. Navigate to YTS -> Manual Tests\r\n2. Using the device remote, navigate to the test named \"**Purchased Movie #1**\" or \"**Purchased Movie #2**\"  and press ENTER.\r\n3. The YouTube application will load and begin playing a video. \r\n4. Enable the **Stats for nerds** panel if it is not already enabled.\r\n5. Observe the **Stats for nerds** panel during video playback."
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.5.5.1",
+            "test_case": {
+                "test_category": "DRM",
+                "test_title": "VP9 Subsample",
+                "test_description": "Testing DRM Widevine & VP9. \r\n\r\nPlease provide a video of test procedure.",
+                "passing_criteria": "Device has capable playback of subsample encryption support for VP9/Widevine content.\r\n\r\nAudio and video should not have any issues with buffering, stuttering, or artifacts ",
+                "is_manual": true,
+                "file_href": "https://ytlr-cert.appspot.com/demoplayer/2020/dash-player.html?manifest_url=assets/sintel_vp9_subsample.mpd",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Navigate to YTS -> Manual Tests\r\n2. Using the device remote, navigate to the test named '**VP9 Subsample**' and press ENTER.\r\n3. A video will begin playback\r\n4. Ensure there are no problems with video quality"
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.6.1.1",
+            "test_case": {
+                "test_category": "WebP",
+                "test_title": "Non-animated WebP",
+                "test_description": "Testing that WebP images can be properly decoded and displayed on the device. ",
+                "passing_criteria": "\r\n\r\nPlease provide a video of test procedure.\r\n\n\nAll images are displayed properly.\nAll images animate without stuttering or frame drops. \nCompare test page output to Chrome on Desktop PC.\n\nNon-WebP images are displayed on the page for comparison purposes only.",
+                "is_manual": true,
+                "file_href": "https://ytlr-cert.appspot.com/2020/manual/webp.html",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "Load https://ytlr-cert.appspot.com/2020/main.html?test_type=manual-test \nUsing the device remote, navigate to the test named “WebP” and press ENTER.\nA gallery page of WebP images will load\n"
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.6.2.1",
+            "test_case": {
+                "test_category": "WebP",
+                "test_title": "Animated WebP",
+                "test_description": "Testing that animated WebP images can be properly decoded and displayed on the device, at a framerate of 10fps. ",
+                "passing_criteria": "Please provide a video of test procedure.\n\nAll thumbnails images are displayed properly.\nAll thumbnail images animate without stuttering or frame drops. \n\nAnimations of thumbnails must not lower UI frame rate or device navigation performance otherwise.",
+                "is_manual": true,
+                "file_href": "https://ytlr-cert.appspot.com/2020/manual/webp_animated.html",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "Load https://ytlr-cert.appspot.com/2020/main.html?test_type=manual-test \nUsing the device remote, navigate to the test named “Animated WebP” and press ENTER.\nA gallery page of animated WebP images will load.\nUsing the device remote, move focus to each of the WebP images and observe the animation. \n"
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.6.3.1",
+            "test_case": {
+                "test_category": "WebP",
+                "test_title": "YouTube App with WebP",
+                "test_description": "Parameter that forces WebP thumbnails within the YouTube application. ",
+                "passing_criteria": "Please provide a video of test procedure.\r\n\r\nAll thumbnails images are displayed properly.\r\n\r\nAll thumbnail images animate without stuttering or frame drops. \r\n\r\nAnimations of thumbnails must not lower UI frame rate or device navigation performance otherwise.",
+                "is_manual": true,
+                "file_href": "https://www.youtube.com/tv?env_supportsAnimatedWebp=true#/",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Navigate to YTS -> Manual Tests\r\n2. Using the device remote, navigate to the test named \"**YouTube App with WebP**\" and press ENTER.\r\n3. The YouTube application will load.\r\n4. Using the device remote, move focus to each of the thumbnails on the homepage of the application and observe the animation. "
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.7.1.1",
+            "test_case": {
+                "test_category": "Spherical - Cobalt",
+                "test_title": "Map-To-Mesh 720P",
+                "test_description": "Testing that Cobalt's Map-to-Mesh feature appropriately decodes video to textures. Used for 360 video. ",
+                "passing_criteria": "Please provide a video of test procedure, first 90 seconds of playback.\n\nThe frame rate displayed on the page must not drop below 30fps.\n\nThe video or audio should remain in sync, and should not stutter, buffer or render artifacts not in the original video. \n\nUsing the device remote arrow buttons must smoothly change the viewport with little or no delay. \n\nThe video must play from start to finish.\nAny issues with video or audio playback cause this test to fail. ",
+                "is_manual": true,
+                "file_href": "https://ytlr-cert.appspot.com/2020/manual/mtm720.html",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "Load https://ytlr-cert.appspot.com/2020/main.html?test_type=manual-test \nUsing the device remote, navigate to the test named “Map-To-Mesh 720P” and press ENTER.\nThe test page will load a 360° spherical video.\nUsing the device remote, move the video’s viewport around during playback and observe"
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.7.2.1",
+            "test_case": {
+                "test_category": "Spherical - Cobalt",
+                "test_title": "Map-To-Mesh 1080P",
+                "test_description": "Testing that Cobalt's Map-to-Mesh feature appropriately decodes video to textures. Used for 360 video. ",
+                "passing_criteria": "Please provide a video of test procedure, first 90 seconds of playback.\n\nThe frame rate displayed on the page must not drop below 30fps.\n\nThe video or audio should remain in sync, and should not stutter, buffer or render artifacts not in the original video. \n\nUsing the device remote arrow buttons must smoothly change the viewport with little or no delay. \n\nThe video must play from start to finish.\nAny issues with video or audio playback cause this test to fail. ",
+                "is_manual": true,
+                "file_href": "https://ytlr-cert.appspot.com/2020/manual/mtm1080.html",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "Load https://ytlr-cert.appspot.com/2020/main.html?test_type=manual-test \nUsing the device remote, navigate to the test named “Map-To-Mesh 1080P” and press ENTER.\nThe test page will load a 360° spherical video.\nUsing the device remote, move the video’s viewport around during playback and observe."
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.7.3.1",
+            "test_case": {
+                "test_category": "Spherical - Cobalt",
+                "test_title": "Map-To-Mesh 1440P",
+                "test_description": "Testing that Cobalt's Map-to-Mesh feature appropriately decodes video to textures. Used for 360 video. ",
+                "passing_criteria": "Please provide a video of test procedure, first 90 seconds of playback.\n\nThe frame rate displayed on the page must not drop below 30fps.\n\nThe video or audio should remain in sync, and should not stutter, buffer or render artifacts not in the original video. \n\nUsing the device remote arrow buttons must smoothly change the viewport with little or no delay. \n\nThe video must play from start to finish.\nAny issues with video or audio playback cause this test to fail. ",
+                "is_manual": true,
+                "file_href": "https://ytlr-cert.appspot.com/2020/manual/mtm1440.html",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "Load https://ytlr-cert.appspot.com/2020/main.html?test_type=manual-test \nUsing the device remote, navigate to the test named “Map-To-Mesh 1440P” and press ENTER.\nThe test page will load a 360° spherical video.\nUsing the device remote, move the video’s viewport around during playback and observe."
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.7.4.1",
+            "test_case": {
+                "test_category": "Spherical - Cobalt",
+                "test_title": "Map-To-Mesh 2160P",
+                "test_description": "Testing that Cobalt's Map-to-Mesh feature appropriately decodes video to textures. Used for 360 video. ",
+                "passing_criteria": "Please provide a video of test procedure, first 90 seconds of playback.\n\nThe frame rate displayed on the page must not drop below 30fps.\n\nThe video or audio should remain in sync, and should not stutter, buffer or render artifacts not in the original video. \n\nUsing the device remote arrow buttons must smoothly change the viewport with little or no delay. \n\nThe video must play from start to finish.\nAny issues with video or audio playback cause this test to fail. ",
+                "is_manual": true,
+                "file_href": "https://ytlr-cert.appspot.com/2020/manual/mtm2160.html",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "Load https://ytlr-cert.appspot.com/2020/main.html?test_type=manual-test \nUsing the device remote, navigate to the test named “Map-To-Mesh 2160P” and press ENTER.\nThe test page will load a 360° spherical video.\nUsing the device remote, move the video’s viewport around during playback and observe."
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.8.1.1",
+            "test_case": {
+                "test_category": "Speech",
+                "test_title": "Acknowledgement of Speech Data Storage Requirements",
+                "test_description": "Please provide an acknowledgement that the device complies with the Technical Requirements restricting the storing of speech data locally during YouTube application usage. \nPlatform-level speech diagrams can be included if desired.",
+                "passing_criteria": "When the YouTube application is running, the target device MUST NOT create any persistent local storage of the data input to or output from the Web Speech APIs. \r\n\r\nAcknowledgement that the device complies with the Technical Requirements restricting the storing of speech data locally during YouTube application usage. \r\n\r\nPlatform-level speech diagrams can be included if desired.\r\n",
+                "is_manual": true,
+                "file_href": "",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "Mark pass if you comply, otherwise mark fail and comment explanation "
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.8.2.1",
+            "test_case": {
+                "test_category": "Speech",
+                "test_title": "Soft-mic Button ",
+                "test_description": "Webspeech enabled devices are required to relay voice messages to the application's software button activation. ",
+                "passing_criteria": "\r\n\r\nPlease provide a video of test procedure\r\n\r\nAfter Step #4, the screen must indicate that the device is now listening for audio input.\r\n\r\nAfter Step #5, the search page must show results for the query, \"Eric Clapton solo\"",
+                "is_manual": true,
+                "file_href": "",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Launch the YouTube application.\r\n2. Navigate to the search page.\r\n3. A microphone icon should be visible next to the keyboard.\r\n4. Move cursor focus to the microphone icon and press OK.\r\n5. Holding the microphone near your mouth and **without** pressing any buttons on the remote, say, \"_Eric Clapton solo_\"."
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.8.3.1",
+            "test_case": {
+                "test_category": "Speech",
+                "test_title": "Hard-mic Button",
+                "test_description": "Webspeech enabled devices are required to relay voice messages to the application using the device's physical microphone button. ",
+                "passing_criteria": "\r\n\r\nPlease provide a video of test procedure\r\n\r\nThe remote must have a physical microphone button for this test. If the device does not have a microphone button, omit this test and include an empty text file as specified in the Required Output section of this test.",
+                "is_manual": true,
+                "file_href": "",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Launch the YouTube application.\r\n2. Navigate to the search page.\r\n3. Press the physical remote button that indicates microphone input (typically indicated by a microphone icon on the RC).\r\n4. Holding the microphone near your mouth and while pressing the microphone button on the remote, say, \"_Jimmy Page solo_\".\r\n5. Release the microphone button."
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.8.4.1",
+            "test_case": {
+                "test_category": "Speech",
+                "test_title": "Conditional Voice Query Outside of YouTube",
+                "test_description": "The remote must have a physical microphone button (or the device includes a far-field microphone) and universal voice assistant for this test. \r\n\r\nCompliance with accurate speech queries outside of YouTube's application. ",
+                "passing_criteria": "\r\n\r\nPlease provide a video of test procedure\r\n\r\nThe default URL will enable the Event Console within the application and allow the following **vq=** & **launch=** deeplinks to be verified.\r\n\r\n\r\nAfter Step #4, the YouTube application must open to the search page. The search page must show results for the query, \"meat loaf\". \r\n\r\n\r\nFor devices where YouTube is pre-loaded, this action is a result of resuming the application and sending a deeplink with the payload:\r\n\r\n**?vq=meat%2Bloaf&launch=voice**\r\n\r\n\r\nAfter Step #7, the YouTube application must open to the search page. The search page must show results for the query, \"dust in the wind\". \r\nFor devices where YouTube is pre-loaded, this action is a result of resuming the application and sending a deeplink with the payload:\r\n\r\n**?vq=dust%2Bin%2Bthe%2Bwind&launch=voice**\r\n\r\n\r\nAfter Step #10, the YouTube application must open.\r\nFor devices where YouTube is pre-loaded, this action is a result of resuming the application and sending a deeplink with the payload:\r\n\r\n**?launch=voice**\r\n\r\n\r\nAfter Step #12, the YouTube application must open to the search page. The search page must show results for the query, \"Play rock music with YouTube\". For devices where YouTube is pre-loaded, this action is a result of resuming the application and sending a deeplink with the payload:\r\n\r\n**?vq=play%2Brock%2Bmusic&launch=voice**\r\n\r\n\r\nNote: For Cobalt devices, \"resuming\" the YouTube application refers to the process outlined in the Starboard Application Lifecycle document. For non-Cobalt devices, \"resuming\" the YouTube application means appending a #resume fragment to the browser's URL, followed by the deeplink parameters. ",
+                "is_manual": true,
+                "file_href": "",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Navigate to the device's home menu.\r\n2. Press the physical remote button that indicates microphone input (typically indicated by a microphone icon on the RC).\r\n3. Say, \"_Search for meatloaf on YouTube_\"\r\n4. Release the microphone button.\r\n5. Exit YouTube and repeat Steps 1-2.\r\n6. Say, \"_Search YouTube for dust in the wind_\"\r\n7. Release the microphone button.\r\n8. Exit YouTube and repeat Steps 1-2.\r\n9. Say, \"_Open YouTube_\" \r\n10. Release the microphone button.\r\n11. Exit YouTube and repeat Steps 1-2.\r\n12. Say, \"_Play rock music with YouTube_\" "
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.8.5.1",
+            "test_case": {
+                "test_category": "Speech",
+                "test_title": "Voice Query Inside of YouTube",
+                "test_description": "The remote must have a physical microphone button (or the device includes a far-field microphone) and universal voice assistant for this test. \r\n\r\nCompliance with accurate speech queries inside of YouTube's application. ",
+                "passing_criteria": "\r\n\r\nPlease provide a video of test procedure\r\n\r\nThe default URL will enable the Event Console within the application and allow the following **vq=** & **inApp=** deeplinks to be verified. \r\n\r\nAfter Step #4, the YouTube application must go to the search page. The search page must show results for the query, \"saturday night live\". \r\n\r\nFor devices where YouTube is pre-loaded, this action is a result of a deeplink with the payload:\r\n\r\n\r\n\r\n**vq=saturday%2Bnight%2Blive&inApp=true**\r\n\r\n\r\n\r\nAfter Step #7, the YouTube application must go to the search page. The search page must show results for the query, \"kansas live from canada\". \r\n\r\nThis action is a result of a deeplink with the payload:\r\n\r\n\r\n\r\n**vq=kansas%2Blive%2Bfrom%2Bcanada&inApp=true**\r\n\r\n\r\nAfter Step #10, the YouTube application must go to the search page. The search page must show results for the query, \"making bacon pancakes\". \r\n\r\nThis action is a result of a deeplink with the payload: \r\n\r\n\r\n\r\n**vq=making%2Bbacon%2Bpancakes&inApp=true**\r\n\r\n\r\n\r\n\r\n\r\nAfter Step #13, the YouTube application must go to the search page. The search page must show results for the query, \"CNN\". \r\n\r\nThis action is a result of a deeplink with the payload: \r\n\r\n\r\n\r\n**vq=cnn&inApp=true**\r\n\r\n\r\n\r\n\r\n\r\nAfter Step #16, the YouTube application must go to the search page. The search page must show results for the query, \"Lady Gaga Music\". \r\n\r\nThis action is a result of a deeplink with the payload: \r\n\r\n\r\n\r\n**vq=lady%2Bgaga%2Bmusic&inApp=true**\r\n\r\n\r\n\r\n\r\n\r\n\r\nAfter Step #19, the YouTube application must go to the search page. The search page must show results for the query, \"Graham Norton Show\". \r\n\r\nThis action is a result of a deeplink with the payload: \r\n\r\n\r\n\r\n**vq=graham%2Bnorton&show&inApp=true**\r\n\r\n\r\n\r\n\r\n\r\n\r\nNote: For Cobalt devices, the platform sends the deeplink to the YouTube application using Application::Link() to send a kSbEventTypeLink event. For non-Cobalt devices, deeplinks are simply appended to the browser's URL hash fragment.\r\n",
+                "is_manual": true,
+                "file_href": "",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Launch the YouTube application.\r\n2. Press the physical remote button that indicates microphone input (typically indicated by a microphone icon on the RC).\r\n3. Say, \"_Saturday Night Live_\"\r\n4. Release the microphone button.\r\n5. Exit YouTube and repeat Steps 1-2.\r\n6. Say, \"_Kansas live from Canada_\"\r\n7. Release the microphone button.\r\n8. Exit YouTube and repeat Steps 1-2.\r\n9. Say, \"_Making bacon pancakes_\" \r\n10. Release the microphone button.\r\n11. Exit YouTube and repeat Steps 1-2.\r\n12. Say, \"_CNN_\"\r\n13. Release the microphone button.\r\n14. Exit YouTube and repeat Steps 1-2.\r\n15. Say, \"_Lady Gaga music_\"\r\n16. Release the microphone button.\r\n17. Exit YouTube and repeat Steps 1-2.\r\n18. Say, \"_Graham Norton Show_\"\r\n19. Release the microphone button"
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.9.1.1",
+            "test_case": {
+                "test_category": "DIAL",
+                "test_title": "Out-of-box Experience (OOBE)",
+                "test_description": "The target device MUST be able to load the application in 35 seconds, measuring from the time the user initiates Wake-up to the time the video content begins playback from an out of box experience scenario. ",
+                "passing_criteria": "\r\n\r\nPlease provide a video of test procedure.Video must be continuous, and not contain any breaks or edits.\r\n\r\nWake on LAN and Wake on WLAN must be enabled by default during the device setup process, or the enable option must be selected by default within a user prompt. \r\n\r\nDevice must wake-up, launch YouTube and begin playback of video in no more than 35 seconds from tapping the Send-to-TV icon within the YouTube mobile application.",
+                "is_manual": true,
+                "file_href": "",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Begin camera capture of test procedure.\r\n2. Take an Out-of-the-box device and go through the setup process, including the following:\r\n    1. connecting to a wireless network \r\n    2. Wake on LAN/WLAN enabled automatically\r\n3. Connect a DIAL-compatible second screen device to the same wireless network and open the YouTube application on the mobile device. \r\n4. Put the device under test into standby mode (typically done via \"Power off\" command from RC).\r\n5. Wait 30 seconds.\r\n6. On the second screen device, play any video and seek to the approximate middle of the video.\r\n7. On the second screen device, during video playback, press the Send-to-TV icon and select the device under test that is currently in standby mode."
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.9.2.1",
+            "test_case": {
+                "test_category": "DIAL",
+                "test_title": "Wake-on-Wireless-LAN 25 Hour Endurance",
+                "test_description": "The device MUST implement DIAL Wake-up wireless functionality as described in Section 7 of the DIAL 2.2 protocol specification. ",
+                "passing_criteria": "\r\n\r\nPlease provide a text document detailing the outcome of the test.\r\n\r\nThe first screen device must be able to maintain a connection to the network and listen for incoming WoL packets at all times.\r\n\r\nThe first screen device must wake-up, launch YouTube and begin playback of video in no more than 35 seconds from tapping the Send-to-TV icon within the YouTube mobile application.\r\n\r\nThe following results are all required to pass this test:\r\n\r\n\r\n\r\n1. The device wakes up\r\n2. YouTube is launched\r\n3. The video begins playing on the first screen device.\r\n\r\nThis test should be performed using both Android and iOS devices.",
+                "is_manual": true,
+                "file_href": "",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Power on the first screen device under test and ensure it is connected to a wireless network. \r\n2. Connect a DIAL-compatible second screen device to the same wireless network as the first screen device under test and open the YouTube application on the mobile device.\r\n3. Wait 30 seconds.\r\n4. Put the device under test into standby mode (typically done via \"Power off\" command from RC).\r\n5. Wait 25 hours. Make sure the TV and router are continuously connected to power during this time period.\r\n6. On the second screen device, play any video and seek to the approximate middle of the video.\r\n7. On the second screen device, during video playback, press the Send-to-TV icon and select the device under test that is currently in standby mode."
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.9.3.1",
+            "test_case": {
+                "test_category": "DIAL",
+                "test_title": "Wake-on-LAN 25 Hour Endurance",
+                "test_description": "The device MUST implement DIAL Wake-up wired functionality as described in Section 7 of the DIAL 2.2 protocol specification. ",
+                "passing_criteria": "\r\n\r\nPlease provide a text document detailing the outcome of the test.\r\n\r\nThe first screen device must be able to maintain a connection to the network and listen for incoming WoL packets at all times.\r\n\r\nThe first screen device must wake-up, launch YouTube and begin playback of video in no more than 35 seconds from tapping the Send-to-TV icon within the YouTube mobile application.\r\n\r\nThe following results are all required to pass this test:\r\n\r\n\r\n\r\n1. The device wakes up\r\n2. YouTube is launched\r\n3. The video begins playing on the first screen device.\r\n\r\nThis test should be performed using both Android and iOS devices.",
+                "is_manual": true,
+                "file_href": "",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Power on the first screen device under test and ensure it is connected to a wired network via ethernet. \r\n2. Connect a DIAL-compatible second screen device to the same LAN as the first screen device under test and open the YouTube application on the mobile device.\r\n3. Wait 30 seconds.\r\n4. Put the device under test into standby mode (typically done via \"Power off\" command from RC).\r\n5. Wait 25 hours. Make sure the TV and router are continuously connected to power during this time period.\r\n6. On the second screen device, play any video and seek to the approximate middle of the video.\r\n7. On the second screen device, during video playback, press the Send-to-TV icon and select the device under test that is currently in standby mode."
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.9.4.1",
+            "test_case": {
+                "test_category": "DIAL",
+                "test_title": "In-App Cast and Volume Control",
+                "test_description": "The device MUST implement DIAL functionality as described in Section 7 of the DIAL 2.2 protocol specification.\r\n\r\nEnsure to clear all paired devices from YouTube application settings. \r\n\r\nFor Android devices, be sure to 'Clear data' and 'Force stop' in application settings before attempting.  ",
+                "passing_criteria": "\r\n\r\nPlease provide a video capture of the entire test procedure. Video must be continuous, and not contain any breaks or edits.\r\n\r\nYouTube application should automatically detect mobile device after pairing with a notification. The device should be able to pair without causing the TV app to restart. \r\n\r\nThis test should adjust the software volume of the device, but not affect the device's main volume control in the same way that the volume controls on the remote do.",
+                "is_manual": true,
+                "file_href": "",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Launch YouTube application from method of choice.\r\n2. Connect a DIAL-compatible mobile device to the same wireless network and open the YouTube application on the mobile device.\r\n3. On mobile device attempt to pair through DIAL by pressing Send-to-TV icon.\r\n4. Play a random video on mobile device then slowly adjust volume levels down to 0 then back up to max with mobile volume controls.\r\n5. Observe the volume adjustments on target device.  \r\n\r\n_Note: If method of choice(dial) utilizes a mobile to launch, use a 2nd mobile device for steps 2 & 3_"
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.9.5.1",
+            "test_case": {
+                "test_category": "DIAL",
+                "test_title": "Multicast Network and Seek location",
+                "test_description": "The device MUST implement DIAL functionality as described in Section 7 of the DIAL 2.2 protocol specification.\r\n\r\n\r\nAndroid and iOS mobile device present with latest YouTube application installed.  ",
+                "passing_criteria": "\r\n\r\nPlease provide a video capture of the entire test procedure. Video must be continuous, and not contain any breaks or edits.\r\n\r\nAfter Step#5, YouTube application should automatically detect Android mobile device with a notification and target device should play at location of seek from step#3.\r\n\r\nAfter Step#7, iOS mobile device should not interrupt the video being played while pairing.\r\n\r\nAfter Step#8,  iOS mobile should then play its current video on all devices on dial network.\r\n\r\nAfter Step#10, notification that iOS mobile device has left the network. Android device and target device should NOT interrupt video.\r\n\r\nAfter Step#11, YouTube application should either quit or exit video.",
+                "is_manual": true,
+                "file_href": "",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Ensure target device is connected to a joinable LAN network.\r\n2. Connect a DIAL-compatible Android device to the same wireless network and open the YouTube application on the Android device.\r\n3. Play any video and seek roughly halfway on Android device.\r\n4. Press the Send-to-TV icon from Android device and select the target device. \r\n5. Observe autoplay on target device and location of playback.\r\n6. Connect a iOS DIAL-compatible mobile device to the same wireless network and launch the YouTube application on the mobile device.\r\n7. Press the Send-to-TV icon from iOS device. Notice device is detected with a toast notification. \r\n8. From iOS mobile device, play a new video.\r\n9. Observe that Android device and target device play the new video from iOS device.\r\n10. Disconnect cast from iOS device.\r\n11. Disconnect cast from Android device."
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.9.6.1",
+            "test_case": {
+                "test_category": "DIAL",
+                "test_title": "Protocol Compliance Tests",
+                "test_description": "The device MUST implement DIAL functionality as described in Section 7 of the DIAL 2.2 protocol specification.\r\n\r\n\r\nA desktop used as dial-client with npm installed and proper node installation in test environment for running node commands. \r\n\r\n  \r\n\r\nClone, patch, and install required dial_reference package from steps below:\r\n\r\n\r\n\r\n1. git clone [https://github.com/Netflix/dial-reference.git](https://github.com/Netflix/dial-reference.git)\r\n2. cd dial-reference/\r\n3. curl [https://storage.googleapis.com/ytlr-cert.appspot.com/yt_dial_tests.patch](https://storage.googleapis.com/ytlr-cert.appspot.com/yt_dial_tests.patch) | git apply\r\n4. cd server/tests/js_tests/\r\n5. npm install. ",
+                "passing_criteria": "\r\n\r\nPlease provide screenshots of all node test results from terminal environment\r\n\r\nAll individual tests against DIAL 2.1 support are required to pass on target device. \r\n\r\nFollowing Dial 2.2 sleep tests will _not_ be required to pass as a part of this test suite:\r\n\r\n\r\n\r\n1. sleepTheSystemWithNoKeyWhenItIsRequired\r\n2. sleepTheSystemWithKeyWhenItIsRequired\r\n\r\nIf device does not support hide or hidden state a response code of '501 Not Implemented' is expected and is not required to pass. \r\n\r\nStep#6 and #7 may be omitted if YouTube Kids and YouTube TV is not available on device.",
+                "is_manual": true,
+                "file_href": "",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Ensure that computer and target device is on the same LAN network.\r\n2. From provided github resource navigate to the directory containing dial tests located under  /dial_reference_master/server/tests/js_tests/tests\r\n3. Enter command:\r\n\r\n    node yt_cert_tests.js --host <ip_address_of_device> --app YouTube\r\n\r\n4. A series of dial compliance tests will run in terminal.\r\n5. Observe tests are executing on terminal and on target device.\r\n\r\nInclude the following test results if device includes YouTube Kids and/or YouTube TV:\r\n\r\n\r\n\r\n6. Enter command:\r\n\r\n     node discoverServerUnderTest.js --host <ip_address_of_device> --app YouTubeKids\r\n\r\n7. Enter command:\r\n\r\n    node discoverServerUnderTest.js --host <ip_address_of_device> --app YouTubeTV"
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.9.7.1",
+            "test_case": {
+                "test_category": "DIAL",
+                "test_title": "AdditionalDataURL",
+                "test_description": "Use the application's normal usage URL with the parameter env_isVideoInfoVisible=true appended. Example:\r\n\r\nhttps://www.youtube.com/tv?launch=menu&additionalDataUrl=http%3A%2F%2Flocalhost%3A8060%2FdialData&env_isVideoInfoVisible=true. ",
+                "passing_criteria": "\r\n\r\nPlease provide one screenshot of debug console in application\r\n\r\nThe debug console will display additionalData that has been POST to device additionalDataURL. A unique generated string for key and value will be present. These two values must match the XML additionalData section on browser.",
+                "is_manual": true,
+                "file_href": "",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Connect a computer and target device is on the same LAN network.\r\n2. Launch the YouTube application and navigate to search page.\r\n3. Enter 'adddata' in the search field and press space.\r\n4. A debug console will appear with a key and value string.\r\n5. Display the XML data of the device using the computer browser in the format of the device's \"APPLICATION_URL/YouTube\"\r\n\r\n    APPLICATION_URL is the DIAL Application URL of the device under test. An example might be http://192.168.1.2:8009/apps\r\n\r\n6. Observe and compare the additionalData section from browser and the debug console information in app."
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.9.8.1",
+            "test_case": {
+                "test_category": "DIAL",
+                "test_title": "Passing Parameters to Running application",
+                "test_description": "Use the application's normal usage URL with the parameter enableEventConsole=true appended. Example:\r\n\r\nhttps://www.youtube.com/tv?launch=menu&additionalDataUrl=http%3A%2F%2Flocalhost%3A8060%2FdialData&env_isVideoInfoVisible=true. ",
+                "passing_criteria": "\r\n\r\nPlease provide one screenshot of debug console in application\r\n\r\nThe debug console will display the following event:\r\n\r\nh5vcc.runtime.onDeepLink:<code>[?v=dMH0bHeiRNg&inApp=true](https://www.youtube.com/tv?v=dMH0bHeiRNg&inApp=true)</code>\r\n\r\nThe application MUST NOT reload when data is POST to a RUNNING instance of the YouTube application. \r\n\r\nNote that inApp=true **MUST **be present for all deeplinks sent while the application is RUNNING.",
+                "is_manual": true,
+                "file_href": "",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "\r\n1. Connect a computer and target device is on the same LAN network.\r\n2. Launch the YouTube application with the _enableEventConsole_ flag.\r\n3. A debug console will appear on application launch.\r\n4. Issue the following POST _curl_ command in a computer console that is in the same network as device (or similar request):\r\n\r\n```\r\ncurl -X POST -H \"Content-Type: text/plain;charset=UTF-8\" \"APPLICATION_URL/YouTube\" -d \"v=dMH0bHeiRNg\"\r\n```\r\nAPPLICATION_URL is the DIAL Application URL of the device under test. An example might be http://192.168.1.2:8009/apps\r\n\r\n\r\n5. Observe and compare the data that was POST in curl to the debug console information in app."
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.10.1.1",
+            "test_case": {
+                "test_category": "Universal Search",
+                "test_title": "Selecting Result from Text Queries Outside of YouTube",
+                "test_description": "The device must support universal search at a platform level using a keyboard (on-screen or physical).",
+                "passing_criteria": "\r\n\r\nPlease provide a video of test procedure\r\n\r\nThe default URL will enable the Event Console within the application and allow the following **v=** & **launch=** deeplinks to be verified. \r\n\r\nAfter Step #2 the platform universal search service must:\r\n\r\n\r\n\r\n*   Use the YouTube data API to request results from YouTube as documented here: https://developers.google.com/youtube/v3/docs/search\r\n*   Display all returned YouTube API results solely on an accessible and dedicated YouTube shelf as part of the device platform's \"universal search\" page; fair ranking of the shelves is expected (e.g. based on popularity, user preferences, frequency of use ).\r\n*   Comply with the YouTube API Services Terms of Service.\r\n\r\nAfter Step #3 the YouTube application must launch or resume and go to selected result.\r\n\r\nThis action is a result of a deeplink with the payload: \r\n\r\n\r\n\r\n**v=[VIDEO_ID_OF_SELECTED_RESULT]&launch=search**",
+                "is_manual": true,
+                "file_href": "",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Navigate to the device's home menu, or other area outside of the YouTube application. \r\n2. Initiate a text-based universal search of the platform, typing: \r\n\r\n\"_yoga videos_\"\r\n\r\n\r\n\r\n3. From the universal search results, select a result from the dedicated YouTube shelf (which MUST be populated with results returned from the YouTube Data API)."
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.10.2.1",
+            "test_case": {
+                "test_category": "Universal Search",
+                "test_title": "Passing Text Queries from Outside of YouTube",
+                "test_description": "The device must support universal search at a platform level using a keyboard (on-screen or physical), and have the option to allow the user to continue the search within YouTube.\r\n\r\nThis test may be omitted if support of outside query is not available outside of YouTube",
+                "passing_criteria": "\r\r\n\r\nPlease provide a video of test procedure\r\n\r\nThe default URL will enable the Event Console within the application and allow the following **q=** & **launch=** deeplinks to be verified. \r\n\r\nAfter Step #2 the platform universal search service must:\r\n\r\n\r\n\r\n*   Use the YouTube data API to request results from YouTube as documented here: https://developers.google.com/youtube/v3/docs/search\r\n*   Display all returned YouTube API results solely on an accessible and dedicated YouTube shelf as part of the device platform's \"universal search\" page; fair ranking of the shelves is expected (e.g. based on popularity, user preferences, frequency of use ).\r\n*   Comply with the YouTube API Services Terms of Service.\r\n\r\nAfter Step #3 the YouTube application must launch or resume and go to selected result.\r\n\r\nThis action is a result of a deeplink with the payload: \r\n\r\n\r\n\r\n**q=yoga%2Bvideos&launch=search**",
+                "is_manual": true,
+                "file_href": "",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Navigate to the device's home menu, or other area outside of the YouTube application. \r\n2. Initiate a text-based universal search of the platform, typing: \r\n\r\n\"_yoga videos_\"\r\n\r\n\r\n\r\n3. From the universal search results, select the option allowing the user to search their query within YouTube, for example an option stating, \"_Search for [query] on YouTube_\"."
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.10.3.1",
+            "test_case": {
+                "test_category": "Universal Search",
+                "test_title": "Selecting Result from Voice Queries Outside of YouTube",
+                "test_description": "The device must support universal search at a platform level using voice input and have the option to allow the user to continue the search within YouTube. ",
+                "passing_criteria": "\r\n\r\nPlease provide a video of test procedure\r\n\r\nThe default URL will enable the Event Console within the application and allow the following **v=** & **launch=** deeplinks to be verified. \r\n\r\nAfter Step #2 the platform universal search service must:\r\n\r\n\r\n\r\n*   Use the YouTube data API to request results from YouTube as documented here: https://developers.google.com/youtube/v3/docs/search\r\n*   Display all returned YouTube API results solely on an accessible and dedicated YouTube shelf as part of the device platform's \"universal search\" page; fair ranking of the shelves is expected (e.g. based on popularity, user preferences, frequency of use ).\r\n*   Comply with the YouTube API Services Terms of Service.\r\n\r\nAfter Step #3 the YouTube application must launch or resume and go to selected result.\r\n\r\nThis action is a result of a deeplink with the payload: \r\n\r\n\r\n\r\n**v=[VIDEO_ID_OF_SELECTED_RESULT]&launch=search&launch=voice**",
+                "is_manual": true,
+                "file_href": "",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Navigate to the device's home menu, or other area outside of the YouTube application. \r\n2. Initiate a voice-based universal search of the platform, saying: \r\n\r\n\"_Show me yoga videos_\"\r\n\r\n\r\n\r\n3. From the universal search results, select a result from the dedicated YouTube shelf (which MUST be populated with results returned from the YouTube Data API)."
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.10.4.1",
+            "test_case": {
+                "test_category": "Universal Search",
+                "test_title": "Passing Voice Queries from Outside of YouTube",
+                "test_description": "The device must support universal search at a platform level using voice input and have the option to allow the user to continue the search outside of YouTube. ",
+                "passing_criteria": "\r\n\r\nPlease provide a video of test procedure\r\n\r\nThe default URL will enable the Event Console within the application and allow the following **q=** & **launch=** deeplinks to be verified. \r\n\r\nAfter Step #2 the platform universal search service must:\r\n\r\n\r\n\r\n*   Use the YouTube data API to request results from YouTube as documented here: https://developers.google.com/youtube/v3/docs/search\r\n*   Display all returned YouTube API results solely on an accessible and dedicated YouTube shelf as part of the device platform's \"universal search\" page; fair ranking of the shelves is expected (e.g. based on popularity, user preferences, frequency of use ).\r\n*   Comply with the YouTube API Services Terms of Service.\r\n\r\nAfter Step #3 the YouTube application must launch or resume and go to selected result.\r\n\r\nThis action is a result of a deeplink with the payload: \r\n\r\n\r\n\r\n**q=yoga%2Bvideos&launch=search&launch=voice**\r\n\r\n\r\n\r\nNote: If the platform's voice search filters out non-query words like \"show me\", those must not be passed to YouTube.",
+                "is_manual": true,
+                "file_href": "",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Navigate to the device's home menu, or other area outside of the YouTube application. \r\n2. Initiate a voice-based universal search of the platform, saying: \r\n\r\n\"_Show me yoga videos_\"\r\n\r\n\r\n\r\n3. From the universal search results, select the option allowing the user to search their query within YouTube, for example an option stating, \"_Search for [query] on YouTube_\"."
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.999.1.1",
+            "test_case": {
+                "test_category": "ETC",
+                "test_title": "Key Event",
+                "test_description": "Testing that the keyrepeat rate of the platform is appropriately set, per the requirements. ",
+                "passing_criteria": "\r\n\r\nPlease record a video of test procedure with remote control visible during key input\r\n\r\nFor step **4a**, at no point can a non-specified key exit the application for any reason (ex: other applications must not launch while YouTube is running).\r\n\r\nFor step **4a**, it is expected that at no point should a keycode be sent that is not specified below:\r\n\r\n\r\n\r\n*   Left (keyCode = 0x25)\r\n*   Right (keyCode = 0x27)\r\n*   Up (keyCode = 0x26)\r\n*   Down (keyCode = 0x28)\r\n*   Enter (keyCode = 0x0D)\r\n*   Escape / Back / Return (keyCode = 0x1B)\r\n*   Play (keyCode = 0xFA)\r\n*   Pause (keyCode = 0x13)\r\n*   Play/Pause (keyCode = 0xB3)\r\n*   Only for remotes that implement play and pause functionality on a single button.\r\n*   Stop (keyCode = 0xB2)\r\n*   Fast Forward (keyCode = 0xE4)\r\n*   Rewind (keyCode = 0xE3)\r\n*   Space (keyCode = 0x20)\r\n*   Backspace (keyCode = 0x08)\r\n*   Delete (keyCode = 0x2E)\r\n*   Search (keyCode = 0xAA)\r\n*   Microphone / Voice (keyCode = 0x3002)\r\n*   Previous (keyCode = 0xB1)\r\n*   Next (keyCode = 0xB0)\r\n*   Closed Captions / Subtitle (keyCode = 0x1CC)\r\n*   Red (keyCode = 0x193)\r\n*   Green (keyCode = 0x194)\r\n*   Yellow (keyCode = 0x195)\r\n*   Blue (keyCode = 0x196)\r\n*   YouTube button (keyCode = 0x3000)\r\n*   Channel Up (keyCode = 0x1AB)\r\n*   Channel Down (keyCode = 0x1AC)\r\n*   Last / Previous / Recall Channel (keyCode = 0x25F)\r\n*   Audio Track Selection (keyCode = 0x3001)\r\n*   Info / Display (keyCode = 0x1C9)\r\n*   This key displays information about channel/program or input you are watching. \r\n*   Guide / EPG (keyCode = 0x1CA)\r\n\r\nFor all specified keycodes, the indicator should be green. \r\n\r\n\r\nIf a non-recognized key is sent, the indicator will be red. \r\n\r\n\r\nFor tests **4b** & **4c**, the initial value printed must be 500ms ± 25ms, and the subsequent values must be 50ms ± 3ms",
+                "is_manual": true,
+                "file_href": "https://ytlr-cert.appspot.com/2020/manual/key_event.html",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Navigate to YTS -> Manual Tests\r\n2. Using the device remote, navigate to the test named \"**Key Event**\" and press ENTER.\r\n3. The test page will load and log KeyboardEvents fired by the platform.\r\n4. Perform the following tests:\r\n    a. Press every key on the remote once.\r\n    b. Press and hold the down key for approximately 2 seconds.\r\n    c. Press and hold the right key for approximately 2 seconds."
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.999.2.1",
+            "test_case": {
+                "test_category": "ETC",
+                "test_title": "Fetch API",
+                "test_description": "This tests that the Fetch API works properly. This page is provided for debugging.",
+                "passing_criteria": "\r\n\r\nPlease provide a video of test procedure\r\n\r\nAfter page has loaded a series of strings will display:\r\n\r\n\"Got the result! The value after 'YouTube' is 'loves Streams'\" \r\n\r\nThis message should appear very quickly. ",
+                "is_manual": true,
+                "file_href": "https://qual-e.appspot.com/fetch.html?referer=",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Navigate to YTS -> Manual Tests\r\n2. Using the device remote, navigate to the test named \"**Fetch API**\" and press ENTER\r\n3. The test page will load\r\n4. A series of messages will display on screen"
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.999.3.1",
+            "test_case": {
+                "test_category": "ETC",
+                "test_title": "Web Audio",
+                "test_description": "Testing that WebAudio works properly and can play audio while video playback occurs. ",
+                "passing_criteria": "\r\n\r\nPlease provide a video of test procedure including audio.\r\n\n\nThe WebAudio sounds should play properly each time a directional key is pressed when the video is playing.\n\nThe WebAudio sounds should play properly each time a directional key is pressed when the video is paused\n",
+                "is_manual": true,
+                "file_href": "https://ytlr-cert.appspot.com/2020/manual/web_audio.html",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Navigate to YTS -> Manual Tests\r\n2. Using the device remote, navigate to the test named \"**Web Audio**\" and press ENTER.\r\n3. The test page will load and a video will begin playing.\r\n4. Using the device remote, press each of the four directional navigation keys.\r\n5. Press ENTER to pause the video\r\n6. Using the device remote, press each of the four directional navigation keys again."
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.999.4.1",
+            "test_case": {
+                "test_category": "ETC",
+                "test_title": "Cookie",
+                "test_description": "Testing that Cookies are stored properly and persist until cleared.\nThis test relies on Cookies being set, and remaining persistently in storage until they expire.",
+                "passing_criteria": "\r\n\r\nPlease provide a screenshots of test page each time it is visited.\r\n\r\nFor Step #4, two Cookies must be displayed:\r\n\r\n1. **PERSIST_THREE_DAYS**\r\n2. **PERSIST_ONE_YEAR**\r\n\r\nFor Step #9, compare the values of each Cookie to the values from Step #3. The dates for the **PERSIST_THREE_DAYS & PERSIST_ONE_YEAR** must be identical. \r\n\r\nFor Step #14, compare the values of each Cookie to the values from Step #9. The dates for the **PERSIST_THREE_DAYS & PERSIST_ONE_YEAR** must be different. \r\n\r\nThe date for the **PERSIST_ONE_YEAR** must match the date found in Step #4 and Step #9.\r\n\r\nThe date for the **PERSIST_THREE_DAYS** must NOT match the date found in Step #3 and Step #10.",
+                "is_manual": true,
+                "file_href": "https://ytlr-cert.appspot.com/2020/manual/cookie.html",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Navigate to YTS -> Manual Tests\r\n2. Using the device remote, navigate to the test named \"**Cookie**\" and press ENTER.\r\n3. The test page will load and a list of Cookies will be displayed. If no Cookies are displayed, Press UP twice to refresh the cookies. \r\n4. Note the dates/values of each Cookie\r\n5. Wait 24 hours (any other testing can be done while waiting)\r\n6. Navigate to YTS -> Manual Tests\r\n7. Using the device remote, navigate to the test named \"**Cookie**\" and press ENTER.\r\n8. The test page will load and a list of Cookies will be displayed.\r\n9. Note the dates/values of each Cookie\r\n10. Wait an additional 48 hours (any other testing can be done while waiting)\r\n11. Navigate to YTS -> Manual Tests\r\n12. Using the device remote, navigate to the test named \"**Cookie**\" and press ENTER.\r\n13. The test page will load and a list of Cookies will be displayed. Press LEFT twice to refresh PERSIST_THREE_DAYS.\r\n14. Note the dates/values of each Cookie"
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.999.5.1",
+            "test_case": {
+                "test_category": "ETC",
+                "test_title": "Fonts",
+                "test_description": "Testing that all required font formats are supported by the device. ",
+                "passing_criteria": "\r\n\r\nPlease provide a screenshot of the test page.\n\nThe text below each of the sections, TTF, WOFF, WOFF2 & PNG must match.\n\nNote: The text need not match perfectly, but should look nearly identical ",
+                "is_manual": true,
+                "file_href": "https://ytlr-cert.appspot.com/2020/manual/fonts.html",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Navigate to YTS -> Manual Tests\r\n2. Using the device remote, navigate to the test named \"Fonts\" and press ENTER.\r\n3. The test page will load.\r\n"
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.999.6.1",
+            "test_case": {
+                "test_category": "ETC",
+                "test_title": "Localization",
+                "test_description": "Testing that the platform supports the required fonts to display all languages required.",
+                "passing_criteria": "\r\n\r\nPlease provide a screenshot of the test page.\n\n\nLook closely at the text on the screen.\n\nTypically if a character is missing, the platform will substitute a character that looks like a box, question mark or an X.\n\nNo boxes, questions or other missing character symbols can appear, with the exception of the last row of text. This test must pass regardless of the languages supported by the device’s own UI.\n\nIf any text is not legible when bolded, this test fails. Pay close attention to CJK characters when bolded. Note that bold support is not required, but if implemented it must be legible.\n\nThe output on the screen should be compared to Chrome on a Desktop PC, and should match*.\n\n*Note: The text need not match perfectly, but should look nearly identical ",
+                "is_manual": true,
+                "file_href": "https://ytlr-cert.appspot.com/2020/manual/localization.html",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Navigate to YTS -> Manual Tests\r\n2. Using the device remote, navigate to the test named \"**Localization**\" and press ENTER.\r\n3. The test page will load.\r\n4. Press ENTER to toggle font-weight: **bold**.\r\n5. Press ENTER to toggle font-weight: normal.\r\n6. Press RIGHT to toggle the use of the Roboto font.\r\n7. Press ENTER to toggle font-weight: **bold**."
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.999.7.1",
+            "test_case": {
+                "test_category": "ETC",
+                "test_title": "Page Visibility API",
+                "test_description": "Testing that the Cobalt Application Lifecycle is appropriately implemented on the platform. ",
+                "passing_criteria": "\r\n\r\nPlease provide a screenshot of the test page. The application is expected to follow the guidelines specified in the [Application Lifecycle documentation](https://cobalt.googlesource.com/cobalt/+/master/src/cobalt/doc/lifecycle.md) shipped with Cobalt.\r\n\r\nAfter Step #3, the page must display the following:\r\n\r\n\r\n    document.visibilityState: visible\r\n\r\nAfter Step #4, the page must display the following:\r\n\r\n\r\n    h5vcc.runtime.onDeepLink: ?launch=menu\r\n\r\n\r\n    window.onfocus\r\n\r\n\r\n    document.onvisibilitychange: visible\r\n\r\n\r\n    document.onvisibilitychange: hidden\r\n\r\n\r\n    window.onblur\r\n\r\n\r\n    document.visibilityState: visible\r\n\r\nAfter Step #5, the page must display the following:\r\n\r\n\r\n    window.onfocus\r\n\r\n\r\n    Window.onblur\r\n\r\n\r\n    h5vcc.runtime.onDeepLink: ?launch=menu\r\n\r\n\r\n    window.onfocus\r\n\r\n\r\n    document.onvisibilitychange: visible\r\n\r\n\r\n    document.onvisibilitychange: hidden\r\n\r\n\r\n    window.onblur\r\n\r\n\r\n    document.visibilityState: visible\r\n\r\nNote: The order of these events is important, and the timing must coincide with visibility or focus changes as a result of user input.\r\n\r\nNote: The value for ?launch=<LAUNCH_PARAMETER> must match the method of launching the application. For example, if using a YouTube button on the remote, the <LAUNCH_PARAMETER> must be ?launch=remote \r\n\r\nValid values for ?launch= are listed below:\r\n\r\n\r\n  **menu** - if the YouTube logo is selected from the device's menu screen.\r\n\r\n\r\n  **guide** - if a YouTube video is selected from a device's guide or EPG pages.\r\n\r\n\r\n  **launcher** - if a YouTube video is selected from a device's content launcher.\r\n\r\n\r\n  **remote** - if a dedicated YouTube button on a device remote has been pressed.\r\n\r\n\r\n  **search** - if a YouTube video is selected from a device's universal search.\r\n\r\n\r\n  **voice** - if the YouTube application was directly opened as a result of a voice command.\r\n\r\nIf your platform supports additional launch methods as listed above, it is **_strongly recommended_** to repeat this test and verify that the proper deeplink is sent. \r\n",
+                "is_manual": true,
+                "file_href": "https://ytlr-cert.appspot.com/2020/manual/page_visibility.html",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Navigate to YTS -> Manual Tests\r\n2. Using the device remote, navigate to the test named \"Page Visibility API\" and press ENTER.\r\n3. The test page will load.\r\n4. If the device supports suspend/resume application states, suspend the YouTube test application, wait 10 seconds, and immediately resume the YouTube test application.\r\n5. If the device supports, open a system menu that is overlaid on top of the application, such as Picture or Sound settings, wait 10 seconds, and immediately close the system menu."
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.999.8.1",
+            "test_case": {
+                "test_category": "ETC",
+                "test_title": "Captions API",
+                "test_description": "Testing that the platform system settings supports closed captions is correctly linked with Cobalt settings. ",
+                "passing_criteria": "\r\n\r\nPlease provide a screenshot of the test page.\r\n\r\nIf your device does not support toggling captions or high contrast text settings at a platform level, these tests may be ignored.",
+                "is_manual": true,
+                "file_href": "https://ytlr-cert.appspot.com/2020/manual/caption.html",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Navigate to YTS -> Manual Tests\r\n2. Using the device remote, navigate to the test named \"Captions API\" and press ENTER.\r\n3. The test page will load.\r\n4. follow the test instruction on the page"
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.999.9.1",
+            "test_case": {
+                "test_category": "ETC",
+                "test_title": "YouTube launcher logo",
+                "test_description": "YouTube application is installed with latest version on device.",
+                "passing_criteria": " \r\n\r\nPlease provide a screenshot of YouTube application launcher from application or system menu on device.\r\n\r\nYouTube application should be prominently placed on top level near similar apps. The YouTube launcher must have the same official YouTube branding on its icon for every device. \r\n\r\nYouTube logo used for launching is wordmark-on-white launcher.",
+                "is_manual": true,
+                "file_href": "",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "1. Power on device and navigate to device application or home menu.\r\n2. Locate YouTube application launcher.\r\n3. Observe that YouTube application is prominently placed.\r\n4. Inspect application logo for official YouTube branding. "
+            }
+        },
+        {
+            "branch": "2020",
+            "test_case_id": "21.999.10.1",
+            "test_case": {
+                "test_category": "ETC",
+                "test_title": "WebSockets",
+                "test_description": "WebSockets are tested using by redirecting a device to a specific test page, which listens for local transport communications sent by a nodejs server running on a computer on the same LAN.\r\n\r\n \r\n\r\n**Setting up the test nodejs server**\r\n\r\nInstall nodejs on a computer connected to the same network as your test device.\r\n\r\nFrom a terminal, download the test runner:\r\n\r\n        curl -O \\\r\n\r\nhttps://qual-e.appspot.com/localtransport/server/lt_test_runner.zip\r\n\r\nUnzip the package\r\n\r\n        unzip lt_test_runner.zip\r\n\r\nEnter the lt_test_runner directory\r\n\r\n        cd lt_test_runner\r\n\r\nUsing npm, install the dependencies using the following command:\r\n\r\n\r\n    npm install. ",
+                "passing_criteria": "\r\n\r\nPlease provide a screenshot of the test log.\r\n\r\nThe TV will display test log output, and should have no failures.\r\n\r\nFailures are indicated by red colored text:\r\n\r\n**Mixed Content: FAILURE. Test timed out after 5000 ms**\r\n\r\n**WebSocket FAILURE**\r\n\r\nExpected results are indicated in green colored text:\r\n\r\n**Mixed Content: SUCCESS**\r\n\r\n**WebSocket SUCCESS**",
+                "is_manual": true,
+                "file_href": "",
+                "test_suite": "Manual Tests",
+                "status": 1,
+                "test_instruction": "\r\n1. Ensure the target device and the computer running the nodejs server are on the same LAN.\r\n2. Start the nodejs server:\r\n\r\n```\r\n$ node lt_test_runner.js\r\n```\r\n\r\n\r\n3. The output in the terminal will be the following:\r\n```\r\nLocal Transport Test Runner\r\n\r\nWed Jan 4 2017 14:39:03 GMT-0700 (PDT) Web server is listening on port 5050\r\n```\r\n_Note: This is the WebSocket server_\r\n```\r\n\r\n\r\n4. On the target device (TV, OTT, etc), navigate the device to the following URL:\r\n\r\nhttps://qual-e.appspot.com/localtransport/index.html?turl=http://<IP_ADDRESS_OF_PC_RUNNING_NODEJS_SERVER>:5050\r\n\r\nExample test URL of server running on 192.158.1.86: [https://qual-e.appspot.com/localtransport/index.html?turl=http://192.168.1.86:5050](https://qual-e.appspot.com/localtransport/index.html?turl=http://192.168.1.86:5050)\r\n\r\n_Note: This test must use HTTP for the local address and HTTPS for the test page._"
+            }
+        }
+    ]
+}
