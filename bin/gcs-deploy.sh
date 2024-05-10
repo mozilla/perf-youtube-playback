@@ -4,7 +4,7 @@
 # expects the GCS bucket name in the environment variable
 # $YTTEST_BUCKET
 
-set -ex
+set -xT
 
 main() {
  # For short-lived assets; in seconds
@@ -20,8 +20,9 @@ main() {
  XSS="x-goog-meta-x-xss-protection: 1; mode=block"
  REFERRER="x-goog-meta-referrer-policy: no-referrer-when-downgrade"
 
- SET "$1"= YTTEST_BUCKET
- SET "$2"= CODE_DIR
+ YTTEST_BUCKET="$1"
+
+ CODE_DIR="$2"
 
  if [ -z "$YTTEST_BUCKET" ]; then
   echo "The GCS bucket is not set. Failing."
@@ -58,9 +59,8 @@ deploy_code() {
   rsync \
   -R \
   -J \
-  -a public-read \
   -x '.*(?<!\.html)$' \
-  "./" "gs://$YTTEST_BUCKET/$CODE_DIR/"
+  "./$CODE_DIR" "gs://$YTTEST_BUCKET/$CODE_DIR/"
 
  # JS; short cache
  gsutil \
@@ -75,9 +75,24 @@ deploy_code() {
   rsync \
   -R \
   -J \
-  -a public-read \
   -x '.*(?<!\.js)$' \
-  "./" "gs://$YTTEST_BUCKET/$CODE_DIR/"
+  "./$CODE_DIR" "gs://$YTTEST_BUCKET/$CODE_DIR/"
+
+ # CSS; short cache 
+ gsutil \
+  -h "cache-control: max-age=${FIVE_DAYS}" \
+  -h "content-type: text/css" \
+  -h "$CSP" \
+  -h "$HSTS" \
+  -h "$TYPE" \
+  -h "$XSS" \
+  -h "$REFERRER" \
+  -m \
+  rsync \
+  -R \
+  -J \
+  -x '.*(?<!\.css)$' \
+  "./$CODE_DIR" "gs://$YTTEST_BUCKET/$CODE_DIR/"
 
  # Everything else; long cache
  gsutil \
@@ -92,23 +107,23 @@ deploy_code() {
   -R \
   -J \
   -d \
-  -a public-read \
   -x '\..*|test-materials/' \
-  "./" "gs://$YTTEST_BUCKET/$CODE_DIR/"
+  "./$CODE_DIR" "gs://$YTTEST_BUCKET/$CODE_DIR/"
 }
 
-_download_and_prepare_media_files() {
+ _download_and_prepare_media_files() {
+
+  
 
  TO_BE_DOWNLOADED=(
   "https://storage.googleapis.com/ytlr-cert.appspot.com/test-materials/YTS-media-files.tar.gz"
  )
 
  for i in "${TO_BE_DOWNLOADED[@]}"; do
-  wget -c "$i"
+  curl -O -C - "$i"
   tar zxvf "${i##*/}"
   rm -fv "${i##*/}"
  done
-
 }
 
 deploy_media_files() {
@@ -127,7 +142,6 @@ deploy_media_files() {
   rsync \
   -R \
   -d \
-  -a public-read \
   ./test-materials/ "gs://$YTTEST_BUCKET/$CODE_DIR/test-materials/"
 }
 
