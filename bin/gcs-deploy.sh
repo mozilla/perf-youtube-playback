@@ -22,7 +22,7 @@ main() {
 
  YTTEST_BUCKET="$1"
 
- CODE_DIR="$2"
+
 
  if [ -z "$YTTEST_BUCKET" ]; then
   echo "The GCS bucket is not set. Failing."
@@ -60,7 +60,7 @@ deploy_code() {
   -R \
   -J \
   -x '.*(?<!\.html)$' \
-  "./$CODE_DIR" "gs://$YTTEST_BUCKET/$CODE_DIR/"
+  "./" "gs://$YTTEST_BUCKET/"
 
  # JS; short cache
  gsutil \
@@ -76,7 +76,7 @@ deploy_code() {
   -R \
   -J \
   -x '.*(?<!\.js)$' \
-  "./$CODE_DIR" "gs://$YTTEST_BUCKET/$CODE_DIR/"
+  "./" "gs://$YTTEST_BUCKET/"
 
  # CSS; short cache 
  gsutil \
@@ -92,7 +92,7 @@ deploy_code() {
   -R \
   -J \
   -x '.*(?<!\.css)$' \
-  "./$CODE_DIR" "gs://$YTTEST_BUCKET/$CODE_DIR/"
+  "./" "gs://$YTTEST_BUCKET/"
 
  # Everything else; long cache
  gsutil \
@@ -108,7 +108,7 @@ deploy_code() {
   -J \
   -d \
   -x '\..*|test-materials/' \
-  "./$CODE_DIR" "gs://$YTTEST_BUCKET/$CODE_DIR/"
+  "./" "gs://$YTTEST_BUCKET/"
 }
 
  _download_and_prepare_media_files() {
@@ -142,7 +142,7 @@ deploy_media_files() {
   rsync \
   -R \
   -d \
-  ./test-materials/ "gs://$YTTEST_BUCKET/$CODE_DIR/test-materials/"
+  ./test-materials/ "gs://$YTTEST_BUCKET/test-materials/"
 }
 
 main "$@"
