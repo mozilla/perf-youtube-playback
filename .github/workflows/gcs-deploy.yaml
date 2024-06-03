@@ -1,0 +1,37 @@
+---
+on:
+  push:
+    branches:
+      - raptor-2020
+jobs:
+  deploy-stage:
+    runs-on: ubuntu-latest
+    environment: stage
+    steps:
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/auth@v2
+        with:
+         service-account-key: ${{ secrets.GCP_SA_KEY_STAGE }}
+
+      - name: set up gcloud
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Deploy raptor-2020 and media files to bucket.
+        run: |
+          sh ./bin/gcs-deploy.sh ${{ secrets.YTTEST_BUCKET_STAGE }}
+  deploy-prod:
+    needs: deploy-stage
+    runs-on: ubuntu-latest
+    environment: prod
+    steps:
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/auth@v2
+        with:
+         service-account-key: ${{ secrets.GCP_SA_KEY_PROD }}
+
+      - name: set up gcloud
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Deploy raptor-2020 and media files to bucket.
+        run: |
+          sh ./bin/gcs-deploy.sh ${{ secrets.YTTEST_BUCKET_PROD }}
