@@ -14,7 +14,7 @@ jobs:
       - name: Set up Google Cloud SDK
         uses: google-github-actions/auth@v2
         with:
-         service-account-key: ${{ secrets.GCP_SA_KEY_STAGE }}
+         credentials_json: ${{ secrets.GCP_SA_KEY_STAGE }}
 
       - name: set up gcloud
         uses: google-github-actions/setup-gcloud@v2
@@ -33,7 +33,7 @@ jobs:
       - name: Set up Google Cloud SDK
         uses: google-github-actions/auth@v2
         with:
-         service-account-key: ${{ secrets.GCP_SA_KEY_PROD }}
+         credentials_json: ${{ secrets.GCP_SA_KEY_PROD }}
 
       - name: set up gcloud
         uses: google-github-actions/setup-gcloud@v2
