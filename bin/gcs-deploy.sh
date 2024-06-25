@@ -4,7 +4,7 @@
 # expects the GCS bucket name in the environment variable
 # $YTTEST_BUCKET
 
-set -xT
+set -x
 
 main() {
  # For short-lived assets; in seconds
