@@ -5,6 +5,7 @@
 # $YTTEST_BUCKET
 
 set -x
+set -e
 
 main() {
  # For short-lived assets; in seconds
@@ -32,9 +33,8 @@ main() {
  # We deploy different code based on the branch name.
  # See https://github.com/mozilla/perf-youtube-playback/issues/19 for the background.
 
- deploy_code
+ deploy_code 
 
- deploy_media_files
 
 }
 
@@ -111,38 +111,4 @@ deploy_code() {
   "./" "gs://$YTTEST_BUCKET/"
 }
 
- _download_and_prepare_media_files() {
-
-  
-
- TO_BE_DOWNLOADED=(
-  "https://storage.googleapis.com/ytlr-cert.appspot.com/test-materials/YTS-media-files.tar.gz"
- )
-
- for i in "${TO_BE_DOWNLOADED[@]}"; do
-  curl -O -C - "$i"
-  tar zxvf "${i##*/}"
-  rm -fv "${i##*/}"
- done
-}
-
-deploy_media_files() {
-
- _download_and_prepare_media_files
-
- # Media files; long cache
- gsutil \
-  -h "cache-control: max-age=${ONE_YEAR}, immutable" \
-  -h "$CSPSTATIC" \
-  -h "$HSTS" \
-  -h "$TYPE" \
-  -h "$XSS" \
-  -h "$REFERRER" \
-  -m \
-  rsync \
-  -R \
-  -d \
-  ./test-materials/ "gs://$YTTEST_BUCKET/test-materials/"
-}
-
-main "$@"
+main "$@"  
